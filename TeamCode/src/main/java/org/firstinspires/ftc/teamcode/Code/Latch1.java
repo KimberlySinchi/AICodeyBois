@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Code;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -45,8 +45,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name="Latch1", group="Linear Opmode")
 
-public class Latch1 extends LinearOpMode
-{
+public class Latch1 extends LinearOpMode {
 
     // Declare OpMode members
     private ElapsedTime runtime = new ElapsedTime();
@@ -58,56 +57,40 @@ public class Latch1 extends LinearOpMode
     private String status;
 
     @Override
-    public void runOpMode()
-    {
+    public void runOpMode() {
         //Equivalent of System.out.println("")
         telemetry.addData("Status", "Initialized");
         //Making it show up on the phone
         telemetry.update();
         //Try to hardwareMap this motor and if it doesn't work, catch the exception and print it
-        try
-        {
+        try {
             dc1 = hardwareMap.get(DcMotor.class, "DC1");
             status += "DC1 connected";
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             telemetry.addData("Mistake: " + e, "");
         }
-        try
-        {
+        try {
             dc2 = hardwareMap.get(DcMotor.class, "DC2");
             status += "DC2 connected";
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             telemetry.addData("Mistake: " + e, "");
         }
-        try
-        {
+        try {
             dc3 = hardwareMap.get(DcMotor.class, "DC3");
             status += "DC3 connected";
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             telemetry.addData("Mistake: " + e, "");
         }
-        try
-        {
+        try {
             dc4 = hardwareMap.get(DcMotor.class, "DC4");
             status += "DC4 connected";
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             telemetry.addData("Mistake: " + e, "");
         }
-        try
-        {
+        try {
             latchMotor = hardwareMap.get(DcMotor.class, "DC7");
             status += "Latch1 Motor connected";
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             telemetry.addData("Mistake: " + e, "");
         }
 
@@ -116,8 +99,7 @@ public class Latch1 extends LinearOpMode
         runtime.reset();
 
         //Run until the end of the 30 second autonomous mode (Driver presses STOP)
-        while(runtime.time() <= 30)
-        {
+        while (runtime.time() <= 30) {
 
             /**
              while (opModeIsActive()) {
@@ -150,8 +132,7 @@ public class Latch1 extends LinearOpMode
             //Constants [CURRENTLY PLACEHOLDER NUMBERS]
             //BEGIN OF AUTONOMOUS SEGMENT
             //UNLATCH CODE
-            if(runtime.time() <= 3.4)
-            {
+            if (runtime.time() <= 3.4) {
                 extendLatch(2);
                 goRight(0.5);
                 goUp(0.5);
@@ -188,36 +169,31 @@ public class Latch1 extends LinearOpMode
             //Getting code to realise which boolean statement becomes true
 
 
-
-
         }
     }
-    public void extendLatch(double time)
-    {
+
+    public void extendLatch(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while(ms.time()<=time)
-        {
+        while (ms.time() <= time) {
             latchMotor.setPower(1);
         }
         latchMotor.setPower(0);
     }
-    public void retractArm(double time)
-    {
+
+    public void retractArm(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while(ms.time()<=time)
-        {
+        while (ms.time() <= time) {
             latchMotor.setPower(-1);
         }
         latchMotor.setPower(0);
     }
-    public void goUp(double time)
-    {
+
+    public void goUp(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while(ms.time()<=time)
-        {
+        while (ms.time() <= time) {
             dc1.setPower(1.0);
             dc2.setPower(-1.0);
             dc3.setPower(1.0);
@@ -229,12 +205,11 @@ public class Latch1 extends LinearOpMode
         dc4.setPower(0.0);
 
     }
-    public void goDown(double time)
-    {
+
+    public void goDown(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while(ms.time()<=time)
-        {
+        while (ms.time() <= time) {
             dc1.setPower(-1.0);
             dc2.setPower(1.0);
             dc3.setPower(-1.0);
@@ -245,12 +220,11 @@ public class Latch1 extends LinearOpMode
         dc3.setPower(0);
         dc4.setPower(0);
     }
-    public void goLeft(double time)
-    {
+
+    public void goLeft(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while(ms.time()<=time)
-        {
+        while (ms.time() <= time) {
             dc1.setPower(-1);
             dc2.setPower(-1);
             dc3.setPower(1);
@@ -261,12 +235,11 @@ public class Latch1 extends LinearOpMode
         dc3.setPower(0);
         dc4.setPower(0);
     }
-    public void goRight(double time)
-    {
+
+    public void goRight(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while(ms.time()<=time)
-        {
+        while (ms.time() <= time) {
             dc1.setPower(1);
             dc2.setPower(1);
             dc3.setPower(-1);
@@ -277,3 +250,4 @@ public class Latch1 extends LinearOpMode
         dc3.setPower(0);
         dc4.setPower(0);
     }
+}

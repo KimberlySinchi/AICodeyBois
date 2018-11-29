@@ -2,7 +2,7 @@
  * This is the package ftc gives coders which basically has classes we might need to import for our code instead of us downloading
  and importing every single individual class; the package makes things more convenient
  **/
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Code;
 
 /**
  * These are all the classes we're choosing to import from the package because we need these packages for our code in this file
