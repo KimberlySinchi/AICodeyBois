@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.HelperClasses.Slave;
+import org.firstinspires.ftc.teamcode.Helpers.Slave;
 
 
 @Autonomous(name="AutoPath1", group="Master")

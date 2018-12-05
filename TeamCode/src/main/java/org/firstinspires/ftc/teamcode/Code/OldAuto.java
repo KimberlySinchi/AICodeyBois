@@ -26,10 +26,9 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
+/*
 package org.firstinspires.ftc.teamcode.Code;
 
-import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -146,7 +145,7 @@ public class OldAuto extends LinearOpMode
             //TILE: 23.5 inches
             //MINERAL PLACEMENT: 29 inches in total with 14.5 inches in between each mineral
             //Constants [CURRENTLY PLACEHOLDER NUMBERS]
-            double blocc = 2000; //Amount of ms to travel a tile horizontally || vertically
+            /*double blocc = 2000; //Amount of ms to travel a tile horizontally || vertically
             double rotate90 = 3000; //Amount of ms to rotate 90 degrees
             //BEGIN OF AUTONOMOUS SEGMENT
             //UNLATCH CODE
@@ -217,7 +216,7 @@ public class OldAuto extends LinearOpMode
             //DROP MARKER CODE
 
             //GO TO CRATER
-            telemetry.update();
+            /*telemetry.update();
             telemetry.addData("Runtime: ", runtime.time() + "");
             /**
              * //TESTING
@@ -227,7 +226,7 @@ public class OldAuto extends LinearOpMode
                 time2.reset();
             }
              **/
-
+/*
         }
     }
     public void extendLatch(double time)
@@ -369,3 +368,4 @@ public class OldAuto extends LinearOpMode
         dc4.setPower(0);
     }
 }
+*/
