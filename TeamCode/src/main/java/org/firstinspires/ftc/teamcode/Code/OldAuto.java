@@ -26,13 +26,15 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/*
+
 package org.firstinspires.ftc.teamcode.Code;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServoImpl;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 @Autonomous(name="Latch1", group="Linear Opmode")
 
@@ -41,7 +43,7 @@ public class OldAuto extends LinearOpMode
 
     // Declare OpMode members
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor dc1;
+    private DcMotor topLeft;
     private DcMotor dc2;
     private DcMotor dc3;
     private DcMotor dc4;
@@ -58,8 +60,8 @@ public class OldAuto extends LinearOpMode
         //Try to hardwareMap this motor and if it doesn't work, catch the exception and print it
         try
         {
-            dc1 = hardwareMap.get(DcMotor.class, "DC1");
-            status += "DC1 connected";
+            topLeft = hardwareMap.get(DcMotor.class, "topLeft");
+            status += "topLeft connected";
         }
         catch(Exception e)
         {
@@ -107,51 +109,49 @@ public class OldAuto extends LinearOpMode
         runtime.reset();
 
         //Run until the end of the 30 second autonomous mode (Driver presses STOP)
-        while(runtime.time() <= 30)
-        {
+        while(runtime.time() <= 30) {
 
-            /**
+
             while (opModeIsActive()) {
 
-            // Setup a variable for each drive wheel to save power level for telemetry
-            double leftPower;
-            double rightPower;
+                // Setup a variable for each drive wheel to save power level for telemetry
+                double leftPower;
+                double rightPower;
 
-            // Choose to drive using either Tank Mode, or POV Mode
-            // Comment out the method that's not used.  The default below is POV.
+                // Choose to drive using either Tank Mode, or POV Mode
+                // Comment out the method that's not used.  The default below is POV.
 
-            // POV Mode uses left stick to go forward, and right stick to turn.
-            // - This uses basic math to combine motions and is easier to drive straight.
-            double drive = -gamepad1.left_stick_y;
-            double turn  =  gamepad1.right_stick_x;
-            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+                // POV Mode uses left stick to go forward, and right stick to turn.
+                // - This uses basic math to combine motions and is easier to drive straight.
+                double drive = -gamepad1.left_stick_y;
+                double turn = gamepad1.right_stick_x;
+                leftPower = Range.clip(drive + turn, -1.0, 1.0);
+                rightPower = Range.clip(drive - turn, -1.0, 1.0);
 
-            // Tank Mode uses one stick to control each wheel.
-            // - This requires no math, but it is hard to drive forward slowly and keep straight.
-            // leftPower  = -gamepad1.left_stick_y ;
-            // rightPower = -gamepad1.right_stick_y ;
+                // Tank Mode uses one stick to control each wheel.
+                // - This requires no math, but it is hard to drive forward slowly and keep straight.
+                // leftPower  = -gamepad1.left_stick_y ;
+                // rightPower = -gamepad1.right_stick_y ;
 
-            // Send calculated power to wheels
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
+                // Send calculated power to wheels
 
-            // Show the elapsed game time and wheel power.
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.update();
+                // Show the elapsed game time and wheel power.
+                telemetry.addData("Status", "Run Time: " + runtime.toString());
+                telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+                telemetry.update();
             }
-            **/
+
+
             //TILE: 23.5 inches
             //MINERAL PLACEMENT: 29 inches in total with 14.5 inches in between each mineral
             //Constants [CURRENTLY PLACEHOLDER NUMBERS]
-            /*double blocc = 2000; //Amount of ms to travel a tile horizontally || vertically
+            double blocc = 2000; //Amount of ms to travel a tile horizontally || vertically
             double rotate90 = 3000; //Amount of ms to rotate 90 degrees
             //BEGIN OF AUTONOMOUS SEGMENT
             //UNLATCH CODE
             if(runtime.time() <= 3.4)
             {
-                extendLatch(2);
+
                 goRight(0.5);
                 goUp(0.5);
                 goLeft(0.5);
@@ -161,47 +161,6 @@ public class OldAuto extends LinearOpMode
             //Booleans cause different paths
             //Will be set to true when certain path is taken
             //Left and right sides from the perspective of the robot
-            boolean side = false, mid = false;
-            GoldAlignDetector gdetect = new GoldAlignDetector();
-
-            //Rotate all the way to the right and scan for gold block
-            /**
-            if(stage1 == false)
-            {
-                rotateCWise(rotate90 * 3 / 5);
-                rotateCCWiseNoNum(0.5);
-                if (gdetect.isBlock())
-                {
-                    rotateSTOP();
-                    stage1 = true;
-                }
-            }
-            if(stage1 == true && stage2 == false)
-            {
-                goUp(2.5);
-                stage2 = true;
-            }
-**/
-            //Determining which path to take
-            /*ElapsedTime blockRange = new ElapsedTime();
-            if(runtime.time() >= 0 && runtime.time() <= 1000)
-            {
-                //code here
-                lSide = true;
-            }
-            else if(blockRange.time() > 1000 && blockRange.time() <= 2000)
-            {
-                //code here
-                midSide = true;
-            }
-            else if(blockRange.time() > 2000 && blockRange.time() <= 3000)
-            {
-                //code here
-                rSide = true;
-            }
-            else
-                blockRange.reset(); */
-
 
             //Getting code to realise which boolean statement becomes true
 
@@ -216,17 +175,13 @@ public class OldAuto extends LinearOpMode
             //DROP MARKER CODE
 
             //GO TO CRATER
-            /*telemetry.update();
+            telemetry.update();
             telemetry.addData("Runtime: ", runtime.time() + "");
-            /**
-             * //TESTING
-            telemetry.addLine("time2: " + time2.time());
-            if(runtime.time() >= 10 && runtime.time()<=12)
-            {
-                time2.reset();
-            }
-             **/
-/*
+
+
+
+
+
         }
     }
     public void extendLatch(double time)
@@ -255,12 +210,12 @@ public class OldAuto extends LinearOpMode
         ms.reset();
         while(ms.time()<=time)
         {
-            dc1.setPower(1.0);
+            topLeft.setPower(1.0);
             dc2.setPower(-1.0);
             dc3.setPower(1.0);
             dc4.setPower(-1.0);
         }
-        dc1.setPower(0.0);
+        topLeft.setPower(0.0);
         dc2.setPower(0.0);
         dc3.setPower(0.0);
         dc4.setPower(0.0);
@@ -272,12 +227,12 @@ public class OldAuto extends LinearOpMode
         ms.reset();
         while(ms.time()<=time)
         {
-            dc1.setPower(-1.0);
+            topLeft.setPower(-1.0);
             dc2.setPower(1.0);
             dc3.setPower(-1.0);
             dc4.setPower(1.0);
         }
-        dc1.setPower(0);
+        topLeft.setPower(0);
         dc2.setPower(0);
         dc3.setPower(0);
         dc4.setPower(0);
@@ -288,12 +243,12 @@ public class OldAuto extends LinearOpMode
         ms.reset();
         while(ms.time()<=time)
         {
-            dc1.setPower(-1);
+            topLeft.setPower(-1);
             dc2.setPower(-1);
             dc3.setPower(1);
             dc4.setPower(1);
         }
-        dc1.setPower(0);
+        topLeft.setPower(0);
         dc2.setPower(0);
         dc3.setPower(0);
         dc4.setPower(0);
@@ -304,12 +259,12 @@ public class OldAuto extends LinearOpMode
         ms.reset();
         while(ms.time()<=time)
         {
-            dc1.setPower(1);
+            topLeft.setPower(1);
             dc2.setPower(1);
             dc3.setPower(-1);
             dc4.setPower(-1);
         }
-        dc1.setPower(0);
+        topLeft.setPower(0);
         dc2.setPower(0);
         dc3.setPower(0);
         dc4.setPower(0);
@@ -320,12 +275,12 @@ public class OldAuto extends LinearOpMode
         ms.reset();
         while(ms.time()<=time)
         {
-            dc1.setPower(1);
+            topLeft.setPower(1);
             dc2.setPower(1);
             dc3.setPower(1);
             dc4.setPower(1);
         }
-        dc1.setPower(0);
+        topLeft.setPower(0);
         dc2.setPower(0);
         dc3.setPower(0);
         dc4.setPower(0);
@@ -336,36 +291,35 @@ public class OldAuto extends LinearOpMode
         ms.reset();
         while(ms.time()<=time)
         {
-            dc1.setPower(-1);
+            topLeft.setPower(-1);
             dc2.setPower(-1);
             dc3.setPower(-1);
             dc4.setPower(-1);
         }
-        dc1.setPower(0);
+        topLeft.setPower(0);
         dc2.setPower(0);
         dc3.setPower(0);
         dc4.setPower(0);
     }
     public void rotateCWiseNoNum(double power)
     {
-        dc1.setPower(power);
+        topLeft.setPower(power);
         dc2.setPower(power);
         dc3.setPower(power);
         dc4.setPower(power);
     }
     public void rotateCCWiseNoNum(double power)
     {
-        dc1.setPower(-power);
+        topLeft.setPower(-power);
         dc2.setPower(-power);
         dc3.setPower(-power);
         dc4.setPower(-1*power);
     }
     public void rotateSTOP()
     {
-        dc1.setPower(0);
+        topLeft.setPower(0);
         dc2.setPower(0);
         dc3.setPower(0);
         dc4.setPower(0);
     }
 }
-*/

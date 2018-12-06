@@ -23,7 +23,7 @@ import java.util.List;
  * Created by Victo on 9/17/2018.
  */
 
-public class autoDetect extends DogeCVDetector {
+public class AutoW extends DogeCVDetector {
 
     // Defining Mats to be used.
     private Mat displayMat = new Mat(); // Display debug info to the screen (this is what is returned)
@@ -54,7 +54,7 @@ public class autoDetect extends DogeCVDetector {
     /**
      * Simple constructor
      */
-    public autoDetect() {
+    public AutoW() {
         super();
         detectorName = "Gold Align Detector"; // Set the detector name
     }

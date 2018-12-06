@@ -40,19 +40,22 @@ import java.util.Date;
  * Remove a @Disabled the on the next line or two (if present) to add this opmode to the Driver Station OpMode list,
  * or add a @Disabled annotation to prevent this OpMode from being added to the Driver Station
  */
-@TeleOp(name="KimberlySucks", group="TeleOp")
+@TeleOp(name="Drive", group="TeleOp")
 
 public class DriverMode extends OpMode {
 
     /* Declare OpMode members. */
-    private DcMotor dc1;
-    private DcMotor dc2;
-    private DcMotor dc3;
-    private DcMotor dc4;
+    private DcMotor frontLeft;
+    private DcMotor frontRight;
+    private DcMotor bottomRight;
+    private DcMotor bottomLeft;
+    /**
+
     private DcMotor armMotor1;
     private DcMotor armMotor2;
     private DcMotor latchMotor;
-    private Servo s1;
+     **/
+   // private Servo s1;
     private String status;
 
     @Override
@@ -63,8 +66,8 @@ public class DriverMode extends OpMode {
         telemetry.addData("Status", "Initialized");
         try
         {
-            dc1 = hardwareMap.get(DcMotor.class, "DC1");
-            //dc1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            frontLeft = hardwareMap.get(DcMotor.class, "DC1");
+            //frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         catch(Exception e)
         {
@@ -72,7 +75,7 @@ public class DriverMode extends OpMode {
         }
         try
         {
-            dc2 = hardwareMap.get(DcMotor.class, "DC2");
+            frontRight = hardwareMap.get(DcMotor.class, "DC2");
         }
         catch(Exception e)
         {
@@ -80,7 +83,7 @@ public class DriverMode extends OpMode {
         }
         try
         {
-            dc3 = hardwareMap.get(DcMotor.class, "DC3");
+            bottomRight = hardwareMap.get(DcMotor.class, "DC3");
         }
         catch(Exception e)
         {
@@ -89,40 +92,11 @@ public class DriverMode extends OpMode {
         try
         {
 
-            dc4 = hardwareMap.get(DcMotor.class, "DC4");
+            bottomLeft = hardwareMap.get(DcMotor.class, "DC4");
         }
         catch(Exception e)
         {
-            telemetry.addData("Mistake: " + e, "");
-        }
-        try
-        {
-            armMotor1 = hardwareMap.get(DcMotor.class, "DC5");
-            armMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        }
-        catch(Exception e)
-        {
-            telemetry.addLine("Mistake: " + e);
-        }
-        try
-        {
-            armMotor2 = hardwareMap.get(DcMotor.class, "DC6");
-            armMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
-        catch(Exception e)
-        {
-            telemetry.addLine("Mistake: " + e);
-        }
-        try
-        {
-            s1 = hardwareMap.get(Servo.class, "S1");
-            status += "S1 connected";
-        }
-        catch(Exception e)
-        {
-            telemetry.addData("Mistake: " + e, "");
-            status += "S1 not found";
+            telemetry.addLine("kimberly sucks");
         }
 
     }
@@ -218,35 +192,36 @@ public class DriverMode extends OpMode {
         //Rotate right
         if(rightPress != 0)
         {
-            dc1.setPower(-1*rightPress);
-            dc2.setPower(-1*rightPress);
-            dc3.setPower(-1*rightPress);
-            dc4.setPower(-1*rightPress);
+            frontLeft.setPower(-1*rightPress);
+            frontRight.setPower(-1*rightPress);
+            bottomRight.setPower(-1*rightPress);
+            bottomLeft.setPower(-1*rightPress);
         }
         //Rotate left
         else if(leftPress != 0)
         {
-            dc1.setPower(-1*leftPress);
-            dc2.setPower(-1*leftPress);
-            dc3.setPower(-1*leftPress);
-            dc4.setPower(-1*leftPress);
+            frontLeft.setPower(-1*leftPress);
+            frontRight.setPower(-1*leftPress);
+            bottomRight.setPower(-1*leftPress);
+            bottomLeft.setPower(-1*leftPress);
         }
         else if(x==0 && y==0)
         {
-            dc1.setPower(0);
-            dc2.setPower(0);
-            dc3.setPower(0);
-            dc4.setPower(0);
+            frontLeft.setPower(0);
+            frontRight.setPower(0);
+            bottomRight.setPower(0);
+            bottomLeft.setPower(0);
         }
         else
         {
-            dc1.setPower(-v2);
-            dc2.setPower(v1);
-            dc3.setPower(v2);
-            dc4.setPower(-v1);
+            frontLeft.setPower(-v2);
+            frontRight.setPower(v1);
+            bottomRight.setPower(v2);
+            bottomLeft.setPower(-v1);
         }
         //Moving the arm up
-        if(yRight < 0)
+        /**
+                if(yRight < 0)
         {
             armMotor1.setPower(y);
             armMotor2.setPower(-y);
@@ -266,8 +241,9 @@ public class DriverMode extends OpMode {
             armMotor2.setPower(0);
         }
         telemetry.update();
-
+**/
         //SERVOS
+        /**
         boolean s1up = gamepad1.y;
         boolean s1down = gamepad1.a;
 
@@ -284,6 +260,7 @@ public class DriverMode extends OpMode {
         {
             s1.setPosition(0.5);
         }
+         **/
         //upDownMotor = name of the motor that controls vertical arm movement
         //up = the y2 might have to be changed
         /**

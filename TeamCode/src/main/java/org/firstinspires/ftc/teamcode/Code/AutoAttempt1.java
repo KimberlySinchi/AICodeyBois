@@ -1,4 +1,6 @@
 package org.firstinspires.ftc.teamcode.Code;
+import com.disnodeteam.dogecv.CameraViewDisplay;
+import com.disnodeteam.dogecv.DogeCV;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -6,8 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Detectors.SampleAlignDetector;
+
 @Autonomous(name = "Basic Autonomous", group = "Slave")
-@Disabled
 
 public class AutoAttempt1 extends LinearOpMode
 {
@@ -17,6 +20,7 @@ public class AutoAttempt1 extends LinearOpMode
     private DcMotor backL;
     private DcMotor backR;
     private Servo armSpin;
+    private SampleAlignDetector detector;
     static final double SPEED = 1;
 
     @Override
@@ -30,7 +34,6 @@ public class AutoAttempt1 extends LinearOpMode
         }
         catch(Exception e)
         {
-
         }
         try
         {
@@ -56,6 +59,30 @@ public class AutoAttempt1 extends LinearOpMode
         telemetry.update(); //Makes it show up on the phone
 
         /**
+         * SETS UP DETECTOR STUFF
+         */
+        telemetry.addData("Status", "Find gold position and align ;-;");
+
+        // Setup detector
+        detector = new SampleAlignDetector(); // Create the detector
+        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance()); // Initialize detector with app context and camera
+        detector.useDefaults(); // Set detector to use default settings
+
+        detector.alignSize = 100; // How wide (in pixels) is the range in which the gold object will be aligned. (Represented by green bars in the preview)
+        detector.alignPosOffset = 0; // How far from center frame to offset this alignment zone.
+        detector.downscale = 0.4; // How much to downscale the input frames
+
+        // Optional tuning
+        detector.areaScoringMethod = DogeCV.AreaScoringMethod.MAX_AREA; // Can also be PERFECT_AREA
+        //detector.perfectAreaScorer.perfectArea = 10000; // if using PERFECT_AREA scoring
+        detector.maxAreaScorer.weight = 0.001;
+
+        detector.ratioScorer.weight = 15;
+        detector.ratioScorer.perfectRatio = 1.0;
+
+        detector.enable(); // Start detector
+
+        /**
          * Now that we have finished INITIALIZING (connecting our variables to the robot), our robot will just stand there UNTIL
          the driver hits the PLAY button (which appears after hitting the INIT button)
          * INIT is when you would connect your robot to your code, PLAY is when your movement code would start running
@@ -64,9 +91,12 @@ public class AutoAttempt1 extends LinearOpMode
         runtime.reset(); //Since we created the variable, the timer has been counting so we have to reset it for our movement code
                         //so that we start at zero (and it's easier to code with)
 
-        //Driving forward for 3 seconds
+        //Finding the position of the gold mineral
+
+
+        //Driving forward for 2 seconds
         forward();
-        while (opModeIsActive() && (runtime.seconds() < 3))
+        while (opModeIsActive() && (runtime.seconds() < 2))
         {
             telemetry.addData("Moving Forward", "Time Elapsed:", runtime.seconds());
             telemetry.update();
@@ -104,7 +134,7 @@ public class AutoAttempt1 extends LinearOpMode
     public void stop(double time)
     {
         ElapsedTime timer = new ElapsedTime();
-        while(timer.seconds() <= time)
+        while (timer.seconds() <= time)
         {
             frontL.setPower(0);
             backL.setPower(0);
