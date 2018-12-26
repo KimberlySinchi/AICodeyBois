@@ -2,7 +2,7 @@
  * This is the package ftc gives coders which basically has classes we might need to import for our code instead of us downloading
  and importing every single individual class; the package makes things more convenient
  **/
-package org.firstinspires.ftc.teamcode.Code;
+package org.firstinspires.ftc.teamcode.Tests;
 
 /**
  * These are all the classes we're choosing to import from the package because we need these packages for our code in this file
@@ -28,7 +28,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  * The name part is just you giving a name to the file (it would show up on the phone under this name)
  * You can also do (name = "Name", group = "Robot") where group is used for organization purposes
  */
-@Autonomous(name = "Basic Autonomous", group = "Slave")
+@Autonomous(name = "Basic Autonomous FTC", group = "Slave")
 @Disabled //Makes it so this code does NOT show up on the phone, we don't really use this line since we upload per file not per folder
         //of files
 

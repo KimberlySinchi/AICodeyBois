@@ -8,16 +8,17 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Detectors.SampleAlignDetector;
 
 
-@TeleOp(name="Sample Align", group="DogeCV")
+@TeleOp(name="Sample Align Doge", group="DogeCV")
 
-public class SampleAlign extends OpMode {
+public class SampleAlign extends OpMode
+{
     // Detector object
     private SampleAlignDetector detector;
 
 
     @Override
     public void init() {
-        telemetry.addData("Status", "DogeCV 2018.0 - Sample Order Align");
+        telemetry.addData("Status", "Find gold position and align ;-;");
 
         // Setup detector
         detector = new SampleAlignDetector(); // Create the detector
@@ -37,6 +38,7 @@ public class SampleAlign extends OpMode {
         detector.ratioScorer.perfectRatio = 1.0;
 
         detector.enable(); // Start detector
+        //
     }
 
     /*

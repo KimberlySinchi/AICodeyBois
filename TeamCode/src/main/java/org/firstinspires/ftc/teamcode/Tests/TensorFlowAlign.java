@@ -58,11 +58,11 @@ public class TensorFlowAlign extends LinearOpMode {
      * Detection engine.
      */
     private TFObjectDetector tfod;
+    public int pos = 0;
 
     @Override
     public void runOpMode()
     {
-        int pos = 2;
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
@@ -104,7 +104,7 @@ public class TensorFlowAlign extends LinearOpMode {
                       int goldMineralCent = -1;
                       int leftRangeX = (1280/2)-50;
                       int rightRangeX = leftRangeX + 100;
-                      boolean aligned = true;
+                      boolean aligned = false;
                       if(updatedRecognitions.size()>=1)
                       {
                           for(Recognition r: updatedRecognitions)
@@ -114,7 +114,7 @@ public class TensorFlowAlign extends LinearOpMode {
                                   goldMineralX = (int) r.getLeft();
                                   goldMineralXR = (int)r.getRight();
                                   goldMineralCent = (int)((goldMineralX+goldMineralXR)/2);
-                                  aligned = isAligned(goldMineralCent, 640-50, 640+50);
+                                  aligned = isAligned(goldMineralCent, 640-75, 640+75);
                               }
                           }
                       }
@@ -200,7 +200,8 @@ public class TensorFlowAlign extends LinearOpMode {
     /**
      * Initialize the Tensor Flow Object Detection engine.
      */
-    private void initTfod() {
+    private void initTfod()
+    {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
             "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);

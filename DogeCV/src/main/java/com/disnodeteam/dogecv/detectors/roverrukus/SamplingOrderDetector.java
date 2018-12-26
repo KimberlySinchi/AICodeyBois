@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Detectors;
+package com.disnodeteam.dogecv.detectors.roverrukus;
 
 import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.DogeCVDetector;
@@ -53,7 +53,6 @@ public class SamplingOrderDetector extends DogeCVDetector {
     private GoldLocation currentOrder = GoldLocation.UNKNOWN;
     private GoldLocation lastOrder    = GoldLocation.UNKNOWN;
     private boolean      isFound      = false;
-    private int leftCount = -1;
 
     // Create the mats used
     private Mat workingMat  = new Mat();
@@ -223,7 +222,7 @@ public class SamplingOrderDetector extends DogeCVDetector {
 
         // If enough elements are found, compute gold position
         if(choosenWhiteRect.get(0) != null && choosenWhiteRect.get(1) != null  && chosenYellowRect != null){
-            leftCount = 0;
+            int leftCount = 0;
             for(int i=0;i<choosenWhiteRect.size();i++){
                 Rect rect = choosenWhiteRect.get(i);
                 if(chosenYellowRect.x > rect.x){
@@ -284,11 +283,6 @@ public class SamplingOrderDetector extends DogeCVDetector {
         return currentOrder;
     }
 
-    //JASON'S TEST METHOD
-    public int getLeftCount()
-    {
-        return leftCount;
-    }
     /**
      * Returns the last known gold pos
      * @return last known gold pos (UNKNOWN, LEFT, CENTER, RIGHT)

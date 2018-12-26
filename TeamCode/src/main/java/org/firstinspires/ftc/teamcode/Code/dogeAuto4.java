@@ -77,6 +77,84 @@ public class dogeAuto4 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        // Set up detector
+        detector = new GoldAlignDetector(); // Create detector
+        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance()); // Initialize it with the app context and camera
+        detector.useDefaults(); // Set detector to use default settings
+
+        // Optional tuning
+        detector.alignSize = 100; // How wide (in pixels) is the range in which the gold object will be aligned. (Represented by green bars in the preview)
+        detector.alignPosOffset = 0; // How far from center frame to offset this alignment zone.
+        detector.downscale = 0.8; // How much to downscale the input frames
+
+        detector.areaScoringMethod = DogeCV.AreaScoringMethod.MAX_AREA; // Can also be PERFECT_AREA
+        //detector.perfectAreaScorer.perfectArea = 10000; // if using PERFECT_AREA scoring
+        detector.maxAreaScorer.weight = 0.005; //
+
+        detector.ratioScorer.weight = 5; //
+        detector.ratioScorer.perfectRatio = 1.0; // Ratio adjustment
+
+        detector.enable(); // Start the detector!
+        try {
+            frontL = hardwareMap.get(DcMotor.class, "DC1");
+            frontL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        } catch (Exception e) {
+        }
+        try {
+            frontR = hardwareMap.get(DcMotor.class, "DC2");
+            frontR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        } catch (Exception e) {
+        }
+        try {
+            backR = hardwareMap.get(DcMotor.class, "DC3");
+            backR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        } catch (Exception e) {
+        }
+        try {
+            backL = hardwareMap.get(DcMotor.class, "DC4");
+            backL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        } catch (Exception e) {
+        }
+
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
+        runtime.reset();
+
+        // run until the end of the match (driver presses STOP)
+        while (opModeIsActive())
+        {
+            if(bool1)
+            {
+
+                double timeRight = rotateRight(1.12, .15);
+
+
+                    double timeLeft = rotateLeft(4, .14);
+
+
+                double totalTime = timeRight + timeLeft;
+                goUp(1.5); //in the future go back: goBack(1.5);
+
+
+                goBack(1.2);
+
+                if(totalTime <=0) //ROTATED RIGHT AND FOUND THE BLOCK
+                {
+                    rotateLeft(-1*totalTime,.15);
+                }
+                else if(totalTime>0);
+                {
+                    rotateRight(totalTime,.14);
+                }
+
+                bool1 = false;
+
+            }
+
+                    detector.disable();
+
+            }
 
         }
 
