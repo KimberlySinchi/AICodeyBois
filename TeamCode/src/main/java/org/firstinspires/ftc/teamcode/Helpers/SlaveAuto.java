@@ -1,13 +1,9 @@
 package org.firstinspires.ftc.teamcode.Helpers;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
-public class Slave
+public class SlaveAuto
 {
     /* Declare OpMode members. */
     public DcMotor frontL;
@@ -16,11 +12,10 @@ public class Slave
     public DcMotor backL;
     public DcMotor latch;
     public String status;
-    public Servo armIntake;
 
     HardwareMap hwmap = null; //Need a reference to hardware map because otherwise, the code will think this is an opmode to use right now
 
-    public Slave()
+    public SlaveAuto()
     {
     }
 
@@ -30,7 +25,7 @@ public class Slave
         try
         {
             frontL = hwmap.get(DcMotor.class, "DC1");
-            frontL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         catch(Exception e)
         {
@@ -39,7 +34,7 @@ public class Slave
         try
         {
             frontR = hwmap.get(DcMotor.class, "DC2");
-            frontR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         catch(Exception e)
         {
@@ -48,7 +43,7 @@ public class Slave
         try
         {
             backR = hwmap.get(DcMotor.class, "DC3");
-            backR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         catch(Exception e)
         {
@@ -57,7 +52,7 @@ public class Slave
         try
         {
             backL = hwmap.get(DcMotor.class, "DC4");
-            backL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         catch(Exception e)
         {
@@ -65,20 +60,12 @@ public class Slave
         }
         try
         {
-            latch = hwmap.get(DcMotor.class, "DC5");
-            latch.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            latch = hwmap.get(DcMotor.class, "latch");
+            latch.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         catch(Exception e)
         {
             status += "\nLatch (latch) motor not mapping";
-        }
-        try
-        {
-            armIntake = hwmap.get(Servo.class, "S1");
-        }
-        catch(Exception e)
-        {
-            status += "\nArm Intake servo not mapping";
         }
     }
     public String getStatus()
