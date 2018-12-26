@@ -32,40 +32,57 @@ package org.firstinspires.ftc.teamcode.Code;
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
-import com.disnodeteam.dogecv.detectors.roverrukus.SamplingOrderDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.Detectors.SampleAlignDetector;
+import org.firstinspires.ftc.teamcode.Helpers.Slave;
 
 
-@Autonomous(name="DogeAuto", group="DogeCV")
+/**
+ * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
+ * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
+ * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
+ * class is instantiated on the Robot Controller and executed.
+ *
+ * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
+ * It includes all the skeletal structure that all linear OpModes contain.
+ *
+ * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
+ * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
+ */
 
-public class GoldAlignExample extends OpMode
-{
+@Autonomous(name="AWESOMEAUTO(plsWork)", group="Linear Opmode")
+
+public class dogeAuto3 extends LinearOpMode {
+
+    // Declare OpMode members.
     // Detector object
     private boolean bool1 = true;
+    private boolean bool2 = true;
+    private boolean bool3 = true;
     private GoldAlignDetector detector;
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor frontL;
     private DcMotor frontR;
     private DcMotor backL;
     private DcMotor backR;
+    private DcMotor latch;
     private Servo armSpin;
+
     static final double SPEED = 1;
-    public boolean isBlock()
-    {
+
+    public boolean isBlock() {
         return detector.getAligned();
     }
 
     @Override
-    public void init() {
-        telemetry.addData("Status", "DogeCV 2018.0 - Gold Align Example");
-
+    public void runOpMode() {
         // Set up detector
         detector = new GoldAlignDetector(); // Create detector
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance()); // Initialize it with the app context and camera
@@ -74,7 +91,7 @@ public class GoldAlignExample extends OpMode
         // Optional tuning
         detector.alignSize = 100; // How wide (in pixels) is the range in which the gold object will be aligned. (Represented by green bars in the preview)
         detector.alignPosOffset = 0; // How far from center frame to offset this alignment zone.
-        detector.downscale = 0.4; // How much to downscale the input frames
+        detector.downscale = 0.8; // How much to downscale the input frames
 
         detector.areaScoringMethod = DogeCV.AreaScoringMethod.MAX_AREA; // Can also be PERFECT_AREA
         //detector.perfectAreaScorer.perfectArea = 10000; // if using PERFECT_AREA scoring
@@ -84,88 +101,85 @@ public class GoldAlignExample extends OpMode
         detector.ratioScorer.perfectRatio = 1.0; // Ratio adjustment
 
         detector.enable(); // Start the detector!
-        try
-        {
+        try {
             frontL = hardwareMap.get(DcMotor.class, "DC1");
             frontL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        } catch (Exception e) {
         }
-        catch(Exception e)
-        {
-        }
-        try
-        {
+        try {
             frontR = hardwareMap.get(DcMotor.class, "DC2");
             frontR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        } catch (Exception e) {
         }
-        catch(Exception e){}
-        try
-        {
+        try {
             backR = hardwareMap.get(DcMotor.class, "DC3");
             backR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        } catch (Exception e) {
         }
-        catch(Exception e){}
-        try
-        {
+        try {
             backL = hardwareMap.get(DcMotor.class, "DC4");
             backL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        } catch (Exception e) {
         }
-        catch(Exception e){}
 
-    }
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
+        runtime.reset();
 
-    /*
-     * Code to run REPEATEDLY when the driver hits INIT
-     */
-    @Override
-    public void init_loop()
-    {
-    }
-
-    /*
-     * Code to run ONCE when the driver hits PLAY
-     */
-    @Override
-    public void start()
-    {
-        while(runtime.seconds()<30)
+        // run until the end of the match (driver presses STOP)
+        while (opModeIsActive())
         {
             if(bool1)
             {
-                goUp(2);
+
+                double timeRight = rotateRight(1.12, .15);
+
+
+                double timeLeft = rotateLeft(4, .14);
+
+
+                goUp(1.5); //in the future go back: goBack(1.5);
+
+
+                goBack(1.2);
+
+                if(timeRight >= -1.0)
+                {
+                    rotateLeft(timeRight,.14);
+                    telemetry.addLine("correct if statement");
+                }
+                else if(timeLeft != -1.0)
+                {
+                    rotateRight(timeLeft,.15);
+                }
+                else
+                {
+                    telemetry.addLine("did not go left or right");
+                    frontL.setPower(0.0);
+                    frontR.setPower(0.0);
+                    backR.setPower(0.0);
+                    backL.setPower(0.0);
+                }
                 bool1 = false;
+
             }
-            stop();
+
+                    detector.disable();
+
+            }
+
         }
-    }
 
-    /*
-     * Code to run REPEATEDLY when the driver hits PLAY
-     */
-    @Override
-    public void loop()
-    {
-        telemetry.addData("IsAligned" , detector.getAligned()); // Is the bot aligned with the gold mineral?
-        telemetry.addData("X Pos" , detector.getXPosition()); // Gold X position.
-    }
 
-    /*
-     * Code to run ONCE after the driver hits STOP
-     */
-    @Override
-    public void stop()
-    {
-        // Disable the detector
-        detector.disable();
-    }
-    public void goUp(double time)
-    {
+
+
+    public void goUp(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while(ms.time()<=time)
-        {
-            frontL.setPower(1.0);
-            frontR.setPower(-1.0);
+        while (ms.time() <= time) {
+            frontL.setPower(-1.0);
+            frontR.setPower(1.0);
             backR.setPower(1.0);
             backL.setPower(-1.0);
         }
@@ -173,16 +187,14 @@ public class GoldAlignExample extends OpMode
         frontR.setPower(0.0);
         backR.setPower(0.0);
         backL.setPower(0.0);
-
     }
-    public void goDown(double time)
-    {
+
+    public void goDown(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while(ms.time()<=time)
-        {
-            frontL.setPower(-1.0);
-            frontR.setPower(1.0);
+        while (ms.time() <= time) {
+            frontL.setPower(1.0);
+            frontR.setPower(-1.0);
             backR.setPower(-1.0);
             backL.setPower(1.0);
         }
@@ -191,90 +203,159 @@ public class GoldAlignExample extends OpMode
         backR.setPower(0);
         backL.setPower(0);
     }
-    public void goLeft(double time)
-    {
+
+    public void goLeft(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while(ms.time()<=time)
-        {
+        while (ms.time() <= time) {
             frontL.setPower(-1);
-            frontR.setPower(-1);
-            backR.setPower(1);
-            backL.setPower(1);
-        }
-        frontL.setPower(0);
-        frontR.setPower(0);
-        backR.setPower(0);
-        backL.setPower(0);
-    }
-    public void goRight(double time)
-    {
-        ElapsedTime ms = new ElapsedTime();
-        ms.reset();
-        while(ms.time()<=time)
-        {
-            frontL.setPower(1);
             frontR.setPower(1);
             backR.setPower(-1);
-            backL.setPower(-1);
-        }
-        frontL.setPower(0);
-        frontR.setPower(0);
-        backR.setPower(0);
-        backL.setPower(0);
-    }
-    public void rotateCWise(double time)
-    {
-        ElapsedTime ms = new ElapsedTime();
-        ms.reset();
-        while(ms.time()<=time)
-        {
-            frontL.setPower(1);
-            frontR.setPower(1);
-            backR.setPower(1);
             backL.setPower(1);
         }
-        frontL.setPower(0);
-        frontR.setPower(0);
-        backR.setPower(0);
-        backL.setPower(0);
-    }
-    public void rotateCCWise(double time)
-    {
-        ElapsedTime ms = new ElapsedTime();
-        ms.reset();
-        while(ms.time()<=time)
-        {
-            frontL.setPower(-1);
-            frontR.setPower(-1);
-            backR.setPower(-1);
-            backL.setPower(-1);
-        }
-        frontL.setPower(0);
-        frontR.setPower(0);
-        backR.setPower(0);
-        backL.setPower(0);
-    }
-    public void rotateCWiseNoNum(double power)
-    {
-        frontL.setPower(power);
-        frontR.setPower(power);
-        backR.setPower(power);
-        backL.setPower(power);
-    }
-    public void rotateCCWiseNoNum(double power)
-    {
-        frontL.setPower(-power);
-        frontR.setPower(-power);
-        backR.setPower(-power);
-        backL.setPower(-1*power);
-    }
-    public void rotateSTOP()
-    {
         frontL.setPower(0);
         frontR.setPower(0);
         backR.setPower(0);
         backL.setPower(0);
     }
 
+    public void goRight(double time) {
+        ElapsedTime ms = new ElapsedTime();
+        ms.reset();
+        while (ms.time() <= time) {
+            frontL.setPower(1);
+            frontR.setPower(-1);
+            backR.setPower(1);
+            backL.setPower(-1);
+        }
+        frontL.setPower(0);
+        frontR.setPower(0);
+        backR.setPower(0);
+        backL.setPower(0);
+    }
+
+    public void rotateCWise(double time) {
+        ElapsedTime ms = new ElapsedTime();
+        ms.reset();
+        while (ms.time() <= time) {
+            frontL.setPower(1);
+            frontR.setPower(1);
+            backR.setPower(1);
+            backL.setPower(1);
+        }
+        frontL.setPower(0);
+        frontR.setPower(0);
+        backR.setPower(0);
+        backL.setPower(0);
+    }
+
+    public void rotateCCWise(double time) {
+        ElapsedTime ms = new ElapsedTime();
+        ms.reset();
+        while (ms.time() <= time) {
+            frontL.setPower(-1);
+            frontR.setPower(-1);
+            backR.setPower(-1);
+            backL.setPower(-1);
+        }
+        frontL.setPower(0);
+        frontR.setPower(0);
+        backR.setPower(0);
+        backL.setPower(0);
+    }
+
+    public void rotateCWiseNoNum(double power) {
+        frontL.setPower(power);
+        frontR.setPower(power);
+        backR.setPower(power);
+        backL.setPower(power);
+    }
+
+    public void rotateCCWiseNoNum(double power) {
+        frontL.setPower(-power);
+        frontR.setPower(-power);
+        backR.setPower(-power);
+        backL.setPower(-1 * power);
+    }
+
+    public void rotateSTOP(double time)
+    {
+        ElapsedTime ms = new ElapsedTime();
+        ms.reset();
+        while (ms.time() <= time) {
+            frontL.setPower(0);
+            frontR.setPower(0);
+            backR.setPower(0);
+            backL.setPower(0);
+        }
+    }
+
+    public boolean isAligned() {
+        return detector.getAligned();
+    }
+
+    public double rotateLeft(double time, double power) {
+        ElapsedTime ms = new ElapsedTime();
+        ms.reset();
+        while (ms.time() <= time && isAligned() == false) {
+            frontL.setPower(power);
+            frontR.setPower(power);
+            backR.setPower(power);
+            backL.setPower(power);
+
+        }
+
+        frontL.setPower(0);
+        frontR.setPower(0);
+        backR.setPower(0);
+        backL.setPower(0);
+        if(isAligned() == true)
+        {
+            return ms.time();
+        }
+        return -1.0;
+    }
+
+
+    public double rotateRight(double time, double power) {
+        ElapsedTime ms = new ElapsedTime();
+        ms.reset();
+        while (ms.time() <= time && isAligned() == false) {
+            frontL.setPower(-power);
+            frontR.setPower(-power);
+            backR.setPower(-power);
+            backL.setPower(-power);
+
+        }
+        frontL.setPower(0);
+        frontR.setPower(0);
+        backR.setPower(0);
+        backL.setPower(0);
+        if(isAligned() == true)
+        {
+            return ms.time();
+        }
+        return -1.0;
+    }
+    public void goBack(double time)
+    {
+        ElapsedTime ms = new ElapsedTime();
+        ms.reset();
+        while (ms.time() <= time)
+        {
+            frontL.setPower(1.0);
+            frontR.setPower(-1.0);
+            backR.setPower(-1.0);
+            backL.setPower(1.0);
+        }
+        frontL.setPower(0.0);
+        frontR.setPower(0.0);
+        backR.setPower(0.0);
+        backL.setPower(0.0);
+    }
+
+    public void Stop()
+    {
+        detector.disable();
+    }
 }
