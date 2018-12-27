@@ -27,6 +27,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.Helpers.Slave;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -40,99 +42,40 @@ import java.util.Date;
  * Remove a @Disabled the on the next line or two (if present) to add this opmode to the Driver Station OpMode list,
  * or add a @Disabled annotation to prevent this OpMode from being added to the Driver Station
  */
-@TeleOp(name="KimberlySucks", group="TeleOp")
+@TeleOp(name="Drive", group="TeleOp")
 
 public class DriverMode extends OpMode {
 
     /* Declare OpMode members. */
-    private DcMotor dc1;
-    private DcMotor dc2;
-    private DcMotor dc3;
-    private DcMotor dc4;
+    private DcMotor frontL;
+    private DcMotor frontR;
+    private DcMotor backR;
+    private DcMotor backL;
+    private DcMotor latchMotor;
+    private Servo armIntake;
+    private Slave slave = new Slave();
+    /**
+
     private DcMotor armMotor1;
     private DcMotor armMotor2;
     private DcMotor latchMotor;
-    private Servo s1;
-    private String status;
+     **/
+
 
     @Override
     public void init()
     {
-        status = "";
-        /* */
-        telemetry.addData("Status", "Initialized");
-        try
-        {
-            dc1 = hardwareMap.get(DcMotor.class, "DC1");
-            //dc1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
-        catch(Exception e)
-        {
-            System.out.println(e + "");
-        }
-        try
-        {
-            dc2 = hardwareMap.get(DcMotor.class, "DC2");
-        }
-        catch(Exception e)
-        {
-            System.out.println(e + "");
-        }
-        try
-        {
-            dc3 = hardwareMap.get(DcMotor.class, "DC3");
-        }
-        catch(Exception e)
-        {
-            telemetry.addData("Mistake: " + e, "");
-        }
-        try
-        {
-
-            dc4 = hardwareMap.get(DcMotor.class, "DC4");
-        }
-        catch(Exception e)
-        {
-            telemetry.addData("Mistake: " + e, "");
-        }
-        try
-        {
-            armMotor1 = hardwareMap.get(DcMotor.class, "DC5");
-            armMotor1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        }
-        catch(Exception e)
-        {
-            telemetry.addLine("Mistake: " + e);
-        }
-        try
-        {
-            armMotor2 = hardwareMap.get(DcMotor.class, "DC6");
-            armMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
-        catch(Exception e)
-        {
-            telemetry.addLine("Mistake: " + e);
-        }
-        try
-        {
-            s1 = hardwareMap.get(Servo.class, "S1");
-            status += "S1 connected";
-        }
-        catch(Exception e)
-        {
-            telemetry.addData("Mistake: " + e, "");
-            status += "S1 not found";
-        }
-
+        slave.init(hardwareMap);
+        telemetry.addLine(slave.getStatus());
     }
 
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
      */
     @Override
-    public void init_loop() {
-        telemetry.addData("status ",status );
+    public void init_loop()
+    {
+        telemetry.addData("Status ", "WORKING");
         telemetry.update();
     }
 
@@ -140,7 +83,8 @@ public class DriverMode extends OpMode {
      * Code to run ONCE when the driver hits PLAY
      */
     @Override
-    public void start() {
+    public void start()
+    {
 
     }
 
@@ -155,6 +99,8 @@ public class DriverMode extends OpMode {
         double leftPress = gamepad1.left_trigger * -1;
         double x2 = gamepad2.left_stick_x;
         double y2 = gamepad2.left_stick_y;
+        boolean dPadUp = gamepad1.dpad_up;
+        boolean dPadDown = gamepad1.dpad_down;
 
         double y = gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
@@ -181,26 +127,26 @@ public class DriverMode extends OpMode {
         else if(y>0 && x<0)
         {
             theta = Math.PI + theta;
-            telemetry.addData("q2", "");
+            telemetry.addData("Q2", "");
 
         }
         //Q3
         else if((x>=-1 && x<0) && (y<0 && y>=-1))
         {
             theta += Math.PI;
-            telemetry.addData("q3","");
+            telemetry.addData("Q3","");
         }
         //Q4
         else if((x>0 && x<=1) && (y<0 && y>=-1))
         {
             theta = 2*Math.PI + theta;
-            telemetry.addData("q4", "");
+            telemetry.addData("Q4", "");
         }
         //Q1
         else
         {
             theta = theta;
-            telemetry.addData("q1", "");
+            telemetry.addData("Q1", "");
         }
         double degree = 0;
         degree = (theta/Math.PI) * 180;
@@ -218,35 +164,60 @@ public class DriverMode extends OpMode {
         //Rotate right
         if(rightPress != 0)
         {
-            dc1.setPower(-1*rightPress);
-            dc2.setPower(-1*rightPress);
-            dc3.setPower(-1*rightPress);
-            dc4.setPower(-1*rightPress);
+            /*
+            frontL.setPower(-1*rightPress);
+            frontR.setPower(-1*rightPress);
+            backR.setPower(-1*rightPress);
+            backL.setPower(-1*rightPress);
+            */
+            slave.frontL.setPower(-1*rightPress);
+            slave.frontR.setPower(-1*rightPress);
+            slave.backR.setPower(-1*rightPress);
+            slave.backL.setPower(-1*rightPress);
         }
         //Rotate left
         else if(leftPress != 0)
         {
-            dc1.setPower(-1*leftPress);
-            dc2.setPower(-1*leftPress);
-            dc3.setPower(-1*leftPress);
-            dc4.setPower(-1*leftPress);
+            /*
+            frontL.setPower(-1*leftPress);
+            frontR.setPower(-1*leftPress);
+            backR.setPower(-1*leftPress);
+            backL.setPower(-1*leftPress);
+            */
+            slave.frontL.setPower(-1*leftPress);
+            slave.frontR.setPower(-1*leftPress);
+            slave.backR.setPower(-1*leftPress);
+            slave.backL.setPower(-1*leftPress);
         }
         else if(x==0 && y==0)
         {
-            dc1.setPower(0);
-            dc2.setPower(0);
-            dc3.setPower(0);
-            dc4.setPower(0);
+            /*
+            frontL.setPower(0);
+            frontR.setPower(0);
+            backR.setPower(0);
+            backL.setPower(0);
+            */
+            slave.frontL.setPower(0);
+            slave.frontR.setPower(0);
+            slave.backR.setPower(0);
+            slave.backL.setPower(0);
         }
         else
         {
-            dc1.setPower(-v2);
-            dc2.setPower(v1);
-            dc3.setPower(v2);
-            dc4.setPower(-v1);
+            /*
+            frontL.setPower(-v2);
+            frontR.setPower(v1);
+            backR.setPower(v2);
+            backL.setPower(-v1);
+            */
+            slave.frontL.setPower(-v2);
+            slave.frontR.setPower(v1);
+            slave.backR.setPower(v2);
+            slave.backL.setPower(-v1);
         }
         //Moving the arm up
-        if(yRight < 0)
+        /**
+                if(yRight < 0)
         {
             armMotor1.setPower(y);
             armMotor2.setPower(-y);
@@ -266,8 +237,9 @@ public class DriverMode extends OpMode {
             armMotor2.setPower(0);
         }
         telemetry.update();
-
+**/
         //SERVOS
+        /**
         boolean s1up = gamepad1.y;
         boolean s1down = gamepad1.a;
 
@@ -284,6 +256,7 @@ public class DriverMode extends OpMode {
         {
             s1.setPosition(0.5);
         }
+         **/
         //upDownMotor = name of the motor that controls vertical arm movement
         //up = the y2 might have to be changed
         /**
@@ -304,6 +277,18 @@ public class DriverMode extends OpMode {
             upDownMotor.setPower(0);
         }
          **/
+        if(yRight>0)
+            slave.latch.setPower(-yRight);
+        else if(yRight<0)
+            slave.latch.setPower(-yRight);
+        else
+            slave.latch.setPower(0);
+        if(dPadUp)
+            slave.armIntake.setPosition(1);
+        else if(dPadDown)
+            slave.armIntake.setPosition(0);
+        else
+            slave.armIntake.setPosition(0.5);
     }
 
     /*

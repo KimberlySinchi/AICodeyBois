@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.Code;
-import com.disnodeteam.dogecv.CameraViewDisplay;
-import com.disnodeteam.dogecv.DogeCV;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -17,12 +14,16 @@ import org.firstinspires.ftc.teamcode.Helpers.Slave;
 
 import java.util.List;
 
-@Autonomous(name = "Basic Autonomous", group = "Slave")
+@Autonomous(name = "aHHHH pt 2", group = "Slave")
 
-public class AutoAttempt1 extends LinearOpMode
+public class AutoAttempt3 extends LinearOpMode
 {
     private Slave slave = new Slave();
     private ElapsedTime runtime = new ElapsedTime();
+
+    private ElapsedTime rotLeftTime = new ElapsedTime();
+    private double rotationTime = 0;
+
     private DcMotor frontL;
     private DcMotor frontR;
     private DcMotor backL;
@@ -58,27 +59,6 @@ public class AutoAttempt1 extends LinearOpMode
          */
         telemetry.addData("Status", "Find gold position and align ;-;");
 
-        // Setup detector for Doge
-        /*
-        detector = new SampleAlignDetector(); // Create the detector
-        detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance()); // Initialize detector with app context and camera
-        detector.useDefaults(); // Set detector to use default settings
-
-        detector.alignSize = 100; // How wide (in pixels) is the range in which the gold object will be aligned. (Represented by green bars in the preview)
-        detector.alignPosOffset = 0; // How far from center frame to offset this alignment zone.
-        detector.downscale = 0.4; // How much to downscale the input frames
-
-        // Optional tuning
-        detector.areaScoringMethod = DogeCV.AreaScoringMethod.MAX_AREA; // Can also be PERFECT_AREA
-        //detector.perfectAreaScorer.perfectArea = 10000; // if using PERFECT_AREA scoring
-        detector.maxAreaScorer.weight = 0.001;
-
-        detector.ratioScorer.weight = 15;
-        detector.ratioScorer.perfectRatio = 1.0;
-
-        detector.enable(); // Start detector
-        */
-
         //Setup for Tensor Flow detector
         initVuforia();
         initTfod();
@@ -90,80 +70,81 @@ public class AutoAttempt1 extends LinearOpMode
         //Finding the position of the gold mineral
         if(opModeIsActive())
         {
-            while (runtime.seconds() < 10 && detect)
+            rotLeftTime.reset();
+            while (opModeIsActive() && runtime.seconds() < 10 && detect)
             {
-                //If the detector is on
                 if (tfod != null)
                 {
-                    //An array to hold the detections
+                    // getUpdatedRecognitions() will return null if no new information is available since
+                    // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    //If there is an object being recognized somewhere
                     if (updatedRecognitions != null)
                     {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
                         int goldMineralX = -1;
                         int goldMineralXR = -1;
                         int goldMineralCent = -1;
-                        int leftRangeX = (1280 / 2) - 50;
+                        int leftRangeX = (1280/2)-50;
                         int rightRangeX = leftRangeX + 100;
-                        //If there is one or more objects being detected
-                        if (updatedRecognitions.size() >= 1)
-                            //Checking every detection
-                            for (Recognition r : updatedRecognitions)
-                                //If one of the detections is a gold mineral model
+                        if(updatedRecognitions.size()>=1)
+                        {
+                            for(Recognition r: updatedRecognitions)
+                            {
                                 if (r.getLabel().equals(LABEL_GOLD_MINERAL))
                                 {
-                                    goldMineralX = (int) r.getLeft();
-                                    goldMineralXR = (int) r.getRight();
-                                    goldMineralCent = ((goldMineralX + goldMineralXR) / 2);
-                                    aligned = isAligned(goldMineralCent, 640 - 100, 640 + 100);
+                                    //goldMineralX = (int) r.getLeft();
+                                    //goldMineralXR = (int)r.getRight();
+                                    //goldMineralCent = (int)((goldMineralX+goldMineralXR)/2);
+                                    //aligned = isAligned(goldMineralCent, 640-75, 640+75);
+                                    if(!aligned)
+                                    {
+                                        telemetry.addLine("TRYING TO FIND GOLD-------");
+                                        goldMineralX = (int) r.getLeft();
+                                        goldMineralXR = (int) r.getRight();
+                                        goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
+                                        aligned = isAligned(goldMineralCent, 640-125, 640+125);
+                                        rotateLeftP(0.05);
+                                        rotationTime = rotLeftTime.time();
+                                        telemetry.addLine("Rotation Time: "+rotationTime);
+                                        telemetry.addLine("Rotating left");
+                                        telemetry.addLine("Aligned: " + aligned);
+                                        if(aligned)
+                                            detect = false;
+                                    }
                                 }
-                        //If there are 3 objects being detected
-                        if (updatedRecognitions.size() == 3)
+                            }
+                        }
+                        /*if (updatedRecognitions.size() == 3)
                         {
                             goldMineralX = -1;
                             goldMineralXR = -1;
                             goldMineralCent = -1;
                             int silverMineral1X = -1;
                             int silverMineral2X = -1;
-                            //Checking every detection
                             for (Recognition recognition : updatedRecognitions)
                             {
-                                //If one of the detections is a gold mineral model
                                 if (recognition.getLabel().equals(LABEL_GOLD_MINERAL))
                                 {
                                     goldMineralX = (int) recognition.getLeft();
                                     goldMineralXR = (int) recognition.getRight();
-                                    goldMineralCent = (int) ((goldMineralX + goldMineralXR)) / 2;
+                                    goldMineralCent = (int)((goldMineralX+goldMineralXR))/2;
                                 }
-                                //If not, assume the other 2 detections are silver minerals and get their relative location
                                 else if (silverMineral1X == -1)
+                                {
                                     silverMineral1X = (int) recognition.getLeft();
+                                }
                                 else
+                                {
                                     silverMineral2X = (int) recognition.getLeft();
+                                }
                             }
-                            //If all three ints for the minerals have a value
                             if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1)
                             {
-                                //Finding the position of the gold mineral
                                 if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X)
                                 {
                                     telemetry.addData("Gold Mineral Position", "Left");
                                     telemetry.addLine("Left code was updated");
                                     pos = -1;
-                                    telemetry.addData("pos", "left");
-                                    telemetry.update();
-                                    rotateLeftP(0.05);
-                                    while(aligned == false)
-                                    {
-                                        aligned = isAligned(goldMineralCent, 640 - 100, 640 + 100);
-                                        telemetry.addLine("penis moving left");
-                                        telemetry.addLine("aligned: " + isAligned(goldMineralCent, 640 - 150, 640 + 150));
-                                        telemetry.update();
-                                    }
-                                    forwardS(2);
-                                    backwardS(2);
-                                    detect = false;
                                 }
                                 else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X)
                                 {
@@ -171,35 +152,49 @@ public class AutoAttempt1 extends LinearOpMode
                                     telemetry.addLine("Right code was updated");
                                     pos = 1;
                                 }
-                                else if(goldMineralX > silverMineral1X && goldMineralX < silverMineral2X ||
-                                goldMineralX < silverMineral1X && goldMineralX > silverMineral2X)
+                                else
                                 {
                                     telemetry.addData("Gold Mineral Position", "Center");
                                     telemetry.addLine("Center code was updated");
                                     pos = 0;
                                 }
-                                telemetry.addLine("Position of gold mineral: " + pos);
                             }
-                        }
+                        }*/
                         telemetry.addLine("Gold cords: (" + goldMineralX + " to " + goldMineralXR + ")");
-                        telemetry.addLine("Gold Center x (" + goldMineralCent + ")");
-                        telemetry.addData("Gold Mineral Aligned: ", aligned);
+                        telemetry.addLine("Gold Center x (" + goldMineralCent +")");
+                        telemetry.addData("Position of Gold", pos);
+                        telemetry.addData("Gold Mineral Aligned", aligned);
                         telemetry.update();
                     }
                 }
             }
-            telemetry.addLine("Outside of detect");
-            telemetry.update();
-            findGold();
-            telemetry.addLine("did movement");
-            telemetry.update();
-            if (tfod != null)
-                tfod.shutdown();
+            forward();
+            runtime.reset();
+            while(opModeIsActive() && runtime.seconds() < 2)
+            {
+                telemetry.addLine("Moving forward");
+                telemetry.addLine("Rotation time: "+rotationTime);
+                telemetry.update();
+            }
+            backward();
+            runtime.reset();
+            while(opModeIsActive() && runtime.seconds() < 2)
+            {
+                telemetry.addLine("Moving backward");
+                telemetry.update();
+            }
+            /*rotateRight();
+            runtime.reset();
+            while(opModeIsActive() && runtime.seconds() < rotationTime)
+            {
+                telemetry.addLine("hi, we're rotating back");
+                telemetry.update();
+            }*/
+
         }
-        else
+        if (tfod != null)
         {
-            stop();
-            sleep(1000);
+            tfod.shutdown();
         }
 
 
