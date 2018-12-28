@@ -15,6 +15,7 @@ public class Slave
     public DcMotor backR;
     public DcMotor backL;
     public DcMotor latch;
+    public DcMotor armExtend;
     public String status;
     public Servo armIntake;
 
@@ -79,6 +80,15 @@ public class Slave
         catch(Exception e)
         {
             status += "\nArm Intake servo not mapping";
+        }
+        try
+        {
+            armExtend = hwmap.get(DcMotor.class, "DC6");
+            armExtend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        catch(Exception e)
+        {
+            status += "\nArm Extending motor not mapping";
         }
     }
     public String getStatus()

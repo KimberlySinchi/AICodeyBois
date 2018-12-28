@@ -82,26 +82,33 @@ public class MineralHit extends OpMode{
         detector.ratioScorer.perfectRatio = 1.0; // Ratio adjustment
 
         detector.enable(); // Start the detector!
-        try {
+        try
+        {
             frontL = hardwareMap.get(DcMotor.class, "DC1");
             frontL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        } catch (Exception e) {
         }
-        try {
+        catch (Exception e) {
+        }
+        try
+        {
             frontR = hardwareMap.get(DcMotor.class, "DC2");
             frontR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        } catch (Exception e) {
         }
-        try {
+        catch (Exception e) {
+        }
+        try
+        {
             backR = hardwareMap.get(DcMotor.class, "DC3");
             backR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        } catch (Exception e) {
         }
-        try {
+        catch (Exception e) {
+        }
+        try
+        {
             backL = hardwareMap.get(DcMotor.class, "DC4");
             backL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
         }
 
     }
@@ -124,21 +131,21 @@ public class MineralHit extends OpMode{
         while (runtime.seconds() < 30) {
 
 
-            if (bool3) {
+            if (bool3)
+            {
                 rotateRight(1, .2);
                 bool3 = false;
             }
-            if (bool1) {
+            if (bool1)
+            {
                 rotateLeft(4, .2);
                 bool1 = false;
             }
-
-            if (bool2) {
+            if (bool2)
+            {
                 goUp(1.7);
                 bool2 = false;
             }
-
-
         }
 
     }
@@ -159,15 +166,18 @@ public class MineralHit extends OpMode{
      * Code to run ONCE after the driver hits STOP
      */
     @Override
-    public void stop() {
+    public void stop()
+    {
         // Disable the detector
         detector.disable();
     }
 
-    public void goUp(double time) {
+    public void goUp(double time)
+    {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time) {
+        while (ms.time() <= time)
+        {
             frontL.setPower(-1.0);
             frontR.setPower(1.0);
             backR.setPower(1.0);
@@ -179,10 +189,12 @@ public class MineralHit extends OpMode{
         backL.setPower(0.0);
     }
 
-    public void goDown(double time) {
+    public void goDown(double time)
+    {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time) {
+        while (ms.time() <= time)
+        {
             frontL.setPower(1.0);
             frontR.setPower(-1.0);
             backR.setPower(-1.0);
@@ -194,10 +206,12 @@ public class MineralHit extends OpMode{
         backL.setPower(0);
     }
 
-    public void goLeft(double time) {
+    public void goLeft(double time)
+    {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time) {
+        while (ms.time() <= time)
+        {
             frontL.setPower(-1);
             frontR.setPower(1);
             backR.setPower(-1);
@@ -209,10 +223,12 @@ public class MineralHit extends OpMode{
         backL.setPower(0);
     }
 
-    public void goRight(double time) {
+    public void goRight(double time)
+    {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time) {
+        while (ms.time() <= time)
+        {
             frontL.setPower(1);
             frontR.setPower(-1);
             backR.setPower(1);
@@ -224,10 +240,12 @@ public class MineralHit extends OpMode{
         backL.setPower(0);
     }
 
-    public void rotateCWise(double time) {
+    public void rotateCWise(double time)
+    {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time) {
+        while (ms.time() <= time)
+        {
             frontL.setPower(1);
             frontR.setPower(1);
             backR.setPower(1);
@@ -239,10 +257,12 @@ public class MineralHit extends OpMode{
         backL.setPower(0);
     }
 
-    public void rotateCCWise(double time) {
+    public void rotateCCWise(double time)
+    {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time) {
+        while (ms.time() <= time)
+        {
             frontL.setPower(-1);
             frontR.setPower(-1);
             backR.setPower(-1);
@@ -254,21 +274,24 @@ public class MineralHit extends OpMode{
         backL.setPower(0);
     }
 
-    public void rotateCWiseNoNum(double power) {
+    public void rotateCWiseNoNum(double power)
+    {
         frontL.setPower(power);
         frontR.setPower(power);
         backR.setPower(power);
         backL.setPower(power);
     }
 
-    public void rotateCCWiseNoNum(double power) {
+    public void rotateCCWiseNoNum(double power)
+    {
         frontL.setPower(-power);
         frontR.setPower(-power);
         backR.setPower(-power);
         backL.setPower(-1 * power);
     }
 
-    public void rotateSTOP() {
+    public void rotateSTOP()
+    {
         frontL.setPower(0);
         frontR.setPower(0);
         backR.setPower(0);
@@ -279,27 +302,29 @@ public class MineralHit extends OpMode{
         return detector.getAligned();
     }
 
-    public void rotateLeft(double time, double power) {
+    public void rotateLeft(double time, double power)
+    {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time && isAligned() == false) {
+        while (ms.time() <= time && isAligned() == false)
+        {
             frontL.setPower(power);
             frontR.setPower(power);
             backR.setPower(power);
             backL.setPower(power);
-
         }
         frontL.setPower(0);
         frontR.setPower(0);
         backR.setPower(0);
         backL.setPower(0);
-
     }
 
-    public void rotateRight(double time, double power) {
+    public void rotateRight(double time, double power)
+    {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time && isAligned() == false) {
+        while (ms.time() <= time && isAligned() == false)
+        {
             frontL.setPower(-power);
             frontR.setPower(-power);
             backR.setPower(-power);
@@ -310,7 +335,5 @@ public class MineralHit extends OpMode{
         frontR.setPower(0);
         backR.setPower(0);
         backL.setPower(0);
-
     }
-
 }

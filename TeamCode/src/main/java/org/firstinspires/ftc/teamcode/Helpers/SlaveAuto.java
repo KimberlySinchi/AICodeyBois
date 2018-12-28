@@ -14,6 +14,7 @@ public class SlaveAuto
     public DcMotor latch;
     public String status;
     public Servo armIntake;
+    public DcMotor armExtend;
 
     HardwareMap hwmap = null; //Need a reference to hardware map because otherwise, the code will think this is an opmode to use right now
 
@@ -62,17 +63,29 @@ public class SlaveAuto
         }
         try
         {
-            latch = hwmap.get(DcMotor.class, "latch");
+            latch = hwmap.get(DcMotor.class, "DC5");
             latch.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         catch(Exception e)
         {
             status += "\nLatch (latch) motor not mapping";
         }
-        try{
+        try
+        {
             armIntake = hwmap.get(Servo.class, "S1");
-        }catch (Exception e){
-            status += "\nArm Intake Servo not mapping";
+        }
+        catch(Exception e)
+        {
+            status += "\nArm Intake servo not mapping";
+        }
+        try
+        {
+            armExtend = hwmap.get(DcMotor.class, "DC6");
+            armExtend.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+        catch(Exception e)
+        {
+            status += "\nArm Extending motor not mapping";
         }
     }
     public String getStatus()

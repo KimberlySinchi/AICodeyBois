@@ -76,7 +76,8 @@ public class dogeAuto4 extends LinearOpMode {
     }
 
     @Override
-    public void runOpMode() {
+    public void runOpMode()
+    {
         // Set up detector
         detector = new GoldAlignDetector(); // Create detector
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance()); // Initialize it with the app context and camera
@@ -95,26 +96,38 @@ public class dogeAuto4 extends LinearOpMode {
         detector.ratioScorer.perfectRatio = 1.0; // Ratio adjustment
 
         detector.enable(); // Start the detector!
-        try {
+        try
+        {
             frontL = hardwareMap.get(DcMotor.class, "DC1");
             frontL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        } catch (Exception e) {
         }
-        try {
+        catch (Exception e)
+        {
+        }
+        try
+        {
             frontR = hardwareMap.get(DcMotor.class, "DC2");
             frontR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        } catch (Exception e) {
         }
-        try {
+        catch (Exception e)
+        {
+        }
+        try
+        {
             backR = hardwareMap.get(DcMotor.class, "DC3");
             backR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        } catch (Exception e) {
         }
-        try {
+        catch (Exception e)
+        {
+        }
+        try
+        {
             backL = hardwareMap.get(DcMotor.class, "DC4");
             backL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
         }
 
         // Wait for the game to start (driver presses PLAY)
@@ -126,42 +139,23 @@ public class dogeAuto4 extends LinearOpMode {
         {
             if(bool1)
             {
-
                 double timeRight = rotateRight(1.12, .14);
-
-
                 double timeLeft = rotateLeft(4, .14);
-
-
                 double totalTime = timeRight + timeLeft;
                 goUp(1.3); //in the future go back: goBack(1.5);
-
-
                 goBack(1.3);
                 telemetry.addLine(totalTime+ "");
                 if(totalTime <=0) //ROTATED RIGHT AND FOUND THE BLOCK
-                {
                     rotateLeft(-1*totalTime,.14);
-                }
-                else if(totalTime>0);
-                {
+                else if(totalTime>0)//There was a semicolon here aCk
                     rotateRight(totalTime,.14);
-                }
-
                 bool1 = false;
-
             }
-
-                    detector.disable();
-
+                detector.disable();
             }
-
         }
-
-
-
-
-    public void goUp(double time) {
+    public void goUp(double time)
+    {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
         while (ms.time() <= time) {

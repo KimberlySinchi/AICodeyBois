@@ -41,12 +41,6 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
 public class DriverModeEncoder extends OpMode {
 
     /* Declare OpMode members. */
-    private DcMotor frontL;
-    private DcMotor frontR;
-    private DcMotor backR;
-    private DcMotor backL;
-    private DcMotor latchMotor;
-    private Servo armIntake;
     private SlaveAuto slave = new SlaveAuto();
 
     @Override
@@ -81,23 +75,31 @@ public class DriverModeEncoder extends OpMode {
     @Override
     public void loop()
     {
-        double bufferA = 5;
-        double rightPress = gamepad1.right_trigger;
-        double leftPress = gamepad1.left_trigger * -1;
-        double x2 = gamepad2.left_stick_x;
-        double y2 = gamepad2.left_stick_y;
-        boolean dPadUp = gamepad1.dpad_up;
-        boolean dPadDown = gamepad1.dpad_down;
-        boolean startButton = gamepad1.start;
+        double rightTrigger = gamepad1.right_trigger;
+        double leftTrigger = -gamepad1.left_trigger;
+
         boolean lBumper = gamepad1.left_bumper;
         boolean rBumper = gamepad1.right_bumper;
 
-        double y = gamepad1.left_stick_y;
-        double x = gamepad1.left_stick_x;
-        double yRight = gamepad1.right_stick_y;
-        double xLeft = gamepad1.right_stick_x;
-        telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
-        double theta = Math.atan(y/x);
+        boolean dPadUp = gamepad1.dpad_up;
+        boolean dPadDown = gamepad1.dpad_down;
+        boolean dPadUp2 = gamepad2.dpad_up;
+        boolean dPadDown2 = gamepad2.dpad_down;
+
+        double xL = gamepad1.left_stick_x;
+        double yL = gamepad1.left_stick_y;
+        double xR = gamepad1.right_stick_x;
+        double yR = gamepad1.right_stick_y;
+
+        double x2 = gamepad2.left_stick_x;
+        double y2 = gamepad2.left_stick_y;
+
+
+        boolean back = gamepad1.back;
+
+        telemetry.addData("Status:","x = " + xL + ", y =  " + yL);
+
+        double theta = Math.atan(yL/xL);
         String compare = "-0.0";
         String sTheta = "" + theta;
         boolean isnegZ = true;
@@ -109,65 +111,58 @@ public class DriverModeEncoder extends OpMode {
                 i = 10;
             }
         }
-        if(isnegZ == true && x<0)
+        if(isnegZ == true && xL < 0)
         {
             theta = Math.PI;
         }
         //Q2
-        else if(y>0 && x<0)
+        else if(yL > 0 && xL < 0)
         {
             theta = Math.PI + theta;
             telemetry.addData("Q2", "");
-
         }
         //Q3
-        else if((x>=-1 && x<0) && (y<0 && y>=-1))
+        else if((xL >= -1 && xL < 0) && (yL < 0 && yL >= -1))
         {
             theta += Math.PI;
             telemetry.addData("Q3","");
         }
         //Q4
-        else if((x>0 && x<=1) && (y<0 && y>=-1))
+        else if((xL > 0 && xL <= 1) && (yL < 0 && yL >= -1))
         {
             theta = 2*Math.PI + theta;
             telemetry.addData("Q4", "");
         }
         //Q1
-        else
-        {
-            theta = theta;
+        else //theta = theta
             telemetry.addData("Q1", "");
-        }
-        double degree = 0;
-        degree = (theta/Math.PI) * 180;
+        double degree = (theta/Math.PI) * 180;
         telemetry.addData("Status:","degree = " + degree);
 
-        double rad = Math.sqrt(x*x + y*y);
+        double rad = Math.sqrt(xL*xL + yL*yL);
         if(rad > 1)
-        {
             rad = 1;
-        }
         double v1 = rad*(-1*Math.sin(theta + Math.PI/4));
         double v2 = rad*Math.cos(theta + Math.PI/4);
         telemetry.addData("v1 = " + v1, " v2 = " + v2);
 
         //Rotate right
-        if(rightPress != 0)
+        if(rightTrigger != 0)
         {
-            slave.frontL.setPower(-1*rightPress);
-            slave.frontR.setPower(-1*rightPress);
-            slave.backR.setPower(-1*rightPress);
-            slave.backL.setPower(-1*rightPress);
+            slave.frontL.setPower(-rightTrigger);
+            slave.frontR.setPower(-rightTrigger);
+            slave.backR.setPower(-rightTrigger);
+            slave.backL.setPower(-rightTrigger);
         }
         //Rotate left
-        else if(leftPress != 0)
+        else if(leftTrigger != 0)
         {
-            slave.frontL.setPower(-1*leftPress);
-            slave.frontR.setPower(-1*leftPress);
-            slave.backR.setPower(-1*leftPress);
-            slave.backL.setPower(-1*leftPress);
+            slave.frontL.setPower(-leftTrigger);
+            slave.frontR.setPower(-leftTrigger);
+            slave.backR.setPower(-leftTrigger);
+            slave.backL.setPower(-leftTrigger);
         }
-        else if(x==0 && y==0)
+        else if(xL==0 && yL==0)
         {
             slave.frontL.setPower(0);
             slave.frontR.setPower(0);
@@ -183,12 +178,20 @@ public class DriverModeEncoder extends OpMode {
         }
 
         //OUR LATCH, 10% OF THE TIME IT WORKS EVERY TIME
-        if(yRight>0)
-            slave.latch.setPower(-yRight);
-        else if(yRight<0)
-            slave.latch.setPower(-yRight);
+        if(dPadUp)
+            slave.latch.setPower(0.8);
+        else if(dPadDown)
+            slave.latch.setPower(-0.8);
         else
             slave.latch.setPower(0);
+
+        //Our Arm Movement
+        if(xR > 0)
+            slave.armExtend.setPower(xR);
+        else if (xR < 0)
+            slave.armExtend.setPower(xR);
+        else
+            slave.armExtend.setPower(0);
 
         //THE SERVO INTAKE SYSTEM, ==SUCC MACHINE 5000==
         if(rBumper)
@@ -199,27 +202,33 @@ public class DriverModeEncoder extends OpMode {
             slave.armIntake.setPosition(0.5);
 
         //~~WOW~~ !ENCODER STUFF! ~~WOW~~
-        if(startButton)
+        if(back)
         {
             slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-
-        telemetry.addData("FL",slave.frontL.getCurrentPosition());
-        telemetry.addData("FR",slave.frontR.getCurrentPosition());
-        telemetry.addData("BL",slave.backL.getCurrentPosition());
-        telemetry.addData("BR",slave.backR.getCurrentPosition());
+        int fL = slave.frontL.getCurrentPosition(),fR = slave.frontR.getCurrentPosition();
+        int bL = slave.backL.getCurrentPosition(),bR = slave.backR.getCurrentPosition();
+        telemetry.addData("FL",fL);
+        telemetry.addData("FR",fR);
+        telemetry.addData("BL",bL);
+        telemetry.addData("BR",bR);
 
         telemetry.update();
-    }
 
+    }
     /*
      * Code to run ONCE after the driver hits STOP
      */
     @Override
-    public void stop() {
+    public void stop()
+    {
 
     }
 }

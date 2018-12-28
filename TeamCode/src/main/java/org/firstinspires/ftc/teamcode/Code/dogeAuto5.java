@@ -209,10 +209,10 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
             }
             public void goDown(int power, int ticks) //NOTE: THIS DISTANCE IS IN INCHES
             {
-                frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                frontL.setMode(DcMotor.RunMode.RESET_ENCODERS);
+                frontR.setMode(DcMotor.RunMode.RESET_ENCODERS);
+                backL.setMode(DcMotor.RunMode.RESET_ENCODERS);
+                backR.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
                 frontL.setTargetPosition(ticks);
                 frontR.setTargetPosition(ticks);
@@ -246,10 +246,10 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
                 }
                 public void goRight(int power, int ticks)
                 {
-                    frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    frontL.setMode(DcMotor.RunMode.RESET_ENCODERS);
+                    frontR.setMode(DcMotor.RunMode.RESET_ENCODERS);
+                    backL.setMode(DcMotor.RunMode.RESET_ENCODERS);
+                    backR.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
                     frontL.setTargetPosition(ticks);
                     frontR.setTargetPosition(ticks);
@@ -283,10 +283,10 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
                     }
                     public void goLeft(double power,int ticks)// edit this part to send the amount of ticks after the yellow block was found ==> an int
                     {
-                        frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                        frontL.setMode(DcMotor.RunMode.RESET_ENCODERS);
+                        frontR.setMode(DcMotor.RunMode.RESET_ENCODERS);
+                        backL.setMode(DcMotor.RunMode.RESET_ENCODERS);
+                        backR.setMode(DcMotor.RunMode.RESET_ENCODERS);
 
                         frontL.setTargetPosition(ticks);
                         frontR.setTargetPosition(ticks);
