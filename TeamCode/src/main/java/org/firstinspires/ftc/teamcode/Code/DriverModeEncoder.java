@@ -36,7 +36,7 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
  * Remove a @Disabled the on the next line or two (if present) to add this opmode to the Driver Station OpMode list,
  * or add a @Disabled annotation to prevent this OpMode from being added to the Driver Station
  */
-@TeleOp(name="DriveEncoder", group="TeleOp")
+@TeleOp(name = "Driver Mode Encoder", group = "TeleOp")
 
 public class DriverModeEncoder extends OpMode {
 
