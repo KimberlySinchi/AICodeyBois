@@ -78,6 +78,43 @@ public class AutoAttempt3 extends LinearOpMode
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                    if(updatedRecognitions == null)
+                    {
+                        telemetry.addData("No Objects Detected", updatedRecognitions.size());
+                        int goldMineralX = -1;
+                        int goldMineralXR = -1;
+                        int goldMineralCent = -1;
+                        int leftRangeX = (1280/2)-50;
+                        int rightRangeX = leftRangeX + 100;
+                        if(updatedRecognitions.size()>=1)
+                        {
+                            for(Recognition r: updatedRecognitions)
+                            {
+                                if (r.getLabel().equals(LABEL_GOLD_MINERAL))
+                                {
+                                    //goldMineralX = (int) r.getLeft();
+                                    //goldMineralXR = (int)r.getRight();
+                                    //goldMineralCent = (int)((goldMineralX+goldMineralXR)/2);
+                                    //aligned = isAligned(goldMineralCent, 640-75, 640+75);
+                                    if(!aligned)
+                                    {
+                                        telemetry.addLine("TRYING TO FIND GOLD-------");
+                                        goldMineralX = (int) r.getLeft();
+                                        goldMineralXR = (int) r.getRight();
+                                        goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
+                                        aligned = isAligned(goldMineralCent, 640-125, 640+125);
+                                        rotateLeftP(0.05);
+                                        rotationTime = rotLeftTime.time();
+                                        telemetry.addLine("Rotation Time: "+rotationTime);
+                                        telemetry.addLine("Rotating left");
+                                        telemetry.addLine("Aligned: " + aligned);
+                                        if(aligned)
+                                            detect = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
                     if (updatedRecognitions != null)
                     {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());

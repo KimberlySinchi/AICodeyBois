@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Helpers;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class SlaveAuto
 {
@@ -12,6 +13,7 @@ public class SlaveAuto
     public DcMotor backL;
     public DcMotor latch;
     public String status;
+    public Servo armIntake;
 
     HardwareMap hwmap = null; //Need a reference to hardware map because otherwise, the code will think this is an opmode to use right now
 
@@ -66,6 +68,11 @@ public class SlaveAuto
         catch(Exception e)
         {
             status += "\nLatch (latch) motor not mapping";
+        }
+        try{
+            armIntake = hwmap.get(Servo.class, "S1");
+        }catch (Exception e){
+            status += "\nArm Intake Servo not mapping";
         }
     }
     public String getStatus()

@@ -127,21 +127,21 @@ public class dogeAuto4 extends LinearOpMode {
             if(bool1)
             {
 
-                double timeRight = rotateRight(1.12, .15);
+                double timeRight = rotateRight(1.12, .14);
 
 
-                    double timeLeft = rotateLeft(4, .14);
+                double timeLeft = rotateLeft(4, .14);
 
 
                 double totalTime = timeRight + timeLeft;
-                goUp(1.5); //in the future go back: goBack(1.5);
+                goUp(1.3); //in the future go back: goBack(1.5);
 
 
-                goBack(1.2);
-
+                goBack(1.3);
+                telemetry.addLine(totalTime+ "");
                 if(totalTime <=0) //ROTATED RIGHT AND FOUND THE BLOCK
                 {
-                    rotateLeft(-1*totalTime,.15);
+                    rotateLeft(-1*totalTime,.14);
                 }
                 else if(totalTime>0);
                 {
