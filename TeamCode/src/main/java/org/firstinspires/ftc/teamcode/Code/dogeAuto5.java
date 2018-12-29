@@ -141,24 +141,32 @@ public class dogeAuto5 extends LinearOpMode {
     }
 
     public void up(double power) {
-        slave.frontL.setPower(-power);
-        slave.frontR.setPower(-power);
-        slave.backR.setPower(-power);
-        slave.backL.setPower(-power);
+        frontL.setDirection(DcMotor.Direction.REVERSE);
+        backL.setDirection(DcMotor.Direction.REVERSE);
+        slave.frontL.setPower(power);
+        slave.frontR.setPower(power);
+        slave.backR.setPower(power);
+        slave.backL.setPower(power);
     }
 
     public void down(double power) {
+        frontR.setDirection(DcMotor.Direction.REVERSE);
+        backR.setDirection(DcMotor.Direction.REVERSE);
         slave.frontL.setPower(power);
-        slave.frontR.setPower(-power);
-        slave.backR.setPower(-power);
+        slave.frontR.setPower(power);
+        slave.backR.setPower(power);
         slave.backL.setPower(power);
     }
 
     public void right(double power) {
-        slave.frontL.setPower(-power);
-        slave.frontR.setPower(-power);
-        slave.backR.setPower(-power);
-        slave.backL.setPower(-power);
+        frontL.setDirection(DcMotor.Direction.REVERSE);
+        frontR.setDirection(DcMotor.Direction.REVERSE);
+        backR.setDirection(DcMotor.Direction.REVERSE);
+        backL.setDirection(DcMotor.Direction.REVERSE);
+        slave.frontL.setPower(power);
+        slave.frontR.setPower(power);
+        slave.backR.setPower(power);
+        slave.backL.setPower(power);
     }
 
     public void left(double power) {
@@ -198,16 +206,19 @@ public class dogeAuto5 extends LinearOpMode {
          backR
 
          **/
-        up(-power);
-        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
-        }
+        up(power);
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) 
+        {}
 
         Stop();
         slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+        frontL.setDirection(DcMotor.Direction.FORWARD);
+        frontR.setDirection(DcMotor.Direction.FORWARD);
+        backR.setDirection(DcMotor.Direction.FORWARD);
+        backL.setDirection(DcMotor.Direction.FORWARD);
 
     }
 
@@ -245,6 +256,11 @@ public class dogeAuto5 extends LinearOpMode {
         slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        
+        frontL.setDirection(DcMotor.Direction.FORWARD);
+        frontR.setDirection(DcMotor.Direction.FORWARD);
+        backR.setDirection(DcMotor.Direction.FORWARD);
+        backL.setDirection(DcMotor.Direction.FORWARD);
 
 
     }
@@ -283,6 +299,10 @@ public class dogeAuto5 extends LinearOpMode {
         slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        frontL.setDirection(DcMotor.Direction.FORWARD);
+        frontR.setDirection(DcMotor.Direction.FORWARD);
+        backR.setDirection(DcMotor.Direction.FORWARD);
+        backL.setDirection(DcMotor.Direction.FORWARD);
 
     }
 
@@ -320,6 +340,11 @@ public class dogeAuto5 extends LinearOpMode {
         slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        
+        frontL.setDirection(DcMotor.Direction.FORWARD);
+        frontR.setDirection(DcMotor.Direction.FORWARD);
+        backR.setDirection(DcMotor.Direction.FORWARD);
+        backL.setDirection(DcMotor.Direction.FORWARD);
 
     }
 
