@@ -26,11 +26,20 @@ public class EncoderData extends LinearOpMode {
     public void runOpMode() {
         slave.init(hardwareMap);
         telemetry.addLine("Mapping Successful");
+
+        mUp();
+
         while(opModeIsActive()){
-            mUp();
+            //Displaying kewl info
+            int fL = slave.frontL.getCurrentPosition(),fR = slave.frontR.getCurrentPosition();
+            int bL = slave.backL.getCurrentPosition(),bR = slave.backR.getCurrentPosition();
+            telemetry.addData("FL",fL);
+            telemetry.addData("FR",fR);
+            telemetry.addData("BL",bL);
+            telemetry.addData("BR",bR);
+            telemetry.update();
         }
     }
-
     public void mUp(){
         //Sets encoder values to 0
         slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -53,14 +62,5 @@ public class EncoderData extends LinearOpMode {
         slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        //Displaying kewl info
-        int fL = slave.frontL.getCurrentPosition(),fR = slave.frontR.getCurrentPosition();
-        int bL = slave.backL.getCurrentPosition(),bR = slave.backR.getCurrentPosition();
-        telemetry.addData("FL",fL);
-        telemetry.addData("FR",fR);
-        telemetry.addData("BL",bL);
-        telemetry.addData("BR",bR);
-        telemetry.update();
     }
 }
