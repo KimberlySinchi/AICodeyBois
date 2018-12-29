@@ -22,8 +22,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import android.content.Context;
-import java.io.FileOutputStream;
 import org.firstinspires.ftc.teamcode.Helpers.Slave;
 import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
 
@@ -43,16 +41,12 @@ public class DriverModeEncoder extends OpMode {
 
     /* Declare OpMode members. */
     private SlaveAuto slave = new SlaveAuto();
-    private FileOutputStream outputStream;
-
     @Override
     public void init()
     {
 
         slave.init(hardwareMap);
         telemetry.addLine(slave.getStatus());
-        try{
-        }
     }
 
     /*

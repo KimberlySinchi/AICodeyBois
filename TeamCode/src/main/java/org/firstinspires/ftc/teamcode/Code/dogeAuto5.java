@@ -46,21 +46,21 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
  * class is instantiated on the Robot Controller and executed.
- *
+ * <p>
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
- *
+ * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="AWESOMEAUTOREVERSE NEW VERSION", group="Linear Opmode")
+@Autonomous(name = "AWESOMEAUTOREVERSE NEW VERSION", group = "Linear Opmode")
 
- public class dogeAuto5 extends LinearOpMode {
+public class dogeAuto5 extends LinearOpMode {
 
     // Declare OpMode members.
     // Detector object
-    private SlaveAuto slave= new SlaveAuto();
+    private SlaveAuto slave = new SlaveAuto();
     private boolean bool1 = true;
     private boolean bool2 = true;
     private boolean bool3 = true;
@@ -132,198 +132,198 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive())
-        {
-            if(bool1)
-            {
+        while (opModeIsActive()) {
+            if (bool1) {
                 goUp(-1, 1440);
                 bool1 = false;
             }
         }
     }
-        public void up(double power)
-        {
-            slave.frontL.setPower(-power);
-            slave.frontR.setPower(-power);
-            slave.backR.setPower(-power);
-            slave.backL.setPower(-power);
+
+    public void up(double power) {
+        slave.frontL.setPower(-power);
+        slave.frontR.setPower(-power);
+        slave.backR.setPower(-power);
+        slave.backL.setPower(-power);
+    }
+
+    public void down(double power) {
+        slave.frontL.setPower(power);
+        slave.frontR.setPower(-power);
+        slave.backR.setPower(-power);
+        slave.backL.setPower(power);
+    }
+
+    public void right(double power) {
+        slave.frontL.setPower(-power);
+        slave.frontR.setPower(-power);
+        slave.backR.setPower(-power);
+        slave.backL.setPower(-power);
+    }
+
+    public void left(double power) {
+        slave.frontL.setPower(power);
+        slave.frontR.setPower(power);
+        slave.backR.setPower(power);
+        slave.backL.setPower(power);
+    }
+
+    public int convInchToTicks(double inches) {
+        //Note: one revolution is 1440 ticks and 1 rev is 11.873 inch ==> so easy conversion from inches to ticks
+        return (int) (inches / 11.873) * 1140;
+    }
+
+    public void goUp(double power, int ticks) //NOTE: THIS DISTANCE IS IN INCHES
+    {
+        slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        slave.frontL.setTargetPosition(ticks);
+        slave.frontR.setTargetPosition(ticks);
+        slave.backL.setTargetPosition(ticks);
+        slave.backR.setTargetPosition(ticks);
+
+        slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        /**
+         frontL
+         frontR
+         backL
+         backR
+
+         **/
+        up(-power);
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
         }
-        public void down(double power)
-        {
-            slave.frontL.setPower(power);
-            slave.frontR.setPower(-power);
-            slave.backR.setPower(-power);
-            slave.backL.setPower(power);
+
+        Stop();
+        slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+    }
+
+    public void goDown(int power, int ticks) //NOTE: THIS DISTANCE IS IN INCHES
+    {
+        slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        slave.frontL.setTargetPosition(ticks);
+        slave.frontR.setTargetPosition(ticks);
+        slave.backL.setTargetPosition(ticks);
+        slave.backR.setTargetPosition(ticks);
+
+        slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        /**
+         frontL
+         frontR
+         backL
+         backR
+
+         **/
+        down(power);
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
         }
-        public void right(double power)
-        {
-            slave.frontL.setPower(-power);
-            slave.frontR.setPower(-power);
-            slave.backR.setPower(-power);
-            slave.backL.setPower(-power);
+
+        Stop();
+        slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+    }
+
+    public void goRight(int power, int ticks) {
+        slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        slave.frontL.setTargetPosition(ticks);
+        slave.frontR.setTargetPosition(ticks);
+        slave.backL.setTargetPosition(ticks);
+        slave.backR.setTargetPosition(ticks);
+
+        slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        /**
+         frontL
+         frontR
+         backL
+         backR
+
+         **/
+        right(power);
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
         }
-        public void left(double power)
-        {
-            slave.frontL.setPower(power);
-            slave.frontR.setPower(power);
-            slave.backR.setPower(power);
-            slave.backL.setPower(power);
+
+        Stop();
+        slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+    }
+
+    public void goLeft(double power, int ticks)// edit this part to send the amount of ticks after the yellow block was found ==> an int
+    {
+        slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        slave.frontL.setTargetPosition(ticks);
+        slave.frontR.setTargetPosition(ticks);
+        slave.backL.setTargetPosition(ticks);
+        slave.backR.setTargetPosition(ticks);
+
+        slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        /**
+         frontL
+         frontR
+         backL
+         backR
+
+         **/
+        left(power);
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
         }
-        public int convInchToTicks(double inches)
-        {
-            //Note: one revolution is 1440 ticks and 1 rev is 11.873 inch ==> so easy conversion from inches to ticks
-            return (int)(inches/11.873) * 1140;
-        }
-        public void goUp(double power, int ticks) //NOTE: THIS DISTANCE IS IN INCHES
-        {
-            slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            slave.frontL.setTargetPosition(ticks);
-            slave.frontR.setTargetPosition(ticks);
-            slave.backL.setTargetPosition(ticks);
-            slave.backR.setTargetPosition(ticks);
+        Stop();
+        slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
 
-
-            /**
-             frontL
-             frontR
-             backL
-             backR
-
-             **/
-            up(-power);
-            while(slave.frontL.isBusy() &&  slave.frontR.isBusy() && slave.backL.isBusy() &&  slave.backR.isBusy())
-            {}
-
-                Stop();
-                slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-            }
-            public void goDown(int power, int ticks) //NOTE: THIS DISTANCE IS IN INCHES
-            {
-                slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                slave.frontL.setTargetPosition(ticks);
-                slave.frontR.setTargetPosition(ticks);
-                slave.backL.setTargetPosition(ticks);
-                slave.backR.setTargetPosition(ticks);
-
-                slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-                /**
-                 frontL
-                 frontR
-                 backL
-                 backR
-
-                 **/
-                down(power);
-                while(slave.frontL.isBusy() &&  slave.frontR.isBusy() && slave.backL.isBusy() &&  slave.backR.isBusy())
-                {}
-
-                    Stop();
-                    slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-                }
-                public void goRight(int power, int ticks)
-                {
-                    slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                    slave.frontL.setTargetPosition(ticks);
-                    slave.frontR.setTargetPosition(ticks);
-                    slave.backL.setTargetPosition(ticks);
-                    slave.backR.setTargetPosition(ticks);
-
-                    slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-                    /**
-                     frontL
-                     frontR
-                     backL
-                     backR
-
-                     **/
-                    right(power);
-                    while(slave.frontL.isBusy() &&  slave.frontR.isBusy() && slave.backL.isBusy() &&  slave.backR.isBusy())
-                    {}
-
-                        Stop();
-                    slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-                    }
-                    public void goLeft(double power,int ticks)// edit this part to send the amount of ticks after the yellow block was found ==> an int
-                    {
-                        slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                        slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-                        slave.frontL.setTargetPosition(ticks);
-                        slave.frontR.setTargetPosition(ticks);
-                        slave.backL.setTargetPosition(ticks);
-                        slave.backR.setTargetPosition(ticks);
-
-                        slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-                        /**
-                         frontL
-                         frontR
-                         backL
-                         backR
-
-                         **/
-                        left(power);
-                        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy())
-                        {}
-
-                            Stop();
-                        slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                        slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                        slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                        slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-                        }
-
-                        public void Stop()
-                        {
-                            up(0);
-                        }
-                    }
+    public void Stop() {
+        up(0);
+    }
+}
