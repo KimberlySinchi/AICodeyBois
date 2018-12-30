@@ -23,7 +23,7 @@ public class EncoderData extends LinearOpMode {
     private static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     private static final double ROBOT_DIAMETER_INCHES = 17.5;
-    static final double COUNTS_PER_NINETY = (3.1415*ROBOT_DIAMETER_INCHES/4)*COUNTS_PER_INCH;
+    static final double COUNTS_PER_NINETY_DEG = (3.1415*ROBOT_DIAMETER_INCHES/4)*COUNTS_PER_INCH;
 
     private static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;

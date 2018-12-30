@@ -39,7 +39,7 @@ public class AutoAttempt4Encoder extends LinearOpMode {
     private static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     private static final double ROBOT_DIAMETER_INCHES = 17.5;
-    static final double COUNTS_PER_NINETY = (3.1415 * ROBOT_DIAMETER_INCHES / 4) * COUNTS_PER_INCH;
+    static final double COUNTS_PER_NINETY_DEG = (3.1415 * ROBOT_DIAMETER_INCHES / 4) * COUNTS_PER_INCH;
 
     private static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
@@ -150,9 +150,10 @@ public class AutoAttempt4Encoder extends LinearOpMode {
                     }
                 }
             }
-            forwardE((int) COUNTS_PER_INCH*51);
-            backwardE((int) COUNTS_PER_INCH*51);
+            forwardE((int) COUNTS_PER_INCH * 51);
+            backwardE((int) COUNTS_PER_INCH * 51);
             rotateRightE(rotVal);
+
         }
         if (tfod != null) {
             tfod.shutdown();
@@ -330,6 +331,10 @@ public class AutoAttempt4Encoder extends LinearOpMode {
 
     /**
      * ENCODER METHODS (TICKS)
+     * In order to convert to inches, use the final double:
+     * COUNTS_PER_INCH (FOR STRAIGHT MOVEMENT)
+     * In order to convert to degrees, use the final double:
+     * COUNTS_PER_NINETY_DEG (FOR ROTATIONAL MOVEMENT)
      */
     public void encoderReset() {
         slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -342,7 +347,7 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         return (Math.abs(slave.frontL.getCurrentPosition()) + Math.abs(slave.frontR.getCurrentPosition()) + Math.abs(slave.backL.getCurrentPosition()) + Math.abs(slave.backR.getCurrentPosition())) / 4;
     }
 
-    public void forwardE(int ticks){
+    public void forwardE(int ticks) {
         //Sets encoder values to 0
         slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -367,7 +372,7 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         slave.backL.setPower(DRIVE_SPEED);
         slave.backR.setPower(DRIVE_SPEED);
 
-        while(slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()){
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
             //does nothing, just makes the method stuck in a while loop until it's done
         }
 
@@ -378,7 +383,8 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    public void backwardE(int ticks){
+
+    public void backwardE(int ticks) {
         //Sets encoder values to 0
         slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -403,7 +409,7 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         slave.backL.setPower(DRIVE_SPEED);
         slave.backR.setPower(DRIVE_SPEED);
 
-        while(slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()){
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
             //does nothing, just makes the method stuck in a while loop until it's done
         }
 
@@ -414,7 +420,8 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    public void rotateRightE(int ticks){
+
+    public void rotateRightE(int ticks) {
         //Sets encoder values to 0
         slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -439,7 +446,7 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         slave.backL.setPower(DRIVE_SPEED);
         slave.backR.setPower(DRIVE_SPEED);
 
-        while(slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()){
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
             //does nothing, just makes the method stuck in a while loop until it's done
         }
 
@@ -450,7 +457,8 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
-    public void rotateLeftE(int ticks){
+
+    public void rotateLeftE(int ticks) {
         //Sets encoder values to 0
         slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -475,7 +483,7 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         slave.backL.setPower(DRIVE_SPEED);
         slave.backR.setPower(DRIVE_SPEED);
 
-        while(slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()){
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
             //does nothing, just makes the method stuck in a while loop until it's done
         }
 
@@ -486,6 +494,7 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+
     /**
      * METHODS FOR TENSOR FLOW (DO NOT TOUCH)
      */
