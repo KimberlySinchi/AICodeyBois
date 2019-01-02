@@ -28,7 +28,8 @@ public class EncoderData extends LinearOpMode {
     private static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
     @Override
-    public void runOpMode() {
+    public void runOpMode()
+    {
         slave.init(hardwareMap);
         telemetry.addLine("Mapping Successful");
 
