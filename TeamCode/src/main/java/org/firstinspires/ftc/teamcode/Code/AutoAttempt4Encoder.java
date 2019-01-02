@@ -18,18 +18,13 @@ import java.util.List;
 
 @Autonomous(name = "ligma", group = "Slave")
 
-public class AutoAttempt4Encoder extends LinearOpMode {
+public class AutoAttempt4Encoder extends LinearOpMode
+{
     private SlaveAuto slave = new SlaveAuto();
     private ElapsedTime runtime = new ElapsedTime();
 
     private int rotVal = 0;
 
-    private DcMotor frontL;
-    private DcMotor frontR;
-    private DcMotor backL;
-    private DcMotor backR;
-    private Servo armSpin;
-    private SampleAlignDetector detector;
     static final double SPEED = 0.6;
 
     private static final int COUNTS_PER_MOTOR_REV = 1440;
@@ -37,6 +32,8 @@ public class AutoAttempt4Encoder extends LinearOpMode {
 
     private static final double WHEEL_DIAMETER_INCHES = 3.78;
     private static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+
+    private static final double HOLONOMIC_COMPENSATION_FACTOR = (Math.sin(45) * WHEEL_DIAMETER_INCHES * 3.1415) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     private static final double ROBOT_DIAMETER_INCHES = 17.5;
     static final double COUNTS_PER_NINETY_DEG = (3.1415 * ROBOT_DIAMETER_INCHES / 4) * COUNTS_PER_INCH;
@@ -58,7 +55,8 @@ public class AutoAttempt4Encoder extends LinearOpMode {
     private boolean detect = true;
 
     @Override
-    public void runOpMode() {
+    public void runOpMode()
+    {
         slave.init(hardwareMap);
 
         //For convenience, we will print on the phone that the robot is ready
@@ -79,23 +77,31 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         runtime.reset();
 
         //Finding the position of the gold mineral
-        if (opModeIsActive()) {
-            while (opModeIsActive() && runtime.seconds() < 10 && detect) {
-                if (tfod != null) {
+        if (opModeIsActive())
+        {
+            while (opModeIsActive() && runtime.seconds() < 10 && detect)
+            {
+                if (tfod != null)
+                {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions == null) {
+                    if (updatedRecognitions == null)
+                    {
                         telemetry.addData("No Objects Detected", updatedRecognitions.size());
                         int goldMineralX = -1;
                         int goldMineralXR = -1;
                         int goldMineralCent = -1;
                         int leftRangeX = (1280 / 2) - 50;
                         int rightRangeX = leftRangeX + 100;
-                        if (updatedRecognitions.size() >= 1) {
-                            for (Recognition r : updatedRecognitions) {
-                                if (r.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    if (!aligned) {
+                        if (updatedRecognitions.size() >= 1)
+                        {
+                            for (Recognition r : updatedRecognitions)
+                            {
+                                if (r.getLabel().equals(LABEL_GOLD_MINERAL))
+                                {
+                                    if (!aligned)
+                                    {
                                         telemetry.addLine("TRYING TO FIND GOLD-------");
                                         goldMineralX = (int) r.getLeft();
                                         goldMineralXR = (int) r.getRight();
@@ -114,17 +120,22 @@ public class AutoAttempt4Encoder extends LinearOpMode {
                             }
                         }
                     }
-                    if (updatedRecognitions != null) {
+                    if (updatedRecognitions != null)
+                    {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
                         int goldMineralX = -1;
                         int goldMineralXR = -1;
                         int goldMineralCent = -1;
                         int leftRangeX = (1280 / 2) - 50;
                         int rightRangeX = leftRangeX + 100;
-                        if (updatedRecognitions.size() >= 1) {
-                            for (Recognition r : updatedRecognitions) {
-                                if (r.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    if (!aligned) {
+                        if (updatedRecognitions.size() >= 1)
+                        {
+                            for (Recognition r : updatedRecognitions)
+                            {
+                                if (r.getLabel().equals(LABEL_GOLD_MINERAL))
+                                {
+                                    if (!aligned)
+                                    {
                                         telemetry.addLine("TRYING TO FIND GOLD-------");
                                         goldMineralX = (int) r.getLeft();
                                         goldMineralXR = (int) r.getRight();
@@ -155,7 +166,8 @@ public class AutoAttempt4Encoder extends LinearOpMode {
             rotateRightE(rotVal);
 
         }
-        if (tfod != null) {
+        if (tfod != null)
+        {
             tfod.shutdown();
         }
     }
@@ -163,9 +175,11 @@ public class AutoAttempt4Encoder extends LinearOpMode {
     /**
      * METHODS BASED ON TIME
      */
-    public void stop(double time) {
+    public void stop(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
-        while (timer.seconds() <= time) {
+        while (timer.seconds() <= time)
+        {
             slave.frontL.setPower(0);
             slave.backL.setPower(0);
             slave.frontR.setPower(0);
@@ -173,9 +187,11 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         }
     }
 
-    public void forwardS(double time) {
+    public void forwardS(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
-        while (timer.seconds() <= time) {
+        while (timer.seconds() <= time)
+        {
             slave.frontL.setPower(-SPEED);
             slave.backL.setPower(-SPEED);
             slave.frontR.setPower(SPEED);
@@ -184,9 +200,11 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         stop(0.5);
     }
 
-    public void backwardS(double time) {
+    public void backwardS(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
-        while (timer.seconds() <= time) {
+        while (timer.seconds() <= time)
+        {
             slave.frontL.setPower(SPEED);
             slave.backL.setPower(SPEED);
             slave.frontR.setPower(-SPEED);
@@ -195,9 +213,11 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         stop(0.5);
     }
 
-    public void rightS(double time) {
+    public void rightS(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
-        while (timer.seconds() <= time) {
+        while (timer.seconds() <= time)
+        {
             slave.frontL.setPower(-SPEED);
             slave.frontR.setPower(-SPEED);
             slave.backR.setPower(SPEED);
@@ -206,9 +226,11 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         stop(0.5);
     }
 
-    public void leftS(double time) {
+    public void leftS(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
-        while (timer.seconds() <= time) {
+        while (timer.seconds() <= time)
+        {
             slave.frontL.setPower(SPEED);
             slave.frontR.setPower(SPEED);
             slave.backL.setPower(-SPEED);
@@ -217,9 +239,11 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         stop(0.5);
     }
 
-    public void rotateRightS(double time) {
+    public void rotateRightS(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
-        while (timer.seconds() <= time) {
+        while (timer.seconds() <= time)
+        {
             slave.frontL.setPower(-SPEED);
             slave.frontR.setPower(-SPEED);
             slave.backL.setPower(-SPEED);
@@ -228,9 +252,11 @@ public class AutoAttempt4Encoder extends LinearOpMode {
         stop(0.5);
     }
 
-    public void rotateLeftS(double time) {
+    public void rotateLeftS(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
-        while (timer.seconds() <= time) {
+        while (timer.seconds() <= time)
+        {
             slave.frontL.setPower(SPEED);
             slave.frontR.setPower(SPEED);
             slave.backL.setPower(SPEED);
@@ -242,42 +268,48 @@ public class AutoAttempt4Encoder extends LinearOpMode {
     /**
      * METHODS BASED ON POWER
      */
-    public void forwardP(double power) {
+    public void forwardP(double power)
+    {
         slave.frontL.setPower(-power);
         slave.backL.setPower(-power);
         slave.frontR.setPower(power);
         slave.backR.setPower(power);
     }
 
-    public void backwardP(double power) {
+    public void backwardP(double power)
+    {
         slave.frontL.setPower(power);
         slave.backL.setPower(power);
         slave.frontR.setPower(-power);
         slave.backR.setPower(-power);
     }
 
-    public void rightP(double power) {
+    public void rightP(double power)
+    {
         slave.frontL.setPower(power);
         slave.frontR.setPower(power);
         slave.backR.setPower(-power);
         slave.backL.setPower(-power);
     }
 
-    public void leftP(double power) {
+    public void leftP(double power)
+    {
         slave.frontL.setPower(-power);
         slave.frontR.setPower(-power);
         slave.backL.setPower(power);
         slave.backR.setPower(power);
     }
 
-    public void rotateRightP(double power) {
+    public void rotateRightP(double power)
+    {
         slave.frontL.setPower(-power);
         slave.frontR.setPower(-power);
         slave.backL.setPower(-power);
         slave.backR.setPower(-power);
     }
 
-    public void rotateLeftP(double power) {
+    public void rotateLeftP(double power)
+    {
         slave.frontL.setPower(power);
         slave.frontR.setPower(power);
         slave.backL.setPower(power);
@@ -287,42 +319,48 @@ public class AutoAttempt4Encoder extends LinearOpMode {
     /**
      * METHODS BASED ON NO PARAMETERS
      */
-    public void forward() {
+    public void forward()
+    {
         slave.frontL.setPower(-SPEED);
         slave.backL.setPower(-SPEED);
         slave.frontR.setPower(SPEED);
         slave.backR.setPower(SPEED);
     }
 
-    public void backward() {
+    public void backward()
+    {
         slave.frontL.setPower(SPEED);
         slave.backL.setPower(SPEED);
         slave.frontR.setPower(-SPEED);
         slave.backR.setPower(-SPEED);
     }
 
-    public void right() {
+    public void right()
+    {
         slave.frontL.setPower(SPEED);
         slave.frontR.setPower(SPEED);
         slave.backR.setPower(-SPEED);
         slave.backL.setPower(-SPEED);
     }
 
-    public void left() {
+    public void left()
+    {
         slave.frontL.setPower(-SPEED);
         slave.frontR.setPower(-SPEED);
         slave.backL.setPower(SPEED);
         slave.backR.setPower(SPEED);
     }
 
-    public void rotateRight() {
+    public void rotateRight()
+    {
         slave.frontL.setPower(-SPEED);
         slave.frontR.setPower(-SPEED);
         slave.backL.setPower(-SPEED);
         slave.backR.setPower(-SPEED);
     }
 
-    public void rotateLeft() {
+    public void rotateLeft()
+    {
         slave.frontL.setPower(SPEED);
         slave.frontR.setPower(SPEED);
         slave.backL.setPower(SPEED);
@@ -336,23 +374,22 @@ public class AutoAttempt4Encoder extends LinearOpMode {
      * In order to convert to degrees, use the final double:
      * COUNTS_PER_NINETY_DEG (FOR ROTATIONAL MOVEMENT)
      */
-    public void encoderReset() {
+    public void encoderReset()
+    {
         slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
-    public int encodeAvg() {
+    public int encodeAvg()
+    {
         return (Math.abs(slave.frontL.getCurrentPosition()) + Math.abs(slave.frontR.getCurrentPosition()) + Math.abs(slave.backL.getCurrentPosition()) + Math.abs(slave.backR.getCurrentPosition())) / 4;
     }
 
     public void forwardE(int ticks) {
         //Sets encoder values to 0
-        slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        encoderReset();
 
         //Sets the target encoder value to reach
         slave.frontL.setTargetPosition(-ticks);
