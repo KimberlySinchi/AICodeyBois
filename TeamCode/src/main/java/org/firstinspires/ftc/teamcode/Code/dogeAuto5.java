@@ -132,8 +132,10 @@ public class dogeAuto5 extends LinearOpMode {
         runtime.reset();
 
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-            if (bool1) {
+        while (opModeIsActive())
+        {
+            if (bool1)
+            {
                 goUp(-1, 1440);
                 bool1 = false;
             }
@@ -207,7 +209,7 @@ public class dogeAuto5 extends LinearOpMode {
 
          **/
         up(power);
-        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) 
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy() && opModeIsActive()) 
         {}
 
         Stop();
@@ -248,7 +250,7 @@ public class dogeAuto5 extends LinearOpMode {
 
          **/
         down(power);
-        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy() && opModeIsActive()) {
         }
 
         Stop();
@@ -290,7 +292,7 @@ public class dogeAuto5 extends LinearOpMode {
 
          **/
         right(power);
-        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy() && opModeIsActive()) {
         }
 
         Stop();
@@ -332,8 +334,8 @@ public class dogeAuto5 extends LinearOpMode {
 
          **/
         left(power);
-        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
-        }
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy() && opModeIsActive())
+        { }
 
         Stop();
         slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -347,8 +349,180 @@ public class dogeAuto5 extends LinearOpMode {
         backL.setDirection(DcMotor.Direction.FORWARD);
 
     }
+    public int goLeftDetect(int ticks, int power)
+    {
+        slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        slave.frontL.setTargetPosition(ticks);
+        slave.frontR.setTargetPosition(ticks);
+        slave.backL.setTargetPosition(ticks);
+        slave.backR.setTargetPosition(ticks);
+
+        slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        left(power);
+        while (isAligned() == false&&(slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) && opModeIsActive())
+        { }
+
+        Stop();
+        slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        frontL.setDirection(DcMotor.Direction.FORWARD);
+        frontR.setDirection(DcMotor.Direction.FORWARD);
+        backR.setDirection(DcMotor.Direction.FORWARD);
+        backL.setDirection(DcMotor.Direction.FORWARD);
+        return slave.frontL.getCurrentPosition();
+    }
+    public int goRightDetect(int power, int ticks) {
+        slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        slave.frontL.setTargetPosition(ticks);
+        slave.frontR.setTargetPosition(ticks);
+        slave.backL.setTargetPosition(ticks);
+        slave.backR.setTargetPosition(ticks);
+
+        slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        /**
+         frontL
+         frontR
+         backL
+         backR
+
+         **/
+        right(power);
+        while (isAligned() == false&&slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy() && opModeIsActive())
+        { }
+
+        Stop();
+        slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        frontL.setDirection(DcMotor.Direction.FORWARD);
+        frontR.setDirection(DcMotor.Direction.FORWARD);
+        backR.setDirection(DcMotor.Direction.FORWARD);
+        backL.setDirection(DcMotor.Direction.FORWARD);
+        return slave.frontL.getCurrentPosition();
+    }
+    public int goDownDetect(int power, int ticks) //NOTE: THIS DISTANCE IS IN INCHES
+    {
+        slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        slave.frontL.setTargetPosition(ticks);
+        slave.frontR.setTargetPosition(ticks);
+        slave.backL.setTargetPosition(ticks);
+        slave.backR.setTargetPosition(ticks);
+
+        slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        /**
+         frontL
+         frontR
+         backL
+         backR
+
+         **/
+        down(power);
+        while (isAligned() == false && slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()&&opModeIsActive())
+        { }
+
+        Stop();
+        slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        frontL.setDirection(DcMotor.Direction.FORWARD);
+        frontR.setDirection(DcMotor.Direction.FORWARD);
+        backR.setDirection(DcMotor.Direction.FORWARD);
+        backL.setDirection(DcMotor.Direction.FORWARD);
+        return slave.frontL.getCurrentPosition();
+    }
+    public int goUpDetect(double power, int ticks) //NOTE: THIS DISTANCE IS IN INCHES
+    {
+        slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        slave.frontL.setTargetPosition(ticks);
+        slave.frontR.setTargetPosition(ticks);
+        slave.backL.setTargetPosition(ticks);
+        slave.backR.setTargetPosition(ticks);
+
+        slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+
+        /**
+         frontL
+         frontR
+         backL
+         backR
+
+         **/
+        up(power);
+        while (isAligned() == false && slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy() && opModeIsActive())
+        {}
+
+        Stop();
+        slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontL.setDirection(DcMotor.Direction.FORWARD);
+        frontR.setDirection(DcMotor.Direction.FORWARD);
+        backR.setDirection(DcMotor.Direction.FORWARD);
+        backL.setDirection(DcMotor.Direction.FORWARD);
+        return slave.frontL.getCurrentPosition();
+    }
     public void Stop() {
         up(0);
+    }
+    public boolean isAligned() {
+        return detector.getAligned();
+    }
+    public int convInToTick(double inches) //only for up down, side-side movement
+    {
+        int COUNTS_PER_MOTOR_REV = 1440;
+        double DRIVE_GEAR_REDUCTION = 2.0; //This value has yet to be discovered //doesnt matter jason
+        double WHEEL_DIAMETER_INCHES = 3.78;
+        double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
+        double ROBOT_DIAMETER_INCHES = 17.5;
+        double COUNTS_PER_NINETY_DEG = (3.1415 * ROBOT_DIAMETER_INCHES / 4) * COUNTS_PER_INCH;
+        double HOLONOMIC_COMPENSATION_FACTOR = (Math.sin(45) * WHEEL_DIAMETER_INCHES * 3.1415);//1 rev = this many inches
+        return (int)(inches/HOLONOMIC_COMPENSATION_FACTOR)*1440;
+
+    }
+    public int convAngleToTick(double angle)
+    {
+        
     }
 }
