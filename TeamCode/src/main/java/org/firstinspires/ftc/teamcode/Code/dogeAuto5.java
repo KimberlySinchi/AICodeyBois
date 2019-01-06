@@ -521,8 +521,8 @@ public class dogeAuto5 extends LinearOpMode {
         return (int)(inches/HOLONOMIC_COMPENSATION_FACTOR)*1440;
 
     }
-    public int convAngleToTick(double angle)
+    /*public int convAngleToTick(double angle)
     {
         
-    }
+    }*/
 }

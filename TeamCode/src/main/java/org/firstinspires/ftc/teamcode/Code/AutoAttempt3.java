@@ -72,7 +72,7 @@ public class AutoAttempt3 extends LinearOpMode
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    rotateLeftP(0.1);
+                    rotateLeftP(0.15);
                     if (updatedRecognitions != null)
                     {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
@@ -98,7 +98,7 @@ public class AutoAttempt3 extends LinearOpMode
                                         goldMineralXR = (int) r.getRight();
                                         goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
                                         aligned = isAligned(goldMineralCent, 640-125, 640+125);
-                                        rotateLeftP(0.1);
+                                        rotateLeftP(0.15);
                                         rotationTime = rotLeftTime.time();
                                         telemetry.addLine("Rotation Time: "+rotationTime);
                                         telemetry.addLine("Rotating left");
@@ -132,7 +132,7 @@ public class AutoAttempt3 extends LinearOpMode
                 telemetry.addLine("Moving backward");
                 telemetry.update();
             }
-            rotateRight();
+            rotateRightP(0.15);
             runtime.reset();
             while(opModeIsActive() && runtime.seconds() < rotationTime)
             {
