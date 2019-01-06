@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Code;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -32,7 +33,7 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
     static final double SPEED = 0.6;
 
     private static final int COUNTS_PER_MOTOR_REV = 1440;
-    private static final double DRIVE_GEAR_REDUCTION = 2.0; //This value has yet to be discovered
+    private static final double DRIVE_GEAR_REDUCTION = 1.0; //This value has yet to be discovered
 
     private static final double WHEEL_DIAMETER_INCHES = 3.78;
     private static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -69,16 +70,17 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
 
         waitForStart();
 
-        forwardE((int)(COUNTS_PER_INCH*8));
-        backwardE((int)(COUNTS_PER_INCH*8));
-        rotateLeftE((int)(COUNTS_PER_INCH*8));
-        rotateRightE((int)(COUNTS_PER_INCH*8));
+        forwardE(1440);
+        backwardE(1440);
+        rotateLeftE(1440);
+        rotateRightE(1440);
     }
 
     /**
      * METHODS BASED ON TIME
      */
-    public void stop(double time) {
+    public void stop(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
         while (timer.seconds() <= time) {
             slave.frontL.setPower(0);
@@ -88,7 +90,8 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         }
     }
 
-    public void forwardS(double time) {
+    public void forwardS(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
         while (timer.seconds() <= time) {
             slave.frontL.setPower(-SPEED);
@@ -99,7 +102,8 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         stop(0.5);
     }
 
-    public void backwardS(double time) {
+    public void backwardS(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
         while (timer.seconds() <= time) {
             slave.frontL.setPower(SPEED);
@@ -110,7 +114,8 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         stop(0.5);
     }
 
-    public void rightS(double time) {
+    public void rightS(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
         while (timer.seconds() <= time) {
             slave.frontL.setPower(-SPEED);
@@ -121,7 +126,8 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         stop(0.5);
     }
 
-    public void leftS(double time) {
+    public void leftS(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
         while (timer.seconds() <= time) {
             slave.frontL.setPower(SPEED);
@@ -131,8 +137,8 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         }
         stop(0.5);
     }
-
-    public void rotateRightS(double time) {
+    public void rotateRightS(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
         while (timer.seconds() <= time) {
             slave.frontL.setPower(-SPEED);
@@ -142,8 +148,8 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         }
         stop(0.5);
     }
-
-    public void rotateLeftS(double time) {
+    public void rotateLeftS(double time)
+    {
         ElapsedTime timer = new ElapsedTime();
         while (timer.seconds() <= time) {
             slave.frontL.setPower(SPEED);
@@ -157,42 +163,46 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
     /**
      * METHODS BASED ON POWER
      */
-    public void forwardP(double power) {
+    public void forwardP(double power)
+    {
         slave.frontL.setPower(-power);
         slave.backL.setPower(-power);
         slave.frontR.setPower(power);
         slave.backR.setPower(power);
     }
-
-    public void backwardP(double power) {
+    public void backwardP(double power)
+    {
         slave.frontL.setPower(power);
         slave.backL.setPower(power);
         slave.frontR.setPower(-power);
         slave.backR.setPower(-power);
     }
-
-    public void rightP(double power) {
+    public void rightP(double power)
+    {
         slave.frontL.setPower(power);
         slave.frontR.setPower(power);
         slave.backR.setPower(-power);
         slave.backL.setPower(-power);
     }
 
-    public void leftP(double power) {
+    public void leftP(double power)
+    {
         slave.frontL.setPower(-power);
         slave.frontR.setPower(-power);
         slave.backL.setPower(power);
         slave.backR.setPower(power);
     }
 
-    public void rotateRightP(double power) {
+    public void rotateRightP(double power)
+    {
         slave.frontL.setPower(-power);
         slave.frontR.setPower(-power);
         slave.backL.setPower(-power);
         slave.backR.setPower(-power);
     }
 
-    public void rotateLeftP(double power) {
+    public void rotateLeftP(double power)
+    {
         slave.frontL.setPower(power);
         slave.frontR.setPower(power);
         slave.backL.setPower(power);
@@ -202,42 +212,48 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
     /**
      * METHODS BASED ON NO PARAMETERS
      */
-    public void forward() {
+    public void forward()
+    {
         slave.frontL.setPower(-SPEED);
         slave.backL.setPower(-SPEED);
         slave.frontR.setPower(SPEED);
         slave.backR.setPower(SPEED);
     }
 
-    public void backward() {
+    public void backward()
+    {
         slave.frontL.setPower(SPEED);
         slave.backL.setPower(SPEED);
         slave.frontR.setPower(-SPEED);
         slave.backR.setPower(-SPEED);
     }
 
-    public void right() {
+    public void right()
+    {
         slave.frontL.setPower(SPEED);
         slave.frontR.setPower(SPEED);
         slave.backR.setPower(-SPEED);
         slave.backL.setPower(-SPEED);
     }
 
-    public void left() {
+    public void left()
+    {
         slave.frontL.setPower(-SPEED);
         slave.frontR.setPower(-SPEED);
         slave.backL.setPower(SPEED);
         slave.backR.setPower(SPEED);
     }
 
-    public void rotateRight() {
+    public void rotateRight()
+    {
         slave.frontL.setPower(-SPEED);
         slave.frontR.setPower(-SPEED);
         slave.backL.setPower(-SPEED);
         slave.backR.setPower(-SPEED);
     }
 
-    public void rotateLeft() {
+    public void rotateLeft()
+    {
         slave.frontL.setPower(SPEED);
         slave.frontR.setPower(SPEED);
         slave.backL.setPower(SPEED);
@@ -257,6 +273,11 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     public void toPos()
     {
@@ -296,11 +317,22 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         //Makes the motors move
         power();
 
-        while (opModeIsActive() && slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy())
+        while (opModeIsActive() &&
+                slave.frontL.getCurrentPosition() >= -ticks &&
+                slave.frontR.getCurrentPosition() <= ticks &&
+                slave.backL.getCurrentPosition() >= -ticks &&
+                slave.backR.getCurrentPosition() <= ticks)
         {
+            telemetry.addLine("" + slave.frontL.getCurrentPosition());
+            telemetry.addLine("" + slave.frontR.getCurrentPosition());
+            telemetry.addLine("" + slave.backL.getCurrentPosition());
+            telemetry.addLine("" + slave.backR.getCurrentPosition());
+            telemetry.addLine("In the loop");
+            telemetry.update();
             //Does nothing, just makes the method stuck in a while loop until it's done
         }
-
+        telemetry.update();
+        stop();
         //Sets motor mode back to encoder
         //This also makes it so we avoid stopping the robot because motors are no longer in run to pos mode
         usingEncoders();
@@ -323,7 +355,7 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         {
             //does nothing, just makes the method stuck in a while loop until it's done
         }
-
+        stop();
         usingEncoders();
     }
 
@@ -344,7 +376,7 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         {
             //does nothing, just makes the method stuck in a while loop until it's done
         }
-
+        stop();
         usingEncoders();
     }
 
@@ -366,7 +398,7 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         {
             //does nothing, just makes the method stuck in a while loop until it's done
         }
-
+        stop();
         //Sets motor mode back to encoder
         //This also makes it so we avoid stopping the robot because motors are no longer in run to pos mode
         usingEncoders();

@@ -24,12 +24,6 @@ public class AutoAttempt3 extends LinearOpMode
     private ElapsedTime rotLeftTime = new ElapsedTime();
     private double rotationTime = 0;
 
-    private DcMotor frontL;
-    private DcMotor frontR;
-    private DcMotor backL;
-    private DcMotor backR;
-    private Servo armSpin;
-    private SampleAlignDetector detector;
     static final double SPEED = 0.6;
 
     /**
@@ -78,43 +72,7 @@ public class AutoAttempt3 extends LinearOpMode
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if(updatedRecognitions == null)
-                    {
-                        telemetry.addData("No Objects Detected", updatedRecognitions.size());
-                        int goldMineralX = -1;
-                        int goldMineralXR = -1;
-                        int goldMineralCent = -1;
-                        int leftRangeX = (1280/2)-50;
-                        int rightRangeX = leftRangeX + 100;
-                        if(updatedRecognitions.size()>=1)
-                        {
-                            for(Recognition r: updatedRecognitions)
-                            {
-                                if (r.getLabel().equals(LABEL_GOLD_MINERAL))
-                                {
-                                    //goldMineralX = (int) r.getLeft();
-                                    //goldMineralXR = (int)r.getRight();
-                                    //goldMineralCent = (int)((goldMineralX+goldMineralXR)/2);
-                                    //aligned = isAligned(goldMineralCent, 640-75, 640+75);
-                                    if(!aligned)
-                                    {
-                                        telemetry.addLine("TRYING TO FIND GOLD-------");
-                                        goldMineralX = (int) r.getLeft();
-                                        goldMineralXR = (int) r.getRight();
-                                        goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
-                                        aligned = isAligned(goldMineralCent, 640-125, 640+125);
-                                        rotateLeftP(0.05);
-                                        rotationTime = rotLeftTime.time();
-                                        telemetry.addLine("Rotation Time: "+rotationTime);
-                                        telemetry.addLine("Rotating left");
-                                        telemetry.addLine("Aligned: " + aligned);
-                                        if(aligned)
-                                            detect = false;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    rotateLeftP(0.1);
                     if (updatedRecognitions != null)
                     {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
@@ -135,12 +93,12 @@ public class AutoAttempt3 extends LinearOpMode
                                     //aligned = isAligned(goldMineralCent, 640-75, 640+75);
                                     if(!aligned)
                                     {
-                                        telemetry.addLine("TRYING TO FIND GOLD-------");
+                                        telemetry.addLine("---TRYING TO FIND GOLD---");
                                         goldMineralX = (int) r.getLeft();
                                         goldMineralXR = (int) r.getRight();
                                         goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
                                         aligned = isAligned(goldMineralCent, 640-125, 640+125);
-                                        rotateLeftP(0.05);
+                                        rotateLeftP(0.1);
                                         rotationTime = rotLeftTime.time();
                                         telemetry.addLine("Rotation Time: "+rotationTime);
                                         telemetry.addLine("Rotating left");
@@ -151,52 +109,6 @@ public class AutoAttempt3 extends LinearOpMode
                                 }
                             }
                         }
-                        /*if (updatedRecognitions.size() == 3)
-                        {
-                            goldMineralX = -1;
-                            goldMineralXR = -1;
-                            goldMineralCent = -1;
-                            int silverMineral1X = -1;
-                            int silverMineral2X = -1;
-                            for (Recognition recognition : updatedRecognitions)
-                            {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL))
-                                {
-                                    goldMineralX = (int) recognition.getLeft();
-                                    goldMineralXR = (int) recognition.getRight();
-                                    goldMineralCent = (int)((goldMineralX+goldMineralXR))/2;
-                                }
-                                else if (silverMineral1X == -1)
-                                {
-                                    silverMineral1X = (int) recognition.getLeft();
-                                }
-                                else
-                                {
-                                    silverMineral2X = (int) recognition.getLeft();
-                                }
-                            }
-                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1)
-                            {
-                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X)
-                                {
-                                    telemetry.addData("Gold Mineral Position", "Left");
-                                    telemetry.addLine("Left code was updated");
-                                    pos = -1;
-                                }
-                                else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X)
-                                {
-                                    telemetry.addData("Gold Mineral Position", "Right");
-                                    telemetry.addLine("Right code was updated");
-                                    pos = 1;
-                                }
-                                else
-                                {
-                                    telemetry.addData("Gold Mineral Position", "Center");
-                                    telemetry.addLine("Center code was updated");
-                                    pos = 0;
-                                }
-                            }
-                        }*/
                         telemetry.addLine("Gold cords: (" + goldMineralX + " to " + goldMineralXR + ")");
                         telemetry.addLine("Gold Center x (" + goldMineralCent +")");
                         telemetry.addData("Position of Gold", pos);
@@ -207,26 +119,26 @@ public class AutoAttempt3 extends LinearOpMode
             }
             forward();
             runtime.reset();
-            while(opModeIsActive() && runtime.seconds() < 2)
+            while(opModeIsActive() && runtime.seconds() < 1.5)
             {
                 telemetry.addLine("Moving forward");
-                telemetry.addLine("Rotation time: "+rotationTime);
+                telemetry.addLine("Rotation time: " + rotationTime);
                 telemetry.update();
             }
             backward();
             runtime.reset();
-            while(opModeIsActive() && runtime.seconds() < 2)
+            while(opModeIsActive() && runtime.seconds() < 1.5)
             {
                 telemetry.addLine("Moving backward");
                 telemetry.update();
             }
-            /*rotateRight();
+            rotateRight();
             runtime.reset();
             while(opModeIsActive() && runtime.seconds() < rotationTime)
             {
-                telemetry.addLine("hi, we're rotating back");
+                telemetry.addLine("Rotating back");
                 telemetry.update();
-            }*/
+            }
 
         }
         if (tfod != null)

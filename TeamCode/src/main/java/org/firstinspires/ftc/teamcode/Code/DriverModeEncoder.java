@@ -212,12 +212,12 @@ public class DriverModeEncoder extends OpMode {
             slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-        int fL = slave.frontL.getCurrentPosition(),fR = slave.frontR.getCurrentPosition();
-        int bL = slave.backL.getCurrentPosition(),bR = slave.backR.getCurrentPosition();
-        telemetry.addData("FL",fL);
-        telemetry.addData("FR",fR);
-        telemetry.addData("BL",bL);
-        telemetry.addData("BR",bR);
+        int fL = slave.frontL.getCurrentPosition(), fR = slave.frontR.getCurrentPosition();
+        int bL = slave.backL.getCurrentPosition(), bR = slave.backR.getCurrentPosition();
+        telemetry.addData("FL" , fL);
+        telemetry.addData("FR" , fR);
+        telemetry.addData("BL" , bL);
+        telemetry.addData("BR" , bR);
 
         telemetry.update();
 

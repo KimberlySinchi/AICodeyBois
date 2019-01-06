@@ -42,25 +42,12 @@ import java.util.Date;
  * Remove a @Disabled the on the next line or two (if present) to add this opmode to the Driver Station OpMode list,
  * or add a @Disabled annotation to prevent this OpMode from being added to the Driver Station
  */
-@TeleOp(name="Drive", group="TeleOp")
+@TeleOp(name = "Drive", group = "TeleOp")
 
 public class DriverMode extends OpMode {
 
     /* Declare OpMode members. */
-    private DcMotor frontL;
-    private DcMotor frontR;
-    private DcMotor backR;
-    private DcMotor backL;
-    private DcMotor latchMotor;
-    private Servo armIntake;
     private Slave slave = new Slave();
-    /**
-
-    private DcMotor armMotor1;
-    private DcMotor armMotor2;
-    private DcMotor latchMotor;
-     **/
-
 
     @Override
     public void init()
@@ -239,24 +226,13 @@ public class DriverMode extends OpMode {
         telemetry.update();
 **/
         //SERVOS
-        /**
-        boolean s1up = gamepad1.y;
-        boolean s1down = gamepad1.a;
-
-        if(s1up)
-        {
-            s1.setPosition(1.0);
-
-        }
-        else if(s1down)
-        {
-            s1.setPosition(0.0);
-        }
+        if(dPadUp)
+            slave.armIntake.setPosition(1);
+        else if(dPadDown)
+            slave.armIntake.setPosition(0);
         else
-        {
-            s1.setPosition(0.5);
-        }
-         **/
+            slave.armIntake.setPosition(0.5);
+
         //upDownMotor = name of the motor that controls vertical arm movement
         //up = the y2 might have to be changed
         /**
@@ -283,12 +259,6 @@ public class DriverMode extends OpMode {
             slave.latch.setPower(-yRight);
         else
             slave.latch.setPower(0);
-        if(dPadUp)
-            slave.armIntake.setPosition(1);
-        else if(dPadDown)
-            slave.armIntake.setPosition(0);
-        else
-            slave.armIntake.setPosition(0.5);
     }
 
     /*
