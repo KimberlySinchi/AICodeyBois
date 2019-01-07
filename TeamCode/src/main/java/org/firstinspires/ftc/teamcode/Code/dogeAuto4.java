@@ -147,14 +147,31 @@ public class dogeAuto4 extends LinearOpMode {
                 motorsOff(.6);
                 goBack(2.6,.5);//half power, so double time for equal distance(test)
                 motorsOff(.3);
-                rotateRight(timeLeft - timeUntilFirstBlock);
-                telemetry.addLine(totalTime+ "");
+                rotateRightB(.5,timeLeft - timeUntilFirstBlock);
+
                 //make sure this works, then continue.
                 
             }
                 detector.disable();
             }
         }
+    public void rotateRightB(double power, double time)
+    {
+        ElapsedTime ms = new ElapsedTime();
+        ms.reset();
+        boolean totalTime = false;
+        while (ms.time() <= time && isAligned() == false) {
+            frontL.setPower(-power);
+            frontR.setPower(-power);
+            backR.setPower(-power);
+            backL.setPower(-power);
+
+        }
+        frontL.setPower(0);
+        frontR.setPower(0);
+        backR.setPower(0);
+        backL.setPower(0);
+    }
     public void motorsOff(double time)
     {
         ElapsedTime ms = new ElapsedTime();
@@ -347,16 +364,16 @@ public class dogeAuto4 extends LinearOpMode {
         }
         return 0;
     }
-    public void goBack(double time)
+    public void goBack(double time,double power)
     {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
         while (ms.time() <= time)
         {
-            frontL.setPower(1.0);
-            frontR.setPower(-1.0);
-            backR.setPower(-1.0);
-            backL.setPower(1.0);
+            frontL.setPower(power);
+            frontR.setPower(-power);
+            backR.setPower(-power);
+            backL.setPower(power);
         }
         frontL.setPower(0.0);
         frontR.setPower(0.0);
