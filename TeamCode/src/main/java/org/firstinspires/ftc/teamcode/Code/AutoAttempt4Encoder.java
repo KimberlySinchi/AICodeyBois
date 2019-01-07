@@ -141,6 +141,9 @@ public class AutoAttempt4Encoder extends LinearOpMode
                                         goldMineralXR = (int) r.getRight();
                                         goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
                                         aligned = isAligned(goldMineralCent, 640 - 125, 640 + 125);
+                                        if(aligned){
+                                            break;
+                                        }
                                         rotateLeftP(0.05);
                                         encoderReset();
                                         rotVal = encodeAvg();
@@ -161,6 +164,7 @@ public class AutoAttempt4Encoder extends LinearOpMode
                     }
                 }
             }
+            stop(.5);
             forwardE((int) COUNTS_PER_INCH * 51);
             backwardE((int) COUNTS_PER_INCH * 51);
             rotateRightE(rotVal);

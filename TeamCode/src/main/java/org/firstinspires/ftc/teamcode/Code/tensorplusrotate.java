@@ -52,9 +52,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="AWESOMEAUTOREVERSE(plsWork)", group="Linear Opmode")
+@Autonomous(name="AWESOMEAUTOREVERSE(plsWork)tensor", group="Linear Opmode")
 
-public class dogeAuto4 extends LinearOpMode {
+public class tensorplusrotate extends LinearOpMode {
 
     // Declare OpMode members.
     // Detector object
@@ -139,67 +139,30 @@ public class dogeAuto4 extends LinearOpMode {
         {
             if(bool1)
             {
-                int timeUntilFirstBlock = 3;
-                double timeLeft = rotateLeft(7, .5);
-                //goUp(1.3); //in the future go back: goBack(1.5); //1.3 seconds with full power
-                //goBack(1.3);//1.3 seconds with full power
-                goUp(2.6,.5);//half power, so double time for equal distance (test)
-                motorsOff(.6);
-                goBack(2.6,.5);//half power, so double time for equal distance(test)
-                motorsOff(.3);
-                rotateRightB(.5,timeLeft - timeUntilFirstBlock);
-
-                //make sure this works, then continue.
-                
+                double timeRight = rotateRight(1.12, .14);
+                double timeLeft = rotateLeft(4, .14);
+                double totalTime = timeRight + timeLeft;
+                goUp(1.3); //in the future go back: goBack(1.5);
+                goBack(1.3);
+                telemetry.addLine(totalTime+ "");
+                if(totalTime <=0) //ROTATED RIGHT AND FOUND THE BLOCK
+                    rotateLeft(-1*totalTime,.14);
+                else if(totalTime>0)//There was a semicolon here aCk
+                    rotateRight(totalTime,.14);
+                bool1 = false;
             }
                 detector.disable();
             }
         }
-    public void rotateRightB(double power, double time)
-    {
-        ElapsedTime ms = new ElapsedTime();
-        ms.reset();
-        boolean totalTime = false;
-        while (ms.time() <= time && isAligned() == false) {
-            frontL.setPower(-power);
-            frontR.setPower(-power);
-            backR.setPower(-power);
-            backL.setPower(-power);
-
-        }
-        frontL.setPower(0);
-        frontR.setPower(0);
-        backR.setPower(0);
-        backL.setPower(0);
-    }
-    public void motorsOff(double time)
-    {
-        ElapsedTime ms = new ElapsedTime();
-        ms.reset();
-        while (ms.time() <= time)
-        {
-            frontL.setPower(0.0);
-            frontR.setPower(0.0);
-            backR.setPower(0.0);
-            backL.setPower(0.0);   
-        }
-        
-    }
-    public void goRightB()
-    {
-    }
-    public void goLeftB()
-    {
-    }
-    public void goUp(double time, double power)
+    public void goUp(double time)
     {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
         while (ms.time() <= time) {
-            frontL.setPower(-power);
-            frontR.setPower(power);
-            backR.setPower(power);
-            backL.setPower(-power);
+            frontL.setPower(-1.0);
+            frontR.setPower(1.0);
+            backR.setPower(1.0);
+            backL.setPower(-1.0);
         }
         frontL.setPower(0.0);
         frontR.setPower(0.0);
@@ -207,15 +170,14 @@ public class dogeAuto4 extends LinearOpMode {
         backL.setPower(0.0);
     }
 
-    public void goDown(double time, double power)
-    {
+    public void goDown(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
         while (ms.time() <= time) {
-            frontL.setPower(power);
-            frontR.setPower(-power);
-            backR.setPower(-power);
-            backL.setPower(power);
+            frontL.setPower(1.0);
+            frontR.setPower(-1.0);
+            backR.setPower(-1.0);
+            backL.setPower(1.0);
         }
         frontL.setPower(0);
         frontR.setPower(0);
@@ -364,16 +326,16 @@ public class dogeAuto4 extends LinearOpMode {
         }
         return 0;
     }
-    public void goBack(double time,double power)
+    public void goBack(double time)
     {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
         while (ms.time() <= time)
         {
-            frontL.setPower(power);
-            frontR.setPower(-power);
-            backR.setPower(-power);
-            backL.setPower(power);
+            frontL.setPower(1.0);
+            frontR.setPower(-1.0);
+            backR.setPower(-1.0);
+            backL.setPower(1.0);
         }
         frontL.setPower(0.0);
         frontR.setPower(0.0);
