@@ -28,7 +28,7 @@ public class SlaveAuto
         try
         {
             frontL = hwmap.get(DcMotor.class, "DC1");
-            frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION); //RUN_TO_POSITION
         }
         catch(Exception e)
         {
@@ -37,7 +37,7 @@ public class SlaveAuto
         try
         {
             frontR = hwmap.get(DcMotor.class, "DC2");
-            frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
         catch(Exception e)
         {
@@ -46,7 +46,7 @@ public class SlaveAuto
         try
         {
             backR = hwmap.get(DcMotor.class, "DC3");
-            backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
         catch(Exception e)
         {
@@ -55,7 +55,7 @@ public class SlaveAuto
         try
         {
             backL = hwmap.get(DcMotor.class, "DC4");
-            backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
         catch(Exception e)
         {

@@ -25,7 +25,7 @@ public class AutoAttempt3 extends LinearOpMode
     private double rotationTime = 0;
 
     static final double SPEED = 0.6;
-
+//speedm = 5.488 cm/s
     /**
      * TENSOR FLOW INSTANCE VARIABLES (DO NOT TOUCH)
      */
@@ -38,6 +38,10 @@ public class AutoAttempt3 extends LinearOpMode
     private int pos = -2;
     private boolean aligned = false;
     private boolean detect = true;
+
+    private static final double SECONDS_PER_TILE = 11.106; //WE NEED TO PUT WALID'S DATA INTO THIS
+    //2.161 inches/sec
+    private static final double SECONDS_PER_360_DEG = 0.0; //WE NEED TO PUT WALID'S DATA INTO THIS
 
     @Override
     public void runOpMode()
@@ -64,6 +68,7 @@ public class AutoAttempt3 extends LinearOpMode
         //Finding the position of the gold mineral
         if(opModeIsActive())
         {
+            boolean flagRotTime = true;
             rotLeftTime.reset();
             while (opModeIsActive() && runtime.seconds() < 10 && detect)
             {
@@ -99,12 +104,18 @@ public class AutoAttempt3 extends LinearOpMode
                                         goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
                                         aligned = isAligned(goldMineralCent, 640-125, 640+125);
                                         rotateLeftP(0.15);
+                                        if(flagRotTime){
+                                            rotLeftTime.reset();
+                                            flagRotTime = false;
+                                        }
                                         rotationTime = rotLeftTime.time();
                                         telemetry.addLine("Rotation Time: "+rotationTime);
                                         telemetry.addLine("Rotating left");
                                         telemetry.addLine("Aligned: " + aligned);
-                                        if(aligned)
+                                        if(aligned){
                                             detect = false;
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -134,7 +145,7 @@ public class AutoAttempt3 extends LinearOpMode
             }
             rotateRightP(0.15);
             runtime.reset();
-            while(opModeIsActive() && runtime.seconds() < rotationTime)
+            while(opModeIsActive() && runtime.seconds() <= rotationTime)
             {
                 telemetry.addLine("Rotating back");
                 telemetry.update();

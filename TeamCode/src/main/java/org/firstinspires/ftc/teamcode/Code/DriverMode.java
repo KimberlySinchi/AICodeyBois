@@ -94,6 +94,7 @@ public class DriverMode extends OpMode {
         double yRight = gamepad1.right_stick_y;
         double xLeft = gamepad1.right_stick_x;
         telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
+        telemetry.update();
         double theta = Math.atan(y/x);
         String compare = "-0.0";
         String sTheta = "" + theta;

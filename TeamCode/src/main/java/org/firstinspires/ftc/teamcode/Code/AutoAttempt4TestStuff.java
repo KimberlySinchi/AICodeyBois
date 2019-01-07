@@ -274,10 +274,7 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        toPos();
     }
     public void toPos()
     {

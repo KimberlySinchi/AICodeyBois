@@ -44,7 +44,6 @@ public class DriverModeEncoder extends OpMode {
     @Override
     public void init()
     {
-
         slave.init(hardwareMap);
         telemetry.addLine(slave.getStatus());
     }
@@ -212,8 +211,11 @@ public class DriverModeEncoder extends OpMode {
             slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-        int fL = slave.frontL.getCurrentPosition(), fR = slave.frontR.getCurrentPosition();
-        int bL = slave.backL.getCurrentPosition(), bR = slave.backR.getCurrentPosition();
+        int fL = slave.frontL.getCurrentPosition();
+        int fR = slave.frontR.getCurrentPosition();
+        int bL = slave.backL.getCurrentPosition();
+        int bR = slave.backR.getCurrentPosition();
+
         telemetry.addData("FL" , fL);
         telemetry.addData("FR" , fR);
         telemetry.addData("BL" , bL);
