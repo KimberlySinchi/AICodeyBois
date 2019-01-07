@@ -209,7 +209,7 @@ public class dogeAuto5 extends LinearOpMode {
 
          **/
         up(power);
-        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) 
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy() && opModeIsActive()) 
         {}
 
         Stop();
@@ -250,7 +250,7 @@ public class dogeAuto5 extends LinearOpMode {
 
          **/
         down(power);
-        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy() && opModeIsActive()) {
         }
 
         Stop();
@@ -292,7 +292,7 @@ public class dogeAuto5 extends LinearOpMode {
 
          **/
         right(power);
-        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy() && opModeIsActive()) {
         }
 
         Stop();
@@ -334,7 +334,7 @@ public class dogeAuto5 extends LinearOpMode {
 
          **/
         left(power);
-        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy())
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy() && opModeIsActive())
         { }
 
         Stop();
@@ -367,7 +367,7 @@ public class dogeAuto5 extends LinearOpMode {
         slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         left(power);
-        while (isAligned() == false&&(slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()))
+        while (isAligned() == false&&(slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) && opModeIsActive())
         { }
 
         Stop();
@@ -407,7 +407,7 @@ public class dogeAuto5 extends LinearOpMode {
 
          **/
         right(power);
-        while (isAligned() == false&&slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy())
+        while (isAligned() == false&&slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy() && opModeIsActive())
         { }
 
         Stop();
@@ -448,7 +448,7 @@ public class dogeAuto5 extends LinearOpMode {
 
          **/
         down(power);
-        while (isAligned() == false && slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy())
+        while (isAligned() == false && slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()&&opModeIsActive())
         { }
 
         Stop();
@@ -489,7 +489,7 @@ public class dogeAuto5 extends LinearOpMode {
 
          **/
         up(power);
-        while (isAligned() == false && slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy())
+        while (isAligned() == false && slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy() && opModeIsActive())
         {}
 
         Stop();
@@ -509,7 +509,7 @@ public class dogeAuto5 extends LinearOpMode {
     public boolean isAligned() {
         return detector.getAligned();
     }
-    public int convInToTick(double inches)
+    public int convInToTick(double inches) //only for up down, side-side movement
     {
         int COUNTS_PER_MOTOR_REV = 1440;
         double DRIVE_GEAR_REDUCTION = 2.0; //This value has yet to be discovered //doesnt matter jason
@@ -521,4 +521,8 @@ public class dogeAuto5 extends LinearOpMode {
         return (int)(inches/HOLONOMIC_COMPENSATION_FACTOR)*1440;
 
     }
+    /*public int convAngleToTick(double angle)
+    {
+        
+    }*/
 }
