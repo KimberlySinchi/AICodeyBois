@@ -52,9 +52,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="AWESOMEAUTOREVERSE(plsWork PLEASE)", group="Linear Opmode")
+@Autonomous(name="AWESOMEAUTOREVERSE(plsWork)tensor", group="Linear Opmode")
 
-public class dogeAuto4 extends LinearOpMode {
+public class tensorplusrotate extends LinearOpMode {
 
     // Declare OpMode members.
     // Detector object
@@ -139,14 +139,16 @@ public class dogeAuto4 extends LinearOpMode {
         {
             if(bool1)
             {
-                //
-                double timeLeft = rotateLeft(5.2, .14);
-                double totalTime = timeLeft;
-
+                double timeRight = rotateRight(1.12, .14);
+                double timeLeft = rotateLeft(4, .14);
+                double totalTime = timeRight + timeLeft;
                 goUp(1.3); //in the future go back: goBack(1.5);
                 goBack(1.3);
                 telemetry.addLine(totalTime+ "");
-                rotateRight(timeLeft - 2.2,.14);
+                if(totalTime <=0) //ROTATED RIGHT AND FOUND THE BLOCK
+                    rotateLeft(-1*totalTime,.14);
+                else if(totalTime>0)//There was a semicolon here aCk
+                    rotateRight(totalTime,.14);
                 bool1 = false;
             }
                 detector.disable();
@@ -276,8 +278,7 @@ public class dogeAuto4 extends LinearOpMode {
     public double rotateLeft(double time, double power) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time && isAligned() == false)
-        {
+        while (ms.time() <= time && isAligned() == false) {
             frontL.setPower(power);
             frontR.setPower(power);
             backR.setPower(power);
@@ -289,65 +290,37 @@ public class dogeAuto4 extends LinearOpMode {
         frontR.setPower(0);
         backR.setPower(0);
         backL.setPower(0);
-        if(ms.time()<time)
+        if(isAligned() == true)
         {
             return ms.time();
         }
         return time;//LEFT IS POSITIVE TIME, RIGHT IS NEGATIVE TIME
     }
 
-    public void goRightB(double time, double power)
-    {
-        ElapsedTime ms = new ElapsedTime();
-        ms.reset();
-        while (ms.time() <= time) {
-            frontL.setPower(-power);
-            frontR.setPower(-power);
-            backR.setPower(-power);
-            backL.setPower(-power);
-        }
 
-        frontL.setPower(0);
-        frontR.setPower(0);
-        backR.setPower(0);
-        backL.setPower(0);
-    }
-    public void goLeftB(double time, double power)
-    {
-        ElapsedTime ms = new ElapsedTime();
-        ms.reset();
-        while (ms.time() <= time) {
-            frontL.setPower(power);
-            frontR.setPower(power);
-            backR.setPower(power);
-            backL.setPower(power);
-        }
-
-        frontL.setPower(0);
-        frontR.setPower(0);
-        backR.setPower(0);
-        backL.setPower(0);
-    }
     public double rotateRight(double time, double power) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        boolean totalTime = true;
+        boolean totalTime = false;
         while (ms.time() <= time && isAligned() == false) {
             frontL.setPower(-power);
             frontR.setPower(-power);
             backR.setPower(-power);
             backL.setPower(-power);
+            if(time == ms.time())
+            {
+                totalTime = true;
+            }
         }
-
         frontL.setPower(0);
         frontR.setPower(0);
         backR.setPower(0);
         backL.setPower(0);
-        if(ms.time() < time)
+        if(isAligned() == true)
         {
             return -1*ms.time();
         }
-        else if(ms.time()>=time)
+        if(totalTime)
         {
             return -1*time;
         }

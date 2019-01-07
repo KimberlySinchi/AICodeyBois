@@ -277,12 +277,15 @@ public class DriverMode extends OpMode {
             upDownMotor.setPower(0);
         }
          **/
+        /*
         if(yRight>0)
             slave.latch.setPower(-yRight);
         else if(yRight<0)
+
             slave.latch.setPower(-yRight);
         else
             slave.latch.setPower(0);
+            */
         if(dPadUp)
             slave.armIntake.setPosition(1);
         else if(dPadDown)

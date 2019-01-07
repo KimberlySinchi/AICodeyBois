@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.Code;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,12 +19,12 @@ import java.util.List;
 @Autonomous(name = "aHHHHH", group = "Slave")
 @Disabled
 
-public class AutoAttempt2 extends LinearOpMode
-{
+public class AutoAttempt2 extends LinearOpMode {
     private Slave slave = new Slave();
     private ElapsedTime runtime = new ElapsedTime();
 
     private ElapsedTime rotLeftTime = new ElapsedTime();
+    private ElapsedTime rotRightTime = new ElapsedTime();
     private double rotationTime = 0;
 
     private DcMotor frontL;
@@ -48,8 +49,7 @@ public class AutoAttempt2 extends LinearOpMode
     private boolean detect = true;
 
     @Override
-    public void runOpMode()
-    {
+    public void runOpMode() {
         slave.init(hardwareMap);
 
         //For convenience, we will print on the phone that the robot is ready
@@ -70,94 +70,92 @@ public class AutoAttempt2 extends LinearOpMode
         runtime.reset();
 
         //Finding the position of the gold mineral
-        if(opModeIsActive())
-        {
+        if (opModeIsActive()) {
             rotLeftTime.reset();
-            while (opModeIsActive() && runtime.seconds() < 10 && detect)
-            {
-                if (tfod != null)
-                {
+            while (opModeIsActive() && runtime.seconds() < 10 && detect) {
+                if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null)
-                    {
+                    if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
                         int goldMineralX = -1;
                         int goldMineralXR = -1;
                         int goldMineralCent = -1;
-                        int leftRangeX = (1280/2)-50;
+                        int leftRangeX = (1280 / 2) - 50;
                         int rightRangeX = leftRangeX + 100;
                         boolean aligned = false;
-                        if(updatedRecognitions.size()>=1)
-                        {
-                            for(Recognition r: updatedRecognitions)
-                            {
-                                if (r.getLabel().equals(LABEL_GOLD_MINERAL))
-                                {
+                        if (updatedRecognitions.size() >= 1) {
+                            for (Recognition r : updatedRecognitions) {
+                                if (r.getLabel().equals(LABEL_GOLD_MINERAL)) {
                                     //goldMineralX = (int) r.getLeft();
                                     //goldMineralXR = (int)r.getRight();
                                     //goldMineralCent = (int)((goldMineralX+goldMineralXR)/2);
                                     //aligned = isAligned(goldMineralCent, 640-75, 640+75);
-                                    if(pos == -1)
-                                    {
+                                    if (pos == -1) {
                                         telemetry.addLine("Gold LEFT Code ------------");
                                         goldMineralX = (int) r.getLeft();
                                         goldMineralXR = (int) r.getRight();
                                         goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
-                                        aligned = isAligned(goldMineralCent, 640-75, 640+75);
+                                        aligned = isAligned(goldMineralCent, 640 - 75, 640 + 75);
                                         rotateLeftP(0.05);
                                         rotationTime = rotLeftTime.time();
-                                        telemetry.addLine("Rotation Time: "+rotationTime);
+                                        telemetry.addLine("Rotation Time: " + rotationTime);
                                         telemetry.addLine("Rotating left");
                                         telemetry.addLine("Aligned: " + aligned);
-                                        if(aligned)
+                                        if (aligned)
+                                            detect = false;
+                                    }
+                                    //THIS IS JASON'S CODE, IF THIS FAILS THEN IT'S MY FAULT LOL
+                                    if (pos == 0) {
+                                        if (aligned)
+                                            detect = false;
+                                    }
+                                    if(pos == 1){
+                                        telemetry.addLine("Gold RIGHT Code ------------");
+                                        goldMineralX = (int) r.getLeft();
+                                        goldMineralXR = (int) r.getRight();
+                                        goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
+                                        aligned = isAligned(goldMineralCent, 640 - 75, 640 + 75);
+                                        rotateRightP(0.05);
+                                        rotationTime = rotRightTime.time();
+                                        telemetry.addLine("Rotation Time: " + rotationTime);
+                                        telemetry.addLine("Rotating right");
+                                        telemetry.addLine("Aligned: " + aligned);
+                                        if (aligned)
                                             detect = false;
                                     }
 
                                 }
                             }
                         }
-                        if (updatedRecognitions.size() == 3)
-                        {
+                        if (updatedRecognitions.size() == 3) {
                             goldMineralX = -1;
                             goldMineralXR = -1;
                             goldMineralCent = -1;
                             int silverMineral1X = -1;
                             int silverMineral2X = -1;
-                            for (Recognition recognition : updatedRecognitions)
-                            {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL))
-                                {
+                            for (Recognition recognition : updatedRecognitions) {
+                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                                     goldMineralX = (int) recognition.getLeft();
                                     goldMineralXR = (int) recognition.getRight();
-                                    goldMineralCent = (int)((goldMineralX+goldMineralXR))/2;
-                                }
-                                else if (silverMineral1X == -1)
-                                {
+                                    goldMineralCent = (int) ((goldMineralX + goldMineralXR)) / 2;
+                                } else if (silverMineral1X == -1) {
                                     silverMineral1X = (int) recognition.getLeft();
-                                }
-                                else
-                                {
+                                } else {
                                     silverMineral2X = (int) recognition.getLeft();
                                 }
                             }
-                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1)
-                            {
-                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X)
-                                {
+                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position", "Left");
                                     telemetry.addLine("Left code was updated");
                                     pos = -1;
-                                }
-                                else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X)
-                                {
+                                } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                     telemetry.addData("Gold Mineral Position", "Right");
                                     telemetry.addLine("Right code was updated");
                                     pos = 1;
-                                }
-                                else
-                                {
+                                } else {
                                     telemetry.addData("Gold Mineral Position", "Center");
                                     telemetry.addLine("Center code was updated");
                                     pos = 0;
@@ -165,39 +163,70 @@ public class AutoAttempt2 extends LinearOpMode
                             }
                         }
                         telemetry.addLine("Gold cords: (" + goldMineralX + " to " + goldMineralXR + ")");
-                        telemetry.addLine("Gold Center x (" + goldMineralCent +")");
+                        telemetry.addLine("Gold Center x (" + goldMineralCent + ")");
                         telemetry.addData("Position of Gold", pos);
                         telemetry.addData("Gold Mineral Aligned", aligned);
                         telemetry.update();
                     }
                 }
             }
-            forward();
-            runtime.reset();
-            while(opModeIsActive() && runtime.seconds() < 2)
-            {
-                telemetry.addLine("Moving forward");
-                telemetry.addLine("Rotation time: "+rotationTime);
-                telemetry.update();
+            if (pos == -1) {
+                forward();
+                runtime.reset();
+                while (opModeIsActive() && runtime.seconds() < 2) {
+                    telemetry.addLine("Moving forward");
+                    telemetry.addLine("Rotation time: " + rotationTime);
+                    telemetry.update();
+                }
+                backward();
+                runtime.reset();
+                while (opModeIsActive() && runtime.seconds() < 2) {
+                    telemetry.addLine("Moving backward");
+                    telemetry.update();
+                }
+                rotateRight();
+                runtime.reset();
+                while (opModeIsActive() && runtime.seconds() < rotationTime) {
+                    telemetry.addLine("hi, we're rotating back");
+                    telemetry.update();
+                }
+            }else if(pos == 0){
+                forward();
+                runtime.reset();
+                while (opModeIsActive() && runtime.seconds() < 2) {
+                    telemetry.addLine("Moving forward");
+                    telemetry.addLine("Rotation time: " + rotationTime);
+                    telemetry.update();
+                }
+                backward();
+                runtime.reset();
+                while (opModeIsActive() && runtime.seconds() < 2) {
+                    telemetry.addLine("Moving backward");
+                    telemetry.update();
+                }
+            }else if(pos == 1){
+                forward();
+                runtime.reset();
+                while (opModeIsActive() && runtime.seconds() < 2) {
+                    telemetry.addLine("Moving forward");
+                    telemetry.addLine("Rotation time: " + rotationTime);
+                    telemetry.update();
+                }
+                backward();
+                runtime.reset();
+                while (opModeIsActive() && runtime.seconds() < 2) {
+                    telemetry.addLine("Moving backward");
+                    telemetry.update();
+                }
+                rotateLeft();
+                runtime.reset();
+                while (opModeIsActive() && runtime.seconds() < rotationTime) {
+                    telemetry.addLine("hi, we're rotating back");
+                    telemetry.update();
+                }
             }
-            backward();
-            runtime.reset();
-            while(opModeIsActive() && runtime.seconds() < 2)
-            {
-                telemetry.addLine("Moving backward");
-                telemetry.update();
-            }
-            rotateRight();
-            runtime.reset();
-            while(opModeIsActive() && runtime.seconds() < rotationTime)
-            {
-                telemetry.addLine("hi, we're rotating back");
-                telemetry.update();
-            }
-
         }
-        if (tfod != null)
-        {
+        if (tfod != null) {
             tfod.shutdown();
         }
 
@@ -264,22 +293,19 @@ public class AutoAttempt2 extends LinearOpMode
     /**
      * METHODS BASED ON TIME
      */
-    public void stop(double time)
-    {
+    public void stop(double time) {
         ElapsedTime timer = new ElapsedTime();
-        while (timer.seconds() <= time)
-        {
+        while (timer.seconds() <= time) {
             slave.frontL.setPower(0);
             slave.backL.setPower(0);
             slave.frontR.setPower(0);
             slave.backR.setPower(0);
         }
     }
-    public void forwardS(double time)
-    {
+
+    public void forwardS(double time) {
         ElapsedTime timer = new ElapsedTime();
-        while(timer.seconds() <= time)
-        {
+        while (timer.seconds() <= time) {
             slave.frontL.setPower(-SPEED);
             slave.backL.setPower(-SPEED);
             slave.frontR.setPower(SPEED);
@@ -287,11 +313,10 @@ public class AutoAttempt2 extends LinearOpMode
         }
         stop(0.5);
     }
-    public void backwardS(double time)
-    {
+
+    public void backwardS(double time) {
         ElapsedTime timer = new ElapsedTime();
-        while(timer.seconds() <= time)
-        {
+        while (timer.seconds() <= time) {
             slave.frontL.setPower(SPEED);
             slave.backL.setPower(SPEED);
             slave.frontR.setPower(-SPEED);
@@ -299,11 +324,10 @@ public class AutoAttempt2 extends LinearOpMode
         }
         stop(0.5);
     }
-    public void rightS(double time)
-    {
+
+    public void rightS(double time) {
         ElapsedTime timer = new ElapsedTime();
-        while(timer.seconds() <= time)
-        {
+        while (timer.seconds() <= time) {
             slave.frontL.setPower(-SPEED);
             slave.frontR.setPower(-SPEED);
             slave.backR.setPower(SPEED);
@@ -311,11 +335,10 @@ public class AutoAttempt2 extends LinearOpMode
         }
         stop(0.5);
     }
-    public void leftS(double time)
-    {
+
+    public void leftS(double time) {
         ElapsedTime timer = new ElapsedTime();
-        while(timer.seconds() <= time)
-        {
+        while (timer.seconds() <= time) {
             slave.frontL.setPower(SPEED);
             slave.frontR.setPower(SPEED);
             slave.backL.setPower(-SPEED);
@@ -323,11 +346,10 @@ public class AutoAttempt2 extends LinearOpMode
         }
         stop(0.5);
     }
-    public void rotateRightS(double time)
-    {
+
+    public void rotateRightS(double time) {
         ElapsedTime timer = new ElapsedTime();
-        while(timer.seconds() <= time)
-        {
+        while (timer.seconds() <= time) {
             slave.frontL.setPower(-SPEED);
             slave.frontR.setPower(-SPEED);
             slave.backL.setPower(-SPEED);
@@ -335,11 +357,10 @@ public class AutoAttempt2 extends LinearOpMode
         }
         stop(0.5);
     }
-    public void rotateLeftS(double time)
-    {
+
+    public void rotateLeftS(double time) {
         ElapsedTime timer = new ElapsedTime();
-        while(timer.seconds() <= time)
-        {
+        while (timer.seconds() <= time) {
             slave.frontL.setPower(SPEED);
             slave.frontR.setPower(SPEED);
             slave.backL.setPower(SPEED);
@@ -351,43 +372,42 @@ public class AutoAttempt2 extends LinearOpMode
     /**
      * METHODS BASED ON POWER
      */
-    public void forwardP(double power)
-    {
+    public void forwardP(double power) {
         slave.frontL.setPower(-power);
         slave.backL.setPower(-power);
         slave.frontR.setPower(power);
         slave.backR.setPower(power);
     }
-    public void backwardP(double power)
-    {
+
+    public void backwardP(double power) {
         slave.frontL.setPower(power);
         slave.backL.setPower(power);
         slave.frontR.setPower(-power);
         slave.backR.setPower(-power);
     }
-    public void rightP(double power)
-    {
+
+    public void rightP(double power) {
         slave.frontL.setPower(power);
         slave.frontR.setPower(power);
         slave.backR.setPower(-power);
         slave.backL.setPower(-power);
     }
-    public void leftP(double power)
-    {
+
+    public void leftP(double power) {
         slave.frontL.setPower(-power);
         slave.frontR.setPower(-power);
         slave.backL.setPower(power);
         slave.backR.setPower(power);
     }
-    public void rotateRightP(double power)
-    {
+
+    public void rotateRightP(double power) {
         slave.frontL.setPower(-power);
         slave.frontR.setPower(-power);
         slave.backL.setPower(-power);
         slave.backR.setPower(-power);
     }
-    public void rotateLeftP(double power)
-    {
+
+    public void rotateLeftP(double power) {
         slave.frontL.setPower(power);
         slave.frontR.setPower(power);
         slave.backL.setPower(power);
@@ -397,60 +417,59 @@ public class AutoAttempt2 extends LinearOpMode
     /**
      * METHODS BASED ON NO PARAMETERS
      */
-    public void forward()
-    {
+    public void forward() {
         slave.frontL.setPower(-SPEED);
         slave.backL.setPower(-SPEED);
         slave.frontR.setPower(SPEED);
         slave.backR.setPower(SPEED);
     }
-    public void backward()
-    {
+
+    public void backward() {
         slave.frontL.setPower(SPEED);
         slave.backL.setPower(SPEED);
         slave.frontR.setPower(-SPEED);
         slave.backR.setPower(-SPEED);
     }
-    public void right()
-    {
+
+    public void right() {
         slave.frontL.setPower(SPEED);
         slave.frontR.setPower(SPEED);
         slave.backR.setPower(-SPEED);
         slave.backL.setPower(-SPEED);
     }
-    public void left()
-    {
+
+    public void left() {
         slave.frontL.setPower(-SPEED);
         slave.frontR.setPower(-SPEED);
         slave.backL.setPower(SPEED);
         slave.backR.setPower(SPEED);
     }
-    public void rotateRight()
-    {
+
+    public void rotateRight() {
         slave.frontL.setPower(-SPEED);
         slave.frontR.setPower(-SPEED);
         slave.backL.setPower(-SPEED);
         slave.backR.setPower(-SPEED);
     }
-    public void rotateLeft()
-    {
+
+    public void rotateLeft() {
         slave.frontL.setPower(SPEED);
         slave.frontR.setPower(SPEED);
         slave.backL.setPower(SPEED);
         slave.backR.setPower(SPEED);
     }
+
     /**
      * METHODS FOR TENSOR FLOW (DO NOT TOUCH)
      */
-    private void initVuforia()
-    {
+    private void initVuforia() {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
-    private void initTfod()
-    {
+
+    private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
@@ -459,25 +478,23 @@ public class AutoAttempt2 extends LinearOpMode
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
-    public static boolean isAligned(int cent, int rangeLeft, int rangeRight)
-    {
-        if(cent >= rangeLeft && cent <= rangeRight)
+
+    public static boolean isAligned(int cent, int rangeLeft, int rangeRight) {
+        if (cent >= rangeLeft && cent <= rangeRight)
             return true;
         else
             return false;
     }
-    public void findGold()
-    {
+
+    public void findGold() {
         stop(2);
         telemetry.addLine("GONNA MOVE");
         telemetry.update();
         //Movement code
-        if(pos == -1 && !aligned)
-        {
+        if (pos == -1 && !aligned) {
             telemetry.addData("pos", "left");
             telemetry.update();
-            while(aligned == false)
-            {
+            while (aligned == false) {
                 telemetry.addLine("penis moving left");
                 telemetry.update();
                 rotateLeftS(1);
@@ -485,22 +502,17 @@ public class AutoAttempt2 extends LinearOpMode
             }
             forwardS(2);
             backwardS(2);
-        }
-        else if(pos == 1 && !aligned)
-        {
+        } else if (pos == 1 && !aligned) {
             telemetry.addData("pos", "right");
             telemetry.update();
-            while (aligned == false)
-            {
+            while (aligned == false) {
                 telemetry.addLine("penis moving right");
                 telemetry.update();
                 rotateRightS(1);
             }
             forwardS(2);
             backwardS(2);
-        }
-        else if(pos == 0)
-        {
+        } else if (pos == 0) {
             telemetry.addLine("PENIS DOING DUMB THING");
             telemetry.update();
             forwardS(2);

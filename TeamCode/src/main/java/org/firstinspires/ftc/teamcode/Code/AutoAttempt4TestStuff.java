@@ -257,6 +257,10 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
     public void toPos()
     {
@@ -302,7 +306,7 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         }
 
         //Sets motor mode back to encoder
-        //This also makes it so we avoid stopping the robot because motors are no longer in run to pos mode
+        stop();
         usingEncoders();
     }
 
