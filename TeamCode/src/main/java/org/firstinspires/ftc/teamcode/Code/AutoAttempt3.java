@@ -163,6 +163,16 @@ public class AutoAttempt3 extends LinearOpMode
                 rotateLeftS(SECONDS_PER_DEG * 8.19);
                 backwardS(SECONDS_PER_INCH * 75);
             }
+            boolean depot = gamepad1.b;
+            if(depot){
+                forwardS(SECONDS_PER_INCH * 26.2);
+                rotateLeftS(SECONDS_PER_DEG * 88.99);
+                forwardS(SECONDS_PER_INCH * 31.6);
+                rotateRightS(SECONDS_PER_DEG * 127.9);
+                forwardS(SECONDS_PER_INCH * 39.98);
+                rotateLeftS(SECONDS_PER_DEG * 8.56);
+                backwardS(SECONDS_PER_INCH * 72);
+            }
         }
         if (tfod != null)
         {
