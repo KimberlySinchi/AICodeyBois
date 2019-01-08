@@ -98,8 +98,8 @@ public class dogeAuto5 extends LinearOpMode {
         detector.ratioScorer.perfectRatio = 1.0; // Ratio adjustment
 
         detector.enable(); // Start the detector!
-        slave.init(hardwareMap); //Mapping all devices
-        /*
+        //slave.init(hardwareMap); //Mapping all devices
+
         try
         {
             frontL = hardwareMap.get(DcMotor.class, "DC1");
@@ -125,7 +125,7 @@ public class dogeAuto5 extends LinearOpMode {
             backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         } catch (Exception e) {
         }
-*/
+
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
