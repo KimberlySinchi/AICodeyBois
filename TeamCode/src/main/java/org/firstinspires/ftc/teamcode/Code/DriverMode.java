@@ -94,7 +94,6 @@ public class DriverMode extends OpMode {
         double yRight = gamepad1.right_stick_y;
         double xLeft = gamepad1.right_stick_x;
         telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
-        telemetry.update();
         double theta = Math.atan(y/x);
         String compare = "-0.0";
         String sTheta = "" + theta;
@@ -255,9 +254,9 @@ public class DriverMode extends OpMode {
         }
          **/
         if(yRight>0)
-            slave.latch.setPower(-.3);
+            slave.latch.setPower(-yRight);
         else if(yRight<0)
-            slave.latch.setPower(-.3);
+            slave.latch.setPower(-yRight);
         else
             slave.latch.setPower(0);
     }
