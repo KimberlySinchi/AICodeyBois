@@ -104,15 +104,17 @@ public class AutoAttempt3 extends LinearOpMode
                                         goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
                                         aligned = isAligned(goldMineralCent, 640-125, 640+125);
                                         rotateLeftP(0.15);
-                                        if(flagRotTime){
+                                        if(flagRotTime)
+                                        {
                                             rotLeftTime.reset();
                                             flagRotTime = false;
                                         }
                                         rotationTime = rotLeftTime.time();
-                                        telemetry.addLine("Rotation Time: "+rotationTime);
+                                        telemetry.addLine("Rotation Time: " + rotationTime);
                                         telemetry.addLine("Rotating left");
                                         telemetry.addLine("Aligned: " + aligned);
-                                        if(aligned){
+                                        if(aligned)
+                                        {
                                             detect = false;
                                             break;
                                         }
@@ -121,7 +123,7 @@ public class AutoAttempt3 extends LinearOpMode
                             }
                         }
                         telemetry.addLine("Gold cords: (" + goldMineralX + " to " + goldMineralXR + ")");
-                        telemetry.addLine("Gold Center x (" + goldMineralCent +")");
+                        telemetry.addLine("Gold Center x (" + goldMineralCent + ")");
                         telemetry.addData("Position of Gold", pos);
                         telemetry.addData("Gold Mineral Aligned", aligned);
                         telemetry.update();
@@ -421,46 +423,5 @@ public class AutoAttempt3 extends LinearOpMode
             return true;
         else
             return false;
-    }
-    public void findGold()
-    {
-        stop(2);
-        telemetry.addLine("GONNA MOVE");
-        telemetry.update();
-        //Movement code
-        if(pos == -1 && !aligned)
-        {
-            telemetry.addData("pos", "left");
-            telemetry.update();
-            while(aligned == false)
-            {
-                telemetry.addLine("penis moving left");
-                telemetry.update();
-                rotateLeftS(1);
-                aligned = true;
-            }
-            forwardS(2);
-            backwardS(2);
-        }
-        else if(pos == 1 && !aligned)
-        {
-            telemetry.addData("pos", "right");
-            telemetry.update();
-            while (aligned == false)
-            {
-                telemetry.addLine("penis moving right");
-                telemetry.update();
-                rotateRightS(1);
-            }
-            forwardS(2);
-            backwardS(2);
-        }
-        else if(pos == 0)
-        {
-            telemetry.addLine("PENIS DOING DUMB THING");
-            telemetry.update();
-            forwardS(2);
-            backwardS(2);
-        }
     }
 }
