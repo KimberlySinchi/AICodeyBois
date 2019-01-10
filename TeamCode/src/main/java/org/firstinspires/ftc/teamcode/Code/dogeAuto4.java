@@ -139,18 +139,39 @@ public class dogeAuto4 extends LinearOpMode {
         {
             if(bool1)
             {
-                int timeUntilFirstBlock = 3;
-                double timeLeft = rotateLeft(7, .5);
-                //goUp(1.3); //in the future go back: goBack(1.5); //1.3 seconds with full power
-                //goBack(1.3);//1.3 seconds with full power
-                goUp(2.6,.5);//half power, so double time for equal distance (test)
-                motorsOff(.6);
-                goBack(2.6,.5);//half power, so double time for equal distance(test)
-                motorsOff(.3);
-                rotateRightB(.5,timeLeft - timeUntilFirstBlock);
+                /**
+                 int timeUntilFirstBlock = 3;
+                 double timeLeft = rotateLeft(7, .5);
+                 //goUp(1.3); //in the future go back: goBack(1.5); //1.3 seconds with full power
+                 //goBack(1.3);//1.3 seconds with full power
+                 goUp(2.6,.5);//half power, so double time for equal distance (test)
+                 motorsOff(.6);
+                 goBack(2.6,.5);//half power, so double time for equal distance(test)
+                 motorsOff(.3);
+                 rotateRightB(.5,timeLeft - timeUntilFirstBlock);
+                 //make sure this works, then continue.
+                 **/
+                //NEW CODE USING MEASUREMENTS AND VELOCITIES
 
-                //make sure this works, then continue.
-                
+                double timeUntilFirstBlock = angleConv(63); //angles only at .3
+                double timeLeft = rotateLeft(7, .15);
+                goUp(forwardConv(70), .6);
+                motorsOff(.6);
+                goDown(forwardConv(65), .6);
+                motorsOff(.6);
+                rotateRightB(.14, timeLeft - timeUntilFirstBlock);
+                /**
+                 motorsOff(.6);
+                 goUp(forwardConv(63.6),.6);
+                 rotateLeftB(angleConv(98),.15);//this is in degrees ==> it will rotate this many degrees, given that the power is .3
+                 //Stuff to test for velocity:
+                 **/
+                //rotateRightB(.15,10); //at .15 power the robot needs 9 seconds to go one revolution
+                //motorsOff(10);
+                //goUp(10,.6);
+
+
+            bool1 = false;
             }
                 detector.disable();
             }
@@ -160,7 +181,7 @@ public class dogeAuto4 extends LinearOpMode {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
         boolean totalTime = false;
-        while (ms.time() <= time && isAligned() == false) {
+        while (ms.time() <= time) {
             frontL.setPower(-power);
             frontR.setPower(-power);
             backR.setPower(-power);
@@ -172,6 +193,23 @@ public class dogeAuto4 extends LinearOpMode {
         backR.setPower(0);
         backL.setPower(0);
     }
+     public void rotateLeftB(double power, double time)
+    {
+        ElapsedTime ms = new ElapsedTime();
+        ms.reset();
+        boolean totalTime = false;
+        while (ms.time() <= time) {
+            frontL.setPower(power);
+            frontR.setPower(power);
+            backR.setPower(power);
+            backL.setPower(power);
+
+        }
+        frontL.setPower(0);
+        frontR.setPower(0);
+        backR.setPower(0);
+        backL.setPower(0);
+    }                
     public void motorsOff(double time)
     {
         ElapsedTime ms = new ElapsedTime();
@@ -328,7 +366,7 @@ public class dogeAuto4 extends LinearOpMode {
         frontR.setPower(0);
         backR.setPower(0);
         backL.setPower(0);
-        if(isAligned() == true)
+        if(ms.time()<= time)
         {
             return ms.time();
         }
@@ -354,7 +392,7 @@ public class dogeAuto4 extends LinearOpMode {
         frontR.setPower(0);
         backR.setPower(0);
         backL.setPower(0);
-        if(isAligned() == true)
+        if(ms.time()<=time)
         {
             return -1*ms.time();
         }
@@ -384,5 +422,26 @@ public class dogeAuto4 extends LinearOpMode {
     public void Stop()
     {
         detector.disable();
+    }
+    public double forwardConv(double length) //length is in cm
+    {
+        //forward by a power of: .6
+        //velocity is 39.37cm/seconds
+        return length/39.37;
+        
+    }
+    public double rotateConv(double length)
+    {
+        //rotational power: .6
+        //velocity: 5.48 cm/sec
+        return length/5.48;
+    }
+    public double angleConv(double angle) //at .35 power : 6 sec = 1 rev, 6sec = 360 degree
+    {
+        return (angle/360.0) * 9.5;
+    }
+    public double tileConv(double tiles)//1 tile is 62 cm this is at .6
+    {
+        return ((tiles)/62) * 1.125;
     }
 }
