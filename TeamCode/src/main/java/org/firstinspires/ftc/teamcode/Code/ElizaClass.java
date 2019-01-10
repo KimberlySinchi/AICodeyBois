@@ -34,13 +34,13 @@ public class ElizaClass extends OpMode {
     public void init() {
 
         try {
-            armFaB = hardware.get(DcMotor.class, "DC6");
+            armFaB = hardware.get(DcMotor.class, "DC7");
             armFaB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         } catch (Exception e) {
             telemetry.addLine("Arm F&B failed to initialize");
         }
         try {
-            armUaD = hardware.get(DcMotor.class, "DC7");
+            armUaD = hardware.get(DcMotor.class, "DC8");
             armUaD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         } catch (Exception e) {
             telemetry.addLine("Arm U&D failed to initialize");

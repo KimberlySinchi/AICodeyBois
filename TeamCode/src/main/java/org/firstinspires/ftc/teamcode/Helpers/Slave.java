@@ -15,7 +15,8 @@ public class Slave
     public DcMotor backR;
     public DcMotor backL;
     public DcMotor latch;
-    public DcMotor armExtend;
+    public DcMotor armFaB;
+    public DcMotor armUaD;
     public String status;
     public Servo armIntake;
 
@@ -83,12 +84,21 @@ public class Slave
         }
         try
         {
-            armExtend = hwmap.get(DcMotor.class, "DC6");
-            armExtend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            armFaB = hwmap.get(DcMotor.class, "DC7");
+            armFaB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            status += "\nArm Extending motor not mapping";
+            status += "Arm F&B failed to initialize";
+        }
+        try
+        {
+            armUaD = hwmap.get(DcMotor.class, "DC8");
+            armUaD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
+        catch (Exception e)
+        {
+            status += "Arm U&D failed to initialize";
         }
     }
     public String getStatus()
