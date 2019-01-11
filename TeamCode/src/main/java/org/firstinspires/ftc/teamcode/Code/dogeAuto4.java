@@ -152,14 +152,20 @@ public class dogeAuto4 extends LinearOpMode {
                  **/
                 //NEW CODE USING MEASUREMENTS AND VELOCITIES
 
-                double timeUntilFirstBlock = angleConv(43); //angles only at .3
+                double timeUntilFirstBlock = angleConv(83); //angles only at .3
+                goUp(forwardConv(10),.6);
                 double timeLeft = rotateLeft(7, .15);
-                goUp(forwardConv(70), .6);
-                motorsOff(.6);
-                goDown(forwardConv(65), .6);
-                motorsOff(.6);
-                rotateRightB(.14, timeLeft - timeUntilFirstBlock);
-                motorsOff(.4);
+
+                    goUp(forwardConv(70), .6);
+                    motorsOff(.6);
+                    goDown(forwardConv(42), .6);
+                    motorsOff(.6);
+                    rotateRightB(.11, timeLeft - 2.61);
+                    motorsOff(.4);
+                    rotateLeftB(.15, 2.4);
+                    goUp(forwardConv(69), .6);
+                    rotateLeftB(.15,2.5);
+                    goDown(forwardConv(45), .6);
 
                 /**
                  motorsOff(.6);
@@ -444,5 +450,12 @@ public class dogeAuto4 extends LinearOpMode {
     public double tileConv(double tiles)//1 tile is 62 cm this is at .6
     {
         return ((tiles)/62) * 1.125;
+    }
+    public void off()
+    {
+        frontL.setPower(0.0);
+        frontR.setPower(0.0);
+        backR.setPower(0.0);
+        backL.setPower(0.0);
     }
 }
