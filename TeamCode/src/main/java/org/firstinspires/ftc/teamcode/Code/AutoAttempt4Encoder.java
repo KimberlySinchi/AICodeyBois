@@ -141,9 +141,6 @@ public class AutoAttempt4Encoder extends LinearOpMode
                                         goldMineralXR = (int) r.getRight();
                                         goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
                                         aligned = isAligned(goldMineralCent, 640 - 125, 640 + 125);
-                                        if(aligned){
-                                            break;
-                                        }
                                         rotateLeftP(0.05);
                                         encoderReset();
                                         rotVal = encodeAvg();
@@ -164,7 +161,6 @@ public class AutoAttempt4Encoder extends LinearOpMode
                     }
                 }
             }
-            stop(.5);
             forwardE((int) COUNTS_PER_INCH * 51);
             backwardE((int) COUNTS_PER_INCH * 51);
             rotateRightE(rotVal);
@@ -539,16 +535,14 @@ public class AutoAttempt4Encoder extends LinearOpMode
     /**
      * METHODS FOR TENSOR FLOW (DO NOT TOUCH)
      */
-    private void initVuforia()
-    {
+    private void initVuforia() {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
 
-    private void initTfod()
-    {
+    private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);

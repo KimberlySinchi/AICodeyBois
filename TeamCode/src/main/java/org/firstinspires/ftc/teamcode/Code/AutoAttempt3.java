@@ -39,11 +39,9 @@ public class AutoAttempt3 extends LinearOpMode
     private boolean aligned = false;
     private boolean detect = true;
 
-    private static final double SECONDS_PER_INCH = 1 / (1/15.5);
-    private static final double DRIVE_SPEED = 0.6;
-
-    private static final double SECONDS_PER_DEG = (20*Math.PI)/360 / 2.15748;
-    private static final double TURN_SPEED = 0.3; //This might be wrong
+    private static final double SECONDS_PER_TILE = 11.106; //WE NEED TO PUT WALID'S DATA INTO THIS
+    //2.161 inches/sec
+    private static final double SECONDS_PER_360_DEG = 0.0; //WE NEED TO PUT WALID'S DATA INTO THIS
 
     @Override
     public void runOpMode()
@@ -106,15 +104,17 @@ public class AutoAttempt3 extends LinearOpMode
                                         goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
                                         aligned = isAligned(goldMineralCent, 640-125, 640+125);
                                         rotateLeftP(0.15);
-                                        if(flagRotTime){
+                                        if(flagRotTime)
+                                        {
                                             rotLeftTime.reset();
                                             flagRotTime = false;
                                         }
                                         rotationTime = rotLeftTime.time();
-                                        telemetry.addLine("Rotation Time: "+rotationTime);
+                                        telemetry.addLine("Rotation Time: " + rotationTime);
                                         telemetry.addLine("Rotating left");
                                         telemetry.addLine("Aligned: " + aligned);
-                                        if(aligned){
+                                        if(aligned)
+                                        {
                                             detect = false;
                                             break;
                                         }
@@ -123,7 +123,7 @@ public class AutoAttempt3 extends LinearOpMode
                             }
                         }
                         telemetry.addLine("Gold cords: (" + goldMineralX + " to " + goldMineralXR + ")");
-                        telemetry.addLine("Gold Center x (" + goldMineralCent +")");
+                        telemetry.addLine("Gold Center x (" + goldMineralCent + ")");
                         telemetry.addData("Position of Gold", pos);
                         telemetry.addData("Gold Mineral Aligned", aligned);
                         telemetry.update();
@@ -145,34 +145,14 @@ public class AutoAttempt3 extends LinearOpMode
                 telemetry.addLine("Moving backward");
                 telemetry.update();
             }
-            runtime.reset();
             rotateRightP(0.15);
+            runtime.reset();
             while(opModeIsActive() && runtime.seconds() <= rotationTime)
             {
                 telemetry.addLine("Rotating back");
                 telemetry.update();
             }
-            stop(5);
-            boolean crater = gamepad1.a;
-            if(crater){
-                forwardS(SECONDS_PER_INCH * 25.28);
-                rotateLeftS(SECONDS_PER_DEG * 98.73);
-                forwardS(SECONDS_PER_INCH * 39);
-                rotateLeftS(SECONDS_PER_DEG * 32.64);
-                forwardS(SECONDS_PER_INCH * 49.09);
-                rotateLeftS(SECONDS_PER_DEG * 8.19);
-                backwardS(SECONDS_PER_INCH * 75);
-            }
-            boolean depot = gamepad1.b;
-            if(depot){
-                forwardS(SECONDS_PER_INCH * 26.2);
-                rotateLeftS(SECONDS_PER_DEG * 88.99);
-                forwardS(SECONDS_PER_INCH * 31.6);
-                rotateRightS(SECONDS_PER_DEG * 127.9);
-                forwardS(SECONDS_PER_INCH * 39.98);
-                rotateLeftS(SECONDS_PER_DEG * 8.56);
-                backwardS(SECONDS_PER_INCH * 72);
-            }
+
         }
         if (tfod != null)
         {
@@ -301,16 +281,15 @@ public class AutoAttempt3 extends LinearOpMode
         }
         stop(0.5);
     }
-    //JASON - I CHANGED THE TURN POWER TO USE TURN_RATE
     public void rotateRightS(double time)
     {
         ElapsedTime timer = new ElapsedTime();
         while(timer.seconds() <= time)
         {
-            slave.frontL.setPower(-TURN_SPEED);
-            slave.frontR.setPower(-TURN_SPEED);
-            slave.backL.setPower(-TURN_SPEED);
-            slave.backR.setPower(-TURN_SPEED);
+            slave.frontL.setPower(-SPEED);
+            slave.frontR.setPower(-SPEED);
+            slave.backL.setPower(-SPEED);
+            slave.backR.setPower(-SPEED);
         }
         stop(0.5);
     }
@@ -319,10 +298,10 @@ public class AutoAttempt3 extends LinearOpMode
         ElapsedTime timer = new ElapsedTime();
         while(timer.seconds() <= time)
         {
-            slave.frontL.setPower(TURN_SPEED);
-            slave.frontR.setPower(TURN_SPEED);
-            slave.backL.setPower(TURN_SPEED);
-            slave.backR.setPower(TURN_SPEED);
+            slave.frontL.setPower(SPEED);
+            slave.frontR.setPower(SPEED);
+            slave.backL.setPower(SPEED);
+            slave.backR.setPower(SPEED);
         }
         stop(0.5);
     }
