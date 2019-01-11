@@ -255,9 +255,9 @@ public class DriverMode extends OpMode {
         }
          **/
         if(yRight>0)
-            slave.latch.setPower(-.3);
+            slave.latch.setPower(-.9);
         else if(yRight<0)
-            slave.latch.setPower(-.3);
+            slave.latch.setPower(.9);
         else
             slave.latch.setPower(0);
     }

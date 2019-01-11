@@ -60,18 +60,19 @@ public class dogeAuto5 extends LinearOpMode {
 
     // Declare OpMode members.
     // Detector object
-    private SlaveAuto slave = new SlaveAuto();
-    private boolean bool1 = true;
-    private boolean bool2 = true;
-    private boolean bool3 = true;
-    private GoldAlignDetector detector;
-    private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor frontL;
-    private DcMotor frontR;
-    private DcMotor backL;
-    private DcMotor backR;
-    private DcMotor latch;
-    private Servo armSpin;
+
+    public SlaveAuto slave = new SlaveAuto();
+    public boolean bool1 = true;
+    public boolean bool2 = true;
+    public boolean bool3 = true;
+    public GoldAlignDetector detector;
+    public ElapsedTime runtime = new ElapsedTime();
+    public DcMotor frontL;
+    public DcMotor frontR;
+    public DcMotor backL;
+    public DcMotor backR;
+    public DcMotor latch;
+    public Servo armSpin;
     static final double SPEED = 1;
 
     public boolean isBlock() {
@@ -79,7 +80,9 @@ public class dogeAuto5 extends LinearOpMode {
     }
 
     @Override
-    public void runOpMode() {
+    public void runOpMode()
+    {
+
         // Set up detector
         detector = new GoldAlignDetector(); // Create detector
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance()); // Initialize it with the app context and camera
@@ -98,8 +101,14 @@ public class dogeAuto5 extends LinearOpMode {
         detector.ratioScorer.perfectRatio = 1.0; // Ratio adjustment
 
         detector.enable(); // Start the detector!
-        //slave.init(hardwareMap); //Mapping all devices
+         //Mapping all devices
 
+        slave.init(hardwareMap);
+
+        telemetry.addLine(slave.getStatus());
+        telemetry.update();
+
+        /**
         try
         {
             frontL = hardwareMap.get(DcMotor.class, "DC1");
@@ -125,7 +134,7 @@ public class dogeAuto5 extends LinearOpMode {
             backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         } catch (Exception e) {
         }
-
+**/
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -136,15 +145,24 @@ public class dogeAuto5 extends LinearOpMode {
         {
             if (bool1)
             {
+                /**
                 goUp(-1, 1440);
                 bool1 = false;
+                **/
+
+                //Autonomous starts here
+
+                int blockFound = goLeftDetect(.15,convAngleToTick(110));
+                int center = blockFound - convAngleToTick(61);
+                stopMotors(1);
+                goRight(.15,1440);
+                stopMotors(1);
+
             }
         }
     }
 
     public void up(double power) {
-        frontL.setDirection(DcMotor.Direction.REVERSE);
-        backL.setDirection(DcMotor.Direction.REVERSE);
         slave.frontL.setPower(power);
         slave.frontR.setPower(power);
         slave.backR.setPower(power);
@@ -152,8 +170,7 @@ public class dogeAuto5 extends LinearOpMode {
     }
 
     public void down(double power) {
-        frontR.setDirection(DcMotor.Direction.REVERSE);
-        backR.setDirection(DcMotor.Direction.REVERSE);
+
         slave.frontL.setPower(power);
         slave.frontR.setPower(power);
         slave.backR.setPower(power);
@@ -161,10 +178,6 @@ public class dogeAuto5 extends LinearOpMode {
     }
 
     public void right(double power) {
-        frontL.setDirection(DcMotor.Direction.REVERSE);
-        frontR.setDirection(DcMotor.Direction.REVERSE);
-        backR.setDirection(DcMotor.Direction.REVERSE);
-        backL.setDirection(DcMotor.Direction.REVERSE);
         slave.frontL.setPower(power);
         slave.frontR.setPower(power);
         slave.backR.setPower(power);
@@ -190,9 +203,9 @@ public class dogeAuto5 extends LinearOpMode {
         slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        slave.frontL.setTargetPosition(ticks);
+        slave.frontL.setTargetPosition(-ticks);
         slave.frontR.setTargetPosition(ticks);
-        slave.backL.setTargetPosition(ticks);
+        slave.backL.setTargetPosition(-ticks);
         slave.backR.setTargetPosition(ticks);
 
         slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -232,9 +245,9 @@ public class dogeAuto5 extends LinearOpMode {
         slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         slave.frontL.setTargetPosition(ticks);
-        slave.frontR.setTargetPosition(ticks);
+        slave.frontR.setTargetPosition(-ticks);
         slave.backL.setTargetPosition(ticks);
-        slave.backR.setTargetPosition(ticks);
+        slave.backR.setTargetPosition(-ticks);
 
         slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -267,16 +280,16 @@ public class dogeAuto5 extends LinearOpMode {
 
     }
 
-    public void goRight(int power, int ticks) {
+    public void goRight(double power, int ticks) {
         slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        slave.frontL.setTargetPosition(ticks);
-        slave.frontR.setTargetPosition(ticks);
-        slave.backL.setTargetPosition(ticks);
-        slave.backR.setTargetPosition(ticks);
+        slave.frontL.setTargetPosition(-ticks);
+        slave.frontR.setTargetPosition(-ticks);
+        slave.backL.setTargetPosition(-ticks);
+        slave.backR.setTargetPosition(-ticks);
 
         slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -349,7 +362,7 @@ public class dogeAuto5 extends LinearOpMode {
         backL.setDirection(DcMotor.Direction.FORWARD);
 
     }
-    public int goLeftDetect(int ticks, int power)
+    public int goLeftDetect(double power, int ticks)
     {
         slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -382,7 +395,7 @@ public class dogeAuto5 extends LinearOpMode {
         backL.setDirection(DcMotor.Direction.FORWARD);
         return slave.frontL.getCurrentPosition();
     }
-    public int goRightDetect(int power, int ticks) {
+    public int goRightDetect(double power, int ticks) {
         slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -503,6 +516,17 @@ public class dogeAuto5 extends LinearOpMode {
         backL.setDirection(DcMotor.Direction.FORWARD);
         return slave.frontL.getCurrentPosition();
     }
+    public void stopMotors(double time)
+    {
+        ElapsedTime ms = new ElapsedTime();
+        ms.reset();
+        while (ms.time() <= time) {
+            frontL.setPower(0);
+            frontR.setPower(0);
+            backR.setPower(0);
+            backL.setPower(0);
+        }
+    }
     public void Stop() {
         up(0);
     }
@@ -511,18 +535,18 @@ public class dogeAuto5 extends LinearOpMode {
     }
     public int convInToTick(double inches) //only for up down, side-side movement
     {
-        int COUNTS_PER_MOTOR_REV = 1440;
+        int COUNTS_PER_MOTOR_REV = 1680;
         double DRIVE_GEAR_REDUCTION = 2.0; //This value has yet to be discovered //doesnt matter jason
         double WHEEL_DIAMETER_INCHES = 3.78;
         double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
         double ROBOT_DIAMETER_INCHES = 17.5;
         double COUNTS_PER_NINETY_DEG = (3.1415 * ROBOT_DIAMETER_INCHES / 4) * COUNTS_PER_INCH;
         double HOLONOMIC_COMPENSATION_FACTOR = (Math.sin(45) * WHEEL_DIAMETER_INCHES * 3.1415);//1 rev = this many inches
-        return (int)(inches/HOLONOMIC_COMPENSATION_FACTOR)*1440;
+        return (int)(inches/HOLONOMIC_COMPENSATION_FACTOR)*1680;
 
     }
-    /*public int convAngleToTick(double angle)
+    public int convAngleToTick(double angle) //robot from wheel to wheel is 49cm
     {
-        
-    }*/
+        return (int)((angle/22.45) * 1680);
+    }
 }

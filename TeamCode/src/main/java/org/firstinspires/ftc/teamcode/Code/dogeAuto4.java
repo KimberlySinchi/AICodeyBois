@@ -53,7 +53,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="AWESOMEAUTOREVERSE(plsWork)", group="Linear Opmode")
-
 public class dogeAuto4 extends LinearOpMode {
 
     // Declare OpMode members.
@@ -153,13 +152,15 @@ public class dogeAuto4 extends LinearOpMode {
                  **/
                 //NEW CODE USING MEASUREMENTS AND VELOCITIES
 
-                double timeUntilFirstBlock = angleConv(63); //angles only at .3
+                double timeUntilFirstBlock = angleConv(43); //angles only at .3
                 double timeLeft = rotateLeft(7, .15);
                 goUp(forwardConv(70), .6);
                 motorsOff(.6);
                 goDown(forwardConv(65), .6);
                 motorsOff(.6);
                 rotateRightB(.14, timeLeft - timeUntilFirstBlock);
+                motorsOff(.4);
+
                 /**
                  motorsOff(.6);
                  goUp(forwardConv(63.6),.6);
@@ -181,7 +182,7 @@ public class dogeAuto4 extends LinearOpMode {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
         boolean totalTime = false;
-        while (ms.time() <= time) {
+        while (opModeIsActive() && ms.time() <= time) {
             frontL.setPower(-power);
             frontR.setPower(-power);
             backR.setPower(-power);
