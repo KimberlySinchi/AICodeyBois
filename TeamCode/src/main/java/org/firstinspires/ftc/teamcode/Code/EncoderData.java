@@ -33,7 +33,7 @@ public class EncoderData extends LinearOpMode {
         slave.init(hardwareMap);
         telemetry.addLine("Mapping Successful");
 
-        upOneRev();
+
     }
     private void upOneRev(){
         //Sets encoder values to 0
@@ -86,5 +86,44 @@ public class EncoderData extends LinearOpMode {
         //Resets motor directions
         slave.frontR.setDirection(DcMotor.Direction.FORWARD);
         slave.backR.setDirection(DcMotor.Direction.FORWARD);
+    }
+    public void encoderReset(){
+        slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+    public void forwardE(int ticks) {
+        //Sets encoder values to 0
+        encoderReset();
+
+        //Sets the target encoder value to reach
+        slave.frontL.setTargetPosition(-ticks);
+        slave.frontR.setTargetPosition(ticks);
+        slave.backL.setTargetPosition(-ticks);
+        slave.backR.setTargetPosition(ticks);
+
+        //Prepares motors to run towards position
+        slave.frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        //Makes the motors move
+        slave.frontL.setPower(DRIVE_SPEED);
+        slave.frontR.setPower(DRIVE_SPEED);
+        slave.backL.setPower(DRIVE_SPEED);
+        slave.backR.setPower(DRIVE_SPEED);
+
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
+            //does nothing, just makes the method stuck in a while loop until it's done
+        }
+
+        //Sets motor mode back to encoder
+        //This also makes it so we avoid stopping the robot because motors are no longer in run to pos mode
+        slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 }

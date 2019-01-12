@@ -53,7 +53,7 @@ public class DriverMode extends OpMode {
     public void init()
     {
         slave.init(hardwareMap);
-        telemetry.addLine(slave.getStatus());
+        //getstatus
     }
 
     /*
@@ -63,6 +63,7 @@ public class DriverMode extends OpMode {
     public void init_loop()
     {
         telemetry.addData("Status ", "WORKING");
+        telemetry.addLine(slave.getStatus()); //rien
         telemetry.update();
     }
 

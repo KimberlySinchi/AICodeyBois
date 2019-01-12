@@ -27,16 +27,16 @@ public class AutoAttempt4Encoder extends LinearOpMode
 
     static final double SPEED = 0.6;
 
-    private static final int COUNTS_PER_MOTOR_REV = 1440;
-    private static final double DRIVE_GEAR_REDUCTION = 2.0; //This value has yet to be discovered
+    private static final int COUNTS_PER_MOTOR_REV = 1680;
+    private static final double DRIVE_GEAR_REDUCTION = 1.0; //This value has yet to be discovered
 
     private static final double WHEEL_DIAMETER_INCHES = 3.78;
     private static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     private static final double HOLONOMIC_COMPENSATION_FACTOR = (Math.sin(45) * WHEEL_DIAMETER_INCHES * 3.1415) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
-    private static final double ROBOT_DIAMETER_INCHES = 17.5;
-    static final double COUNTS_PER_NINETY_DEG = (3.1415 * ROBOT_DIAMETER_INCHES / 4) * COUNTS_PER_INCH;
+    private static final double ROBOT_DIAMETER_INCHES = 19.29;
+    static final double COUNTS_PER_DEG = (3.1415 * ROBOT_DIAMETER_INCHES / 360) * COUNTS_PER_INCH;
 
     private static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;

@@ -35,20 +35,26 @@ public class ElizaClass extends OpMode {
     private Slave slave = new Slave();
 
     @Override
-    public void init() {
+    public void init()
+    {
         telemetry.addLine("START");
-        try {
-            armFaB = hardware.get(DcMotor.class, "DC7");
+        try
+        {
+            armFaB = hardwareMap.get(DcMotor.class, "DC7");
             armFaB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             telemetry.addLine("HELLO");
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             telemetry.addLine("Arm F&B failed to initialize");
         }
-        try {
-            armUaD = hardware.get(DcMotor.class, "DC8");
+        try
+        {
+            armUaD = hardwareMap.get(DcMotor.class, "DC8");
             armUaD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             telemetry.addLine("HELLO2");
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             telemetry.addLine("Arm U&D failed to initialize");
         }
         telemetry.addLine("END");
@@ -56,32 +62,38 @@ public class ElizaClass extends OpMode {
     }
 
     @Override
-    public void init_loop() {
+    public void init_loop()
+    {
 
     }
 
     @Override
-    public void start() {
+    public void start()
+    {
 
     }
 
     @Override
-    public void loop() {
+    public void loop()
+    {
         double armForwardAndBack = gamepad1.left_stick_y;
         double armUpAndDown = gamepad1.right_stick_y;
-
-        if (armForwardAndBack != 0) {
+        if (armForwardAndBack != 0)
+        {
             armFaB.setPower(-armForwardAndBack);
-        } else {
+        }
+        else
+        {
             armFaB.setPower(0);
         }
-        if (armUpAndDown != 0) {
+        if (armUpAndDown != 0)
+        {
             armUaD.setPower(-armUpAndDown);
-        } else {
+        }
+        else
+        {
             armUaD.setPower(0);
         }
-        telemetry.addLine("LOOP");
-        telemetry.update();
     }
 
     @Override
