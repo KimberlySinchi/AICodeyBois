@@ -94,6 +94,12 @@ public class DriverMode extends OpMode {
         double x = gamepad1.left_stick_x;
         double yRight = gamepad1.right_stick_y;
         double xLeft = gamepad1.right_stick_x;
+
+        //For movement and rotating
+        boolean slow = gamepad1.back;
+
+        //For arm extension and vertical movement as well as latch
+        double yR2 = gamepad2.right_stick_y;
         telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
         telemetry.update();
         double theta = Math.atan(y/x);
@@ -261,6 +267,17 @@ public class DriverMode extends OpMode {
             slave.latch.setPower(.9);
         else
             slave.latch.setPower(0);
+        double armForwardAndBack = gamepad1.left_stick_y;
+        double armUpAndDown = gamepad1.right_stick_y;
+
+        if (y2 != 0)
+            slave.armFaB.setPower(-y2);
+        else
+            slave.armFaB.setPower(0);
+        if (yR2 != 0)
+            slave.armUaD.setPower(-yR2);
+        else
+            slave.armUaD.setPower(0);
     }
 
     /*

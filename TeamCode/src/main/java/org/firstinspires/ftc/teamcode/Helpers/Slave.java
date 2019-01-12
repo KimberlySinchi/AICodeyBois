@@ -17,7 +17,7 @@ public class Slave
     public DcMotor latch;
     public DcMotor armFaB;
     public DcMotor armUaD;
-    public String status;
+    public String status = "";
     public Servo armIntake;
 
     HardwareMap hwmap = null; //Need a reference to hardware map because otherwise, the code will think this is an opmode to use right now

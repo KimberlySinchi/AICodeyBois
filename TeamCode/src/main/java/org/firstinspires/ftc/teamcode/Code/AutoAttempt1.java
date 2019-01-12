@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.Helpers.Slave;
 import java.util.List;
 
 @Autonomous(name = "Basic Autonomous", group = "Slave")
+@Disabled
 
 public class AutoAttempt1 extends LinearOpMode
 {

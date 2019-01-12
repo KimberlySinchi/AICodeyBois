@@ -58,6 +58,7 @@ import org.firstinspires.ftc.teamcode.Helpers.Slave;
  */
 
 @Autonomous(name="AWESOMEAUTO(plsWork)", group="Linear Opmode")
+@Disabled
 
 public class dogeAuto3 extends LinearOpMode {
 
