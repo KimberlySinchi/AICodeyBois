@@ -69,6 +69,7 @@ public class Slave
         {
             latch = hwmap.get(DcMotor.class, "DC5");
             latch.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            latch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         catch(Exception e)
         {

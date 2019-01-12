@@ -23,6 +23,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.Helpers.Slave;
+
 @TeleOp(name = "Elizard", group = "TeleOp")
 
 public class ElizaClass extends OpMode {
@@ -30,46 +32,66 @@ public class ElizaClass extends OpMode {
     public DcMotor armUaD;
     HardwareMap hardware;
 
-    @Override
-    public void init() {
+    private Slave slave = new Slave();
 
-        try {
-            armFaB = hardware.get(DcMotor.class, "DC7");
+    @Override
+    public void init()
+    {
+        telemetry.addLine("START");
+        try
+        {
+            armFaB = hardwareMap.get(DcMotor.class, "DC7");
             armFaB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        } catch (Exception e) {
+            telemetry.addLine("HELLO");
+        }
+        catch (Exception e)
+        {
             telemetry.addLine("Arm F&B failed to initialize");
         }
-        try {
-            armUaD = hardware.get(DcMotor.class, "DC8");
+        try
+        {
+            armUaD = hardwareMap.get(DcMotor.class, "DC8");
             armUaD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        } catch (Exception e) {
+            telemetry.addLine("HELLO2");
+        }
+        catch (Exception e) {
             telemetry.addLine("Arm U&D failed to initialize");
         }
+        telemetry.addLine("END");
+        telemetry.update();
     }
 
     @Override
-    public void init_loop() {
+    public void init_loop()
+    {
 
     }
 
     @Override
-    public void start() {
+    public void start()
+    {
 
     }
 
     @Override
-    public void loop() {
+    public void loop()
+    {
         double armForwardAndBack = gamepad1.left_stick_y;
         double armUpAndDown = gamepad1.right_stick_y;
-
-        if (armForwardAndBack != 0) {
+        if (armForwardAndBack != 0)
+        {
             armFaB.setPower(-armForwardAndBack);
-        } else {
+        }
+        else
+        {
             armFaB.setPower(0);
         }
-        if (armUpAndDown != 0) {
+        if (armUpAndDown != 0)
+        {
             armUaD.setPower(-armUpAndDown);
-        } else {
+        }
+        else
+        {
             armUaD.setPower(0);
         }
     }
