@@ -12,11 +12,10 @@ public class SlaveAuto
     public DcMotor backR;
     public DcMotor backL;
     public DcMotor latch;
-    public String status;
-    public Servo armIntake;
-    public DcMotor armExtend;
     public DcMotor armFaB;
     public DcMotor armUaD;
+    public String status = "";
+    public Servo armIntake;
 
     HardwareMap hwmap = null; //Need a reference to hardware map because otherwise, the code will think this is an opmode to use right now
 
@@ -24,7 +23,8 @@ public class SlaveAuto
     {
     }
 
-    public void init(HardwareMap ahwmap) {
+    public void init(HardwareMap ahwmap)
+    {
         hwmap = ahwmap;
         try {
             frontL = hwmap.get(DcMotor.class, "DC1");

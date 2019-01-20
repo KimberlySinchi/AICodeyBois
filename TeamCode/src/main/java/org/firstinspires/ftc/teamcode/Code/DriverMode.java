@@ -37,7 +37,7 @@ import java.util.Date;
  * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
  * The names of OpModes appear on the menu of the FTC Driver Station.
  * When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
+ * class is instantiated on the AutoRobot Controller and executed.
  *
  * Remove a @Disabled the on the next line or two (if present) to add this opmode to the Driver Station OpMode list,
  * or add a @Disabled annotation to prevent this OpMode from being added to the Driver Station
@@ -270,12 +270,16 @@ public class DriverMode extends OpMode {
         double armForwardAndBack = gamepad1.left_stick_y;
         double armUpAndDown = gamepad1.right_stick_y;
 
-        if (y2 != 0)
-            slave.armFaB.setPower(-y2);
+        if (y2 > 0)
+            slave.armFaB.setPower(-.3);
+        else if(y2 < 0)
+            slave.armFaB.setPower(.3);
         else
             slave.armFaB.setPower(0);
-        if (yR2 != 0)
-            slave.armUaD.setPower(-yR2);
+        if (yR2 > 0)
+            slave.armUaD.setPower(0.35);
+        else if(yR2 <0)
+            slave.armUaD.setPower(-.45);
         else
             slave.armUaD.setPower(0);
     }

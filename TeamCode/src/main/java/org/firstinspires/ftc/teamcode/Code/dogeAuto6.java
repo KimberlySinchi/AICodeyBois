@@ -45,7 +45,7 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
+ * class is instantiated on the AutoRobot Controller and executed.
  * <p>
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
@@ -54,7 +54,7 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name = "AWESOMEAUTOREVERSE(plsWork)", group = "Linear Opmode")
+@Autonomous(name = "AWESOMEAUTOREVERSE(plsWork)p2", group = "Linear Opmode")
 public class dogeAuto6 extends LinearOpMode {
 
     // Declare OpMode members.
@@ -70,6 +70,8 @@ public class dogeAuto6 extends LinearOpMode {
     private DcMotor backL;
     private DcMotor backR;
     private DcMotor latch;
+    private DcMotor arm;
+    private Servo armIntake;
     private Servo armSpin;
     static final double SPEED = 1;
 
@@ -97,31 +99,62 @@ public class dogeAuto6 extends LinearOpMode {
         detector.ratioScorer.perfectRatio = 1.0; // Ratio adjustment
 
         detector.enable(); // Start the detector!
-        /**
-         try {
-         frontL = hardwareMap.get(DcMotor.class, "DC1");
-         frontL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        try
+        {
+            frontL = hardwareMap.get(DcMotor.class, "DC1");
+            frontL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-         } catch (Exception e) {
-         }
-         try {
-         frontR = hardwareMap.get(DcMotor.class, "DC2");
-         frontR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-         } catch (Exception e) {
-         }
-         try {
-         backR = hardwareMap.get(DcMotor.class, "DC3");
-         backR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-         } catch (Exception e) {
-         }
-         try {
-         backL = hardwareMap.get(DcMotor.class, "DC4");
-         backL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-         } catch (Exception e) {
-         }
-         **/
-        slave.init(hardwareMap);
-        telemetry.addLine(slave.getStatus());
+        } catch (Exception e) {
+        }
+        try
+        {
+            frontR = hardwareMap.get(DcMotor.class, "DC2");
+            frontR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        } catch (Exception e) {
+        }
+        try
+        {
+            backR = hardwareMap.get(DcMotor.class, "DC3");
+            backR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        } catch (Exception e) {
+        }
+        try
+        {
+            backL = hardwareMap.get(DcMotor.class, "DC4");
+            backL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        } catch (Exception e)
+        {
+        }
+        try
+        {
+            latch = hardwareMap.get(DcMotor.class, "DC5");
+            latch.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            latch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+        catch(Exception e)
+        {
+            telemetry.addLine(e + "");
+        }
+        try
+        {
+            arm  = hardwareMap.get(DcMotor.class, "DC7");
+            arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+        catch(Exception e)
+        {
+            telemetry.addLine("" + e);
+        }
+        try
+        {
+            armIntake = hardwareMap.get(Servo.class, "S1");
+
+        }
+        catch(Exception e)
+        {
+            telemetry.addLine("" + e);
+        }
+
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
@@ -167,8 +200,12 @@ public class dogeAuto6 extends LinearOpMode {
                  /* *
                  *
                  */
+
+
+                /**
                 timeUntilFirstBlock = angleConv(83); //angles only at .3
                 goUp(forwardConv(10), .6);
+                 **/
                 timeLeft = rotateLeft(7, .15);
                 goUp(forwardConv(70), .6);
                 motorsOff(.6);
@@ -490,7 +527,7 @@ public class dogeAuto6 extends LinearOpMode {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
         while (ms.time() <= time) {
-            slave.latch.setPower(-1 * power);
+            latch.setPower(-1 * power);
         }
         frontL.setPower(0.0);
         frontR.setPower(0.0);
@@ -502,7 +539,7 @@ public class dogeAuto6 extends LinearOpMode {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
         while (ms.time() <= time) {
-            slave.latch.setPower(power);
+            latch.setPower(power);
         }
         frontL.setPower(0.0);
         frontR.setPower(0.0);
