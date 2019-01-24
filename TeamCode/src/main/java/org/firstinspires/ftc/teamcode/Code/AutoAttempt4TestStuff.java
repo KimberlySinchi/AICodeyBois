@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
 
 import java.util.List;
 
-@Autonomous(name = "sugondese", group = "Slave")
+@Autonomous(name = "test one motor encoder", group = "Slave")
 
 public class AutoAttempt4TestStuff extends LinearOpMode {
     private SlaveAuto slave = new SlaveAuto();
@@ -74,6 +74,7 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
         backwardE(1440);
         rotateLeftE(1440);
         rotateRightE(1440);
+        rotateRightE((int)COUNTS_PER_NINETY_DEG);
     }
 
     /**
@@ -82,7 +83,8 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
     public void stop(double time)
     {
         ElapsedTime timer = new ElapsedTime();
-        while (timer.seconds() <= time) {
+        while (timer.seconds() <= time)
+        {
             slave.frontL.setPower(0);
             slave.backL.setPower(0);
             slave.frontR.setPower(0);
@@ -238,7 +240,10 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
             telemetry.addLine("In the loop");
             telemetry.update();
         }
-        stop(0.5);
+        slave.frontL.setPower(0);
+        slave.backL.setPower(0);
+        slave.frontR.setPower(0);
+        slave.backR.setPower(0);
     }
     public void backwardE(int ticks)
     {
@@ -262,7 +267,10 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
             telemetry.addLine("In the loop");
             telemetry.update();
         }
-        stop(0.5);
+        slave.frontL.setPower(0);
+        slave.backL.setPower(0);
+        slave.frontR.setPower(0);
+        slave.backR.setPower(0);
     }
 
     public void rotateRightE(int ticks)
@@ -287,7 +295,10 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
             telemetry.addLine("In the loop");
             telemetry.update();
         }
-        stop(0.5);
+        slave.frontL.setPower(0);
+        slave.backL.setPower(0);
+        slave.frontR.setPower(0);
+        slave.backR.setPower(0);
     }
 
     public void rotateLeftE(int ticks)
@@ -312,6 +323,9 @@ public class AutoAttempt4TestStuff extends LinearOpMode {
             telemetry.addLine("In the loop");
             telemetry.update();
         }
-        stop(0.5);
+        slave.frontL.setPower(0);
+        slave.backL.setPower(0);
+        slave.frontR.setPower(0);
+        slave.backR.setPower(0);
     }
 }

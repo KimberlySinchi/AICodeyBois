@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
 
 import java.util.List;
 
-@Autonomous(name = "ligma", group = "Slave")
+@Autonomous(name = "With Encoders", group = "Slave")
 
 public class AutoAttempt4Encoder extends LinearOpMode
 {
@@ -27,7 +27,7 @@ public class AutoAttempt4Encoder extends LinearOpMode
 
     static final double SPEED = 0.6;
 
-    private static final int COUNTS_PER_MOTOR_REV = 1680;
+    private static final int COUNTS_PER_MOTOR_REV = 1440;
     private static final double DRIVE_GEAR_REDUCTION = 1.0; //This value has yet to be discovered
 
     private static final double WHEEL_DIAMETER_INCHES = 3.78;
@@ -387,7 +387,8 @@ public class AutoAttempt4Encoder extends LinearOpMode
         return (Math.abs(slave.frontL.getCurrentPosition()) + Math.abs(slave.frontR.getCurrentPosition()) + Math.abs(slave.backL.getCurrentPosition()) + Math.abs(slave.backR.getCurrentPosition())) / 4;
     }
 
-    public void forwardE(int ticks) {
+    public void forwardE(int ticks)
+    {
         //Sets encoder values to 0
         encoderReset();
 
@@ -409,7 +410,8 @@ public class AutoAttempt4Encoder extends LinearOpMode
         slave.backL.setPower(DRIVE_SPEED);
         slave.backR.setPower(DRIVE_SPEED);
 
-        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy())
+        {
             //does nothing, just makes the method stuck in a while loop until it's done
         }
 
@@ -421,7 +423,8 @@ public class AutoAttempt4Encoder extends LinearOpMode
         slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void backwardE(int ticks) {
+    public void backwardE(int ticks)
+    {
         //Sets encoder values to 0
         slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -446,7 +449,8 @@ public class AutoAttempt4Encoder extends LinearOpMode
         slave.backL.setPower(DRIVE_SPEED);
         slave.backR.setPower(DRIVE_SPEED);
 
-        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy())
+        {
             //does nothing, just makes the method stuck in a while loop until it's done
         }
 
@@ -458,7 +462,8 @@ public class AutoAttempt4Encoder extends LinearOpMode
         slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void rotateRightE(int ticks) {
+    public void rotateRightE(int ticks)
+    {
         //Sets encoder values to 0
         slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -483,7 +488,8 @@ public class AutoAttempt4Encoder extends LinearOpMode
         slave.backL.setPower(DRIVE_SPEED);
         slave.backR.setPower(DRIVE_SPEED);
 
-        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy()) {
+        while (slave.frontL.isBusy() && slave.frontR.isBusy() && slave.backL.isBusy() && slave.backR.isBusy())
+        {
             //does nothing, just makes the method stuck in a while loop until it's done
         }
 
@@ -495,7 +501,8 @@ public class AutoAttempt4Encoder extends LinearOpMode
         slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void rotateLeftE(int ticks) {
+    public void rotateLeftE(int ticks)
+    {
         //Sets encoder values to 0
         slave.frontL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -535,14 +542,16 @@ public class AutoAttempt4Encoder extends LinearOpMode
     /**
      * METHODS FOR TENSOR FLOW (DO NOT TOUCH)
      */
-    private void initVuforia() {
+    private void initVuforia()
+    {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
     }
 
-    private void initTfod() {
+    private void initTfod()
+    {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
@@ -557,39 +566,5 @@ public class AutoAttempt4Encoder extends LinearOpMode
             return true;
         else
             return false;
-    }
-
-    public void findGold() {
-        stop(2);
-        telemetry.addLine("GONNA MOVE");
-        telemetry.update();
-        //Movement code
-        if (pos == -1 && !aligned) {
-            telemetry.addData("pos", "left");
-            telemetry.update();
-            while (aligned == false) {
-                telemetry.addLine("penis moving left");
-                telemetry.update();
-                rotateLeftS(1);
-                aligned = true;
-            }
-            forwardS(2);
-            backwardS(2);
-        } else if (pos == 1 && !aligned) {
-            telemetry.addData("pos", "right");
-            telemetry.update();
-            while (aligned == false) {
-                telemetry.addLine("penis moving right");
-                telemetry.update();
-                rotateRightS(1);
-            }
-            forwardS(2);
-            backwardS(2);
-        } else if (pos == 0) {
-            telemetry.addLine("PENIS DOING DUMB THING");
-            telemetry.update();
-            forwardS(2);
-            backwardS(2);
-        }
     }
 }

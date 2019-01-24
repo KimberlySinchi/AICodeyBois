@@ -28,31 +28,31 @@ public class SlaveAuto
         hwmap = ahwmap;
         try {
             frontL = hwmap.get(DcMotor.class, "DC1");
-            frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER); //RUN_TO_POSITION
+            frontL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } catch (Exception e) {
             status += "\nFrontL (DC1) motor not mapping";
         }
         try {
             frontR = hwmap.get(DcMotor.class, "DC2");
-            frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            frontR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } catch (Exception e) {
             status += "\nFrontR (DC2) motor not mapping";
         }
         try {
             backR = hwmap.get(DcMotor.class, "DC3");
-            backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } catch (Exception e) {
             status += "\nBackR (DC3) motor not mapping";
         }
         try {
             backL = hwmap.get(DcMotor.class, "DC4");
-            backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            backL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } catch (Exception e) {
             status += "\nBackL (DC4) motor not mapping";
         }
         try {
             latch = hwmap.get(DcMotor.class, "DC5");
-            latch.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            latch.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } catch (Exception e) {
             status += "\nLatch (latch) motor not mapping";
         }
@@ -63,13 +63,13 @@ public class SlaveAuto
         }
         try {
             armFaB = hwmap.get(DcMotor.class, "DC7");
-            armFaB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            armFaB.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } catch (Exception e) {
             status += "Arm F&B failed to initialize";
         }
         try {
             armUaD = hwmap.get(DcMotor.class, "DC8");
-            armUaD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            armUaD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } catch (Exception e) {
             status += "Arm U&D failed to initialize";
         }

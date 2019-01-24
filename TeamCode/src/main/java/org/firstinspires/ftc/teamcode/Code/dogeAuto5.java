@@ -33,6 +33,7 @@ import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -54,8 +55,8 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name = "Crater Auto", group = "Linear Opmode")
-
+@Autonomous(name = "Crater AutoAttemptEncoders", group = "Linear Opmode")
+@Disabled
 public class dogeAuto5 extends LinearOpMode {
 
     // Declare OpMode members.

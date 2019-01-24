@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Helpers.Slave;
 
 @TeleOp(name = "Official Drive")
-public class FinalDrive extends OpMode
+public class OfficialDrive extends OpMode
 {
     private Slave slave = new Slave();
 

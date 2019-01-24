@@ -14,14 +14,14 @@ import org.firstinspires.ftc.teamcode.Helpers.Slave;
 
 import java.util.List;
 
-@Autonomous(name = "aHHHH pt 2", group = "Slave")
+@Autonomous(name = "Rotating Left Tensor", group = "Slave")
 
 public class AutoAttempt3 extends LinearOpMode
 {
     private Slave slave = new Slave();
     private ElapsedTime runtime = new ElapsedTime();
 
-    private ElapsedTime rotLeftTime = new ElapsedTime();
+    private ElapsedTime rotRightTime = new ElapsedTime();
     private double rotationTime = 0;
 
     static final double SPEED = 0.6;
@@ -38,6 +38,7 @@ public class AutoAttempt3 extends LinearOpMode
     private int pos = -2;
     private boolean aligned = false;
     private boolean detect = true;
+    private double rotateBack = 0.0;
 
     private static final double SECONDS_PER_TILE = 11.106; //WE NEED TO PUT WALID'S DATA INTO THIS
     //2.161 inches/sec
@@ -69,9 +70,10 @@ public class AutoAttempt3 extends LinearOpMode
         if(opModeIsActive())
         {
             boolean flagRotTime = true;
-            rotLeftTime.reset();
+            rotRightTime.reset();
             while (opModeIsActive() && runtime.seconds() < 10 && detect)
             {
+                rotRightTime.reset();
                 if (tfod != null)
                 {
                     // getUpdatedRecognitions() will return null if no new information is available since
@@ -104,19 +106,13 @@ public class AutoAttempt3 extends LinearOpMode
                                         goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
                                         aligned = isAligned(goldMineralCent, 640-125, 640+125);
                                         rotateLeftP(0.15);
-                                        if(flagRotTime)
-                                        {
-                                            rotLeftTime.reset();
-                                            flagRotTime = false;
-                                        }
-                                        rotationTime = rotLeftTime.time();
                                         telemetry.addLine("Rotation Time: " + rotationTime);
                                         telemetry.addLine("Rotating left");
                                         telemetry.addLine("Aligned: " + aligned);
                                         if(aligned)
                                         {
+                                            rotateBack = rotRightTime.milliseconds()/1000;
                                             detect = false;
-                                            break;
                                         }
                                     }
                                 }
@@ -134,88 +130,77 @@ public class AutoAttempt3 extends LinearOpMode
             runtime.reset();
             while(opModeIsActive() && runtime.seconds() < 1.5)
             {
-                telemetry.addLine("Moving forward");
-                telemetry.addLine("Rotation time: " + rotationTime);
+                telemetry.addLine("Hitting Mineral");
                 telemetry.update();
             }
             backward();
             runtime.reset();
-            while(opModeIsActive() && runtime.seconds() < 1.5)
+            while(opModeIsActive() && runtime.seconds() < 1)
             {
-                telemetry.addLine("Moving backward");
+                telemetry.addLine("Moving back");
                 telemetry.update();
             }
             rotateRightP(0.15);
             runtime.reset();
-            while(opModeIsActive() && runtime.seconds() <= rotationTime)
+            while(opModeIsActive() && runtime.seconds() <= rotateBack)
             {
-                telemetry.addLine("Rotating back");
+                telemetry.addData("Rotating back", "Time Elapsed:", runtime.seconds(), "\nTarget Time:", rotateBack);
                 telemetry.update();
             }
-
+            left();
+            runtime.reset();
+            while(opModeIsActive() && runtime.seconds() <= 2)
+            {
+                telemetry.addLine("Moving Past Minerals");
+                telemetry.update();
+            }
+            rotateLeft();
+            runtime.reset();
+            while(opModeIsActive() && runtime.seconds() <= 1.5)
+            {
+                telemetry.addLine("Aligning with Depot");
+                telemetry.update();
+            }
+            backward();
+            runtime.reset();
+            while(opModeIsActive() && runtime.seconds() <= 3)
+            {
+                telemetry.addLine("Backing Up Into Depot");
+                telemetry.update();
+            }
+            runtime.reset();
+            while(opModeIsActive() && runtime.seconds() <= 3)
+            {
+                telemetry.addLine("Deploying Marker");
+                telemetry.update();
+            }
+            rotateRight();
+            while(opModeIsActive() && runtime.seconds() <= 0.6)
+            {
+                telemetry.addLine("To Crater");
+                telemetry.update();
+            }
+            forward();
+            while(opModeIsActive() && runtime.seconds() <= 5)
+            {
+                telemetry.addLine("Parking");
+                telemetry.update();
+            }
+            stop();
+            telemetry.addData("Path", "Complete");
+            telemetry.update();
+            sleep(1000);
         }
         if (tfod != null)
         {
             tfod.shutdown();
         }
-
-
-        //Driving forward for 1.4 seconds
         /*
-        forward(0.2);
-        while (opModeIsActive() && (runtime.seconds() < 1.4))
-        {
-            telemetry.addData("Moving Forward", "Time Elapsed:", runtime.seconds());
-            telemetry.update();
-        }
-        //Rotating left for 1.3 seconds
-        rotateLeft(0.2);
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 1.3)
-        {
-            telemetry.addData("Rotating Left", "Time Elapsed:", runtime.seconds());
-            telemetry.update();
-        }
-        //Rotating right for 1.3 seconds
-        rotateRight(0.2);
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 1.3)
-        {
-            telemetry.addData("Rotating Right", "Time Elapsed:", runtime.seconds());
-            telemetry.update();
-        }
-        //Moving left for 2 seconds
-        left(0.2);
-        runtime.reset();
-        while(opModeIsActive() && runtime.seconds() < 2)
-        {
-            telemetry.addData("Moving Right", "Time Elapsed:", runtime.seconds());
-        }
         //Stop the autonomous program
         stop();
         telemetry.addData("Path", "Complete");
         telemetry.update();
         sleep(1000);
-        */
-
-        //THIS WILL NOT WORK WITH POWER METHODS BECAUSE IT WILL ONLY JOLT FOR A SECOND BEFORE STOPPING
-        /*
-        while(opModeIsActive())
-        {
-            if(runtime.seconds() < 1.4)
-                forwardP(0.2);
-            runtime.reset();
-            if(runtime.seconds() < 1.3)
-                rotateLeftP(0.2);
-            runtime.reset();
-            if(runtime.seconds() < 1.3)
-                rotateRightP(0.2);
-            runtime.reset();
-            if(runtime.seconds() < 2)
-                leftP(0.2);
-            stop();
-            sleep(1000);
-        }
         */
     }
 
