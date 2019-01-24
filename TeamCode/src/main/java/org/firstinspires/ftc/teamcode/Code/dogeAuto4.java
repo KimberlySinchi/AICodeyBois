@@ -33,30 +33,28 @@ import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
 import com.disnodeteam.dogecv.detectors.roverrukus.GoldAlignDetector;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
+
 
 
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
  * of the FTC Driver Station. When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
+ * class is instantiated on the AutoRobot Controller and executed.
+ * <p>
  * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
  * It includes all the skeletal structure that all linear OpModes contain.
- *
+ * <p>
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="AWESOMEAUTOREVERSE(plsWork)", group="Linear Opmode")
-@Disabled
+@Autonomous(name = "AWESOMEAUTOREVERSE(plsWork)(CRATERAUTO)", group = "Linear Opmode")
 public class dogeAuto4 extends LinearOpMode {
 
     // Declare OpMode members.
@@ -71,16 +69,16 @@ public class dogeAuto4 extends LinearOpMode {
     private DcMotor backL;
     private DcMotor backR;
     private DcMotor latch;
-    private Servo armSpin;
-    static final double SPEED = 1;
-    public SlaveAuto slave = new SlaveAuto();
+    private  DcMotor arm;
+    private Servo armIntake;
+
+
     public boolean isBlock() {
         return detector.getAligned();
     }
 
     @Override
-    public void runOpMode()
-    {
+    public void runOpMode() {
         // Set up detector
         detector = new GoldAlignDetector(); // Create detector
         detector.init(hardwareMap.appContext, CameraViewDisplay.getInstance()); // Initialize it with the app context and camera
@@ -99,109 +97,169 @@ public class dogeAuto4 extends LinearOpMode {
         detector.ratioScorer.perfectRatio = 1.0; // Ratio adjustment
 
         detector.enable(); // Start the detector!
-        slave.init(hardwareMap);
-
-        telemetry.addLine(slave.getStatus());
-        telemetry.update();
-        /**
+        //Mapping all devices
         try
         {
             frontL = hardwareMap.get(DcMotor.class, "DC1");
             frontL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            frontL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
         }
         try
         {
             frontR = hardwareMap.get(DcMotor.class, "DC2");
             frontR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-        catch (Exception e)
-        {
+            frontR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        } catch (Exception e) {
         }
         try
         {
             backR = hardwareMap.get(DcMotor.class, "DC3");
             backR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-        catch (Exception e)
-        {
+            backR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        } catch (Exception e) {
         }
         try
         {
             backL = hardwareMap.get(DcMotor.class, "DC4");
             backL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
-        catch (Exception e)
+            backL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        } catch (Exception e)
         {
         }
-        **/
+        try
+        {
+            latch = hardwareMap.get(DcMotor.class, "DC5");
+            latch.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            latch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+        catch(Exception e)
+        {
+            telemetry.addLine(e + "");
+        }
+        try
+        {
+            arm  = hardwareMap.get(DcMotor.class, "DC7");
+            arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+        catch(Exception e)
+        {
+            telemetry.addLine("" + e);
+        }
+        try
+        {
+            armIntake = hardwareMap.get(Servo.class, "S1");
+
+        }
+        catch(Exception e)
+        {
+            telemetry.addLine("" + e);
+        }
+
+
+        telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
-
         // run until the end of the match (driver presses STOP)
-        while (opModeIsActive())
-        {
-            if(bool1)
+        while (opModeIsActive()) {
+
+            telemetry.update();
+            if (bool1)
             {
-                /**
-                 int timeUntilFirstBlock = 3;
-                 double timeLeft = rotateLeft(7, .5);
-                 //goUp(1.3); //in the future go back: goBack(1.5); //1.3 seconds with full power
-                 //goBack(1.3);//1.3 seconds with full power
-                 goUp(2.6,.5);//half power, so double time for equal distance (test)
-                 motorsOff(.6);
-                 goBack(2.6,.5);//half power, so double time for equal distance(test)
-                 motorsOff(.3);
-                 rotateRightB(.5,timeLeft - timeUntilFirstBlock);
-                 //make sure this works, then continue.
-                 **/
+/**
+ int timeUntilFirstBlock = 3;
+ double timeLeft = rotateLeft(7, .5);
+ //goUp(1.3); //in the future go back: goBack(1.5); //1.3 seconds with full power
+ //goBack(1.3);//1.3 seconds with full power
+ goUp(2.6,.5);//half power, so double time for equal distance (test)
+ motorsOff(.6);
+ goBack(2.6,.5);//half power, so double time for equal distance(test)
+ motorsOff(.3);
+ rotateRightB(.5,timeLeft - timeUntilFirstBlock);
+ //make sure this works, then continue.
+ **/
+
                 //NEW CODE USING MEASUREMENTS AND VELOCITIES
-                latchDown(3.5,.9);
-                double timeUntilFirstBlock = angleConv(83); //angles only at .3
-                goUp(forwardConv(10),.6);
-                double timeLeft = rotateLeft(7, .15);
-
-                    goUp(forwardConv(70), .6);
-                    motorsOff(.6);
-                    goDown(forwardConv(42), .6);
-                    motorsOff(.6);
-                    rotateRightB(.11, timeLeft - 2.61);
-                    motorsOff(.4);
-                    rotateLeftB(.15, 2.31);
-                    goUp(forwardConv(80), .6);
-                    rotateLeftB(.15,2.6);
-                    goDown(forwardConv(65.5), .6);
-
                 /**
+                latchUp(1.82, .9);
+                // rotateLeft(.33,.4);
+                goDown(.63, .6);
+                motorsOff(.3);
+                goUp(forwardConv(10), .6);
+                 **/
+                /**
+                 motorsOff(.3);
+                 goLeft(5);
+                 motorsOff(.6);
+                 **/
+                double timeLeft = rotateLeft(8, .13);
+                //use the time for other things like the distance ==>
+                //the time reflects how far the robot travels when it goes to the depot.
+                double totalTime = timeLeft - 2.61;
+
+                motorsOff(.6);
+                goDown(forwardConv(64), .6);
+                motorsOff(.6);
+
+                goUp(forwardConv(53), .6);//perhaps lower the time here to around 42 (it used to be 48)
+                motorsOff(.6);
+                rotateRightB(.11, timeLeft - 2.78);//2.48
+                telemetry.addLine(timeLeft + "");
+                //we need to get the top part working right first
+
+                motorsOff(.4);
+                rotateRightB(.15, 2.55);
+                motorsOff(.4);
+                goUp(forwardConv(95), .6);
+
+                motorsOff(.4);
+                rotateLeftB(.15,1.51);
+
+                motorsOff(.4);
+                goUp(totalTime + .69,.6);
+                motorsOff(.4);
+                //rotate the arm here ==>
+                rotateLeftB(.15,5.10);
+                goUp(2.7,.6);
+                //rotate servos here
+                /**
+                rotateLeftB(.15,1.26);
+                goUp(forwardConv(34),.6);
+                rotateLeftB(.15,5.15);
+                 **/
+
+                 /*AFTER MARKER
+                 rotateLeftB(.15, 2.6);
+                 goDown(forwardConv(64.5), .75);
                  motorsOff(.6);
                  goUp(forwardConv(63.6),.6);
                  rotateLeftB(angleConv(98),.15);//this is in degrees ==> it will rotate this many degrees, given that the power is .3
-                 //Stuff to test for velocity:
-                 **/
+                 */
+                //Stuff to test for velocity:
                 //rotateRightB(.15,10); //at .15 power the robot needs 9 seconds to go one revolution
                 //motorsOff(10);
                 //goUp(10,.6);
 
-
-            bool1 = false;
-            }
+                bool1 = false;
                 detector.disable();
+                telemetry.update();
             }
+
         }
-    public void rotateRightB(double power, double time)
-    {
+    }
+
+    public void rotateRightB(double power, double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
         boolean totalTime = false;
-        double newTime = time* -1;
-        if(time>0)
-        {
-            while (opModeIsActive() && ms.time() <= time)
+        double newTime = time * -1;
+        if (time > 0) {
+            while (ms.time() <= time)
             {
                 frontL.setPower(-power);
                 frontR.setPower(-power);
@@ -209,10 +267,8 @@ public class dogeAuto4 extends LinearOpMode {
                 backL.setPower(-power);
 
             }
-        }
-        else
-        {
-            while (opModeIsActive() && ms.time() <= time)
+        } else {
+            while (ms.time() <= newTime)
             {
                 frontL.setPower(power);
                 frontR.setPower(power);
@@ -226,14 +282,13 @@ public class dogeAuto4 extends LinearOpMode {
         backR.setPower(0);
         backL.setPower(0);
     }
-     public void rotateLeftB(double power, double time)
-    {
+
+    public void rotateLeftB(double power, double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        double newTime = time*-1;
+        double newTime = time * -1;
         boolean totalTime = false;
-        if(time>0)
-        {
+        if (time > 0) {
             while (ms.time() <= time) {
                 frontL.setPower(power);
                 frontR.setPower(power);
@@ -243,8 +298,8 @@ public class dogeAuto4 extends LinearOpMode {
             }
         }
         else
-        {
-            while(ms.time() <= time)
+            {
+            while (ms.time() <= time)
             {
                 frontL.setPower(-power);
                 frontR.setPower(-power);
@@ -256,28 +311,42 @@ public class dogeAuto4 extends LinearOpMode {
         frontR.setPower(0);
         backR.setPower(0);
         backL.setPower(0);
-    }                
-    public void motorsOff(double time)
-    {
+    }
+
+    public void motorsOff(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time)
-        {
+        while (ms.time() <= time) {
             frontL.setPower(0.0);
             frontR.setPower(0.0);
             backR.setPower(0.0);
-            backL.setPower(0.0);   
+            backL.setPower(0.0);
         }
-        
+
     }
-    public void goRightB()
-    {
+
+    public void goRightB() {
     }
-    public void goLeftB()
-    {
+
+    public void goLeftB() {
     }
-    public void goUp(double time, double power)
-    {
+
+    public void goUp(double time, double power) {
+        ElapsedTime ms = new ElapsedTime();
+        ms.reset();
+        while (ms.time() <= time) {
+            frontL.setPower(power);
+            frontR.setPower(-power);
+            backR.setPower(-power);
+            backL.setPower(power);
+        }
+        frontL.setPower(0.0);
+        frontR.setPower(0.0);
+        backR.setPower(0.0);
+        backL.setPower(0.0);
+    }
+
+    public void goDown(double time, double power) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
         while (ms.time() <= time) {
@@ -286,31 +355,13 @@ public class dogeAuto4 extends LinearOpMode {
             backR.setPower(power);
             backL.setPower(-power);
         }
-        frontL.setPower(0.0);
-        frontR.setPower(0.0);
-        backR.setPower(0.0);
-        backL.setPower(0.0);
-    }
-
-    public void goDown(double time, double power)
-    {
-        ElapsedTime ms = new ElapsedTime();
-        ms.reset();
-        while (ms.time() <= time)
-        {
-            frontL.setPower(power);
-            frontR.setPower(-power);
-            backR.setPower(-power);
-            backL.setPower(power);
-        }
         frontL.setPower(0);
         frontR.setPower(0);
         backR.setPower(0);
         backL.setPower(0);
     }
 
-    public void goLeft(double time)
-    {
+    public void goLeft(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
         while (ms.time() <= time) {
@@ -325,12 +376,10 @@ public class dogeAuto4 extends LinearOpMode {
         backL.setPower(0);
     }
 
-    public void goRight(double time)
-    {
+    public void goRight(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time)
-        {
+        while (ms.time() <= time) {
             frontL.setPower(1);
             frontR.setPower(-1);
             backR.setPower(1);
@@ -342,12 +391,10 @@ public class dogeAuto4 extends LinearOpMode {
         backL.setPower(0);
     }
 
-    public void rotateCWise(double time)
-    {
+    public void rotateCWise(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time)
-        {
+        while (ms.time() <= time) {
             frontL.setPower(1);
             frontR.setPower(1);
             backR.setPower(1);
@@ -359,12 +406,10 @@ public class dogeAuto4 extends LinearOpMode {
         backL.setPower(0);
     }
 
-    public void rotateCCWise(double time)
-    {
+    public void rotateCCWise(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time)
-        {
+        while (ms.time() <= time) {
             frontL.setPower(-1);
             frontR.setPower(-1);
             backR.setPower(-1);
@@ -376,28 +421,24 @@ public class dogeAuto4 extends LinearOpMode {
         backL.setPower(0);
     }
 
-    public void rotateCWiseNoNum(double power)
-    {
+    public void rotateCWiseNoNum(double power) {
         frontL.setPower(power);
         frontR.setPower(power);
         backR.setPower(power);
         backL.setPower(power);
     }
 
-    public void rotateCCWiseNoNum(double power)
-    {
+    public void rotateCCWiseNoNum(double power) {
         frontL.setPower(-power);
         frontR.setPower(-power);
         backR.setPower(-power);
         backL.setPower(-1 * power);
     }
 
-    public void rotateSTOP(double time)
-    {
+    public void rotateSTOP(double time) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time)
-        {
+        while (ms.time() <= time) {
             frontL.setPower(0);
             frontR.setPower(0);
             backR.setPower(0);
@@ -405,30 +446,24 @@ public class dogeAuto4 extends LinearOpMode {
         }
     }
 
-    public boolean isAligned()
-    {
+    public boolean isAligned() {
         return detector.getAligned();
     }
 
-    public double rotateLeft(double time, double power)
-    {
+    public double rotateLeft(double time, double power) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time && isAligned() == false)
-        {
+        while (ms.time() <= time && isAligned() == false) {
             frontL.setPower(power);
             frontR.setPower(power);
             backR.setPower(power);
             backL.setPower(power);
-
         }
-
         frontL.setPower(0);
         frontR.setPower(0);
         backR.setPower(0);
         backL.setPower(0);
-        if(ms.time()<= time)
-        {
+        if (ms.time() <= time) {
             return ms.time();
         }
         return time;//LEFT IS POSITIVE TIME, RIGHT IS NEGATIVE TIME
@@ -444,31 +479,25 @@ public class dogeAuto4 extends LinearOpMode {
             frontR.setPower(-power);
             backR.setPower(-power);
             backL.setPower(-power);
-            if(time == ms.time())
-            {
-                totalTime = true;
-            }
+
         }
         frontL.setPower(0);
         frontR.setPower(0);
         backR.setPower(0);
         backL.setPower(0);
-        if(ms.time()<=time)
-        {
-            return -1*ms.time();
+        if (ms.time() <= time) {
+            return -1 * ms.time();
         }
-        if(totalTime)
-        {
-            return -1*time;
+        if (totalTime) {
+            return -1 * time;
         }
         return 0;
     }
-    public void goBack(double time,double power)
-    {
+
+    public void goBack(double time, double power) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time)
-        {
+        while (ms.time() <= time) {
             frontL.setPower(power);
             frontR.setPower(-power);
             backR.setPower(-power);
@@ -480,62 +509,67 @@ public class dogeAuto4 extends LinearOpMode {
         backL.setPower(0.0);
     }
 
-    public void Stop()
-    {
+    public void Stop() {
         detector.disable();
     }
+
     public double forwardConv(double length) //length is in cm
     {
         //forward by a power of: .6
         //velocity is 39.37cm/seconds
-        return length/39.37;
-        
+        return length / 39.37;
+
     }
-    public double rotateConv(double length)
-    {
+
+    public double rotateConv(double length) {
         //rotational power: .6
         //velocity: 5.48 cm/sec
-        return length/5.48;
+        return length / 5.48;
     }
+
     public double angleConv(double angle) //at .35 power : 6 sec = 1 rev, 6sec = 360 degree
     {
-        return (angle/360.0) * 9.5;
+        return (angle / 360.0) * 9.5;
     }
+
     public double tileConv(double tiles)//1 tile is 62 cm this is at .6
     {
-        return ((tiles)/62) * 1.125;
+        return ((tiles) / 62) * 1.125;
     }
-    public void off()
-    {
+
+    public void off() {
         frontL.setPower(0.0);
         frontR.setPower(0.0);
         backR.setPower(0.0);
         backL.setPower(0.0);
     }
-    public void latchUp(double time, double power)
-    {
+
+    public void latchDown(double time, double power) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time)
-        {
-            slave.latch.setPower(-1*power);
+        while (ms.time() <= time) {
+            latch.setPower(-1 * power);
         }
-        frontL.setPower(0.0);
-        frontR.setPower(0.0);
-        backR.setPower(0.0);
-        backL.setPower(0.0);
+        latch.setPower(0);
     }
-    public void latchDown(double time, double power)
-    {
+
+    public void latchUp(double time, double power) {
         ElapsedTime ms = new ElapsedTime();
         ms.reset();
-        while (ms.time() <= time)
-        {
-            slave.latch.setPower(power);
+        while (ms.time() <= time) {
+            latch.setPower(power);
         }
-        frontL.setPower(0.0);
-        frontR.setPower(0.0);
-        backR.setPower(0.0);
-        backL.setPower(0.0);
+        latch.setPower(0);
+    }
+
+    public void spin(double time) {
+        //servo goes from 0 - 1
+        //0 ==> backward, .5 ==> stop, 1 ==> forward
+        ElapsedTime ms = new ElapsedTime();
+        ms.reset();
+        while (ms.time() <= time) {
+            armIntake.setPosition(0);
+        }
+        armIntake.setPosition(.5);
     }
 }

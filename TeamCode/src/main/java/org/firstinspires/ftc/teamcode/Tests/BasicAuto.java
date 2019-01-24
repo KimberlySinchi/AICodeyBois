@@ -10,7 +10,7 @@ package org.firstinspires.ftc.teamcode.Tests;
  */
 import android.view.Display;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous; //Details what type of program this is (the AutoAttemptEncoders part can be TeleOp instead)
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous; //Details what type of program this is (the Auto part can be TeleOp instead)
 import com.qualcomm.robotcore.eventloop.opmode.Disabled; //Allows us to use the line @Disabled (explained further down)
 import com.qualcomm.robotcore.util.ElapsedTime; //Acts as a timer for our code (this autonomous example is time-based BUT there are
                                                 // other ways to do autonomous too)
@@ -341,7 +341,7 @@ public class BasicAuto extends LinearOpMode
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
-        // Step through each leg of the path, ensuring that the AutoAttemptEncoders mode has not been stopped along the way
+        // Step through each leg of the path, ensuring that the Auto mode has not been stopped along the way
 
         // Step 1:  Drive forward for 3 seconds
         robot.leftDrive.setPower(FORWARD_SPEED);

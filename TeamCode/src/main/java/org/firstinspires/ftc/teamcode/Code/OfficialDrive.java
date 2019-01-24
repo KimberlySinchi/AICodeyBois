@@ -148,12 +148,16 @@ public class OfficialDrive extends OpMode
             slave.backL.setPower(-v1);
         }
         //ARM MOVEMENT
-        if (y2 != 0)
-            slave.armFaB.setPower(-y2);
+        if (y2 > 0)
+            slave.armFaB.setPower(-.3);
+        else if(y2 < 0)
+            slave.armFaB.setPower(.3);
         else
             slave.armFaB.setPower(0);
-        if (yR2 != 0)
-            slave.armUaD.setPower(-yR2);
+        if (yR2 > 0)
+            slave.armUaD.setPower(0.35);
+        else if(yR2 <0)
+            slave.armUaD.setPower(-.45);
         else
             slave.armUaD.setPower(0);
 
@@ -167,11 +171,11 @@ public class OfficialDrive extends OpMode
 
         //LATCH
         if(rTrig2 > 0)
-            slave.latch.setPower(.9);
+            slave.latch.setPower(1.0);
         else
             slave.latch.setPower(0);
         if(lTrig2 > 0)
-            slave.latch.setPower(-.9);
+            slave.latch.setPower(-1.0);
         else
             slave.latch.setPower(0);
     }
