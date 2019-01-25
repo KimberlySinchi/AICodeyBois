@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Code;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.teamcode.Helpers.Slave;
 import java.util.List;
 
 @Autonomous(name = "Rotating Left Tensor", group = "Slave")
+@Disabled
 
 public class AutoAttempt3 extends LinearOpMode
 {

@@ -18,6 +18,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR O`THER DEALINGS IN THE S
 */
 package org.firstinspires.ftc.teamcode.Code;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -36,6 +37,7 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
  * or add a @Disabled annotation to prevent this OpMode from being added to the Driver Station
  */
 @TeleOp(name = "DriveData", group = "TeleOp")
+@Disabled
 
 public class DriverModeAuto extends OpMode {
 

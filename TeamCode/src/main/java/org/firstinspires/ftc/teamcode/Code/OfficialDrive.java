@@ -23,7 +23,6 @@ public class OfficialDrive extends OpMode
     @Override
     public void init_loop()
     {
-
         telemetry.addLine(slave.getStatus());
         if(slave.getStatus().equals(""))
             telemetry.addData("Status", "WORKING");
