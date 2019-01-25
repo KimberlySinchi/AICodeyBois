@@ -13,11 +13,13 @@ public class Slave {
     public DcMotor frontR;
     public DcMotor backR;
     public DcMotor backL;
-    public DcMotor latch;
-    public DcMotor armFaB;
+    public DcMotor latchDown;
+    public DcMotor latchUp;
     public DcMotor armUaD;
     public String status = "";
+
     public Servo armIntake;
+    public Servo armFaB;
 
     HardwareMap hwmap = null; //Need a reference to hardware map because otherwise, the code will think this is an opmode to use right now
 
@@ -27,6 +29,8 @@ public class Slave {
     public void init(HardwareMap ahwmap)
     {
         hwmap = ahwmap;
+
+        //4 MOVEMENT MOTORS
         try
         {
             frontL = hwmap.get(DcMotor.class, "DC1");
@@ -63,16 +67,42 @@ public class Slave {
         {
             status += "\nBackL (DC4) motor not mapping";
         }
+
+        //LATCH MOTORS
         try
         {
-            latch = hwmap.get(DcMotor.class, "DC5");
-            latch.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            latch.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            latchDown = hwmap.get(DcMotor.class, "DC5");
+            latchDown.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            latchDown.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         catch (Exception e)
         {
-            status += "\nLatch (latch) motor not mapping";
+            status += "\nBottom Gearbox motor not mapping";
         }
+        try
+        {
+            latchUp = hwmap.get(DcMotor.class, "DC6");
+            latchUp.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            latchUp.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+        catch (Exception e)
+        {
+            status += "\nHigher Gearbox motor not mapping";
+        }
+
+        //ARM MOTOR
+        try
+        {
+            armUaD = hwmap.get(DcMotor.class, "DC7");
+            armUaD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            armUaD.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+        catch (Exception e)
+        {
+            status += "Arm U&D failed to initialize";
+        }
+
+        //ARM SERVOS
         try
         {
             armIntake = hwmap.get(Servo.class, "S1");
@@ -83,23 +113,11 @@ public class Slave {
         }
         try
         {
-            armFaB = hwmap.get(DcMotor.class, "DC7");
-            armFaB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            armFaB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            armFaB = hwmap.get(Servo.class, "S2");
         }
         catch (Exception e)
         {
-            status += "Arm F&B failed to initialize";
-        }
-        try
-        {
-            armUaD = hwmap.get(DcMotor.class, "DC8");
-            armUaD.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            armUaD.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
-        catch (Exception e)
-        {
-            status += "Arm U&D failed to initialize";
+            status += "\nArm Extension servo not mapping";
         }
     }
 

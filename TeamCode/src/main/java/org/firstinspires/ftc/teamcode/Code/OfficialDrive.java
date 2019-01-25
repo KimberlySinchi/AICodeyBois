@@ -6,6 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Helpers.Slave;
 
+/**
+ * UPDATE THIS SINCE WE CHANGED THE SLAVE CLASS
+ */
 @TeleOp(name = "Official Drive")
 public class OfficialDrive extends OpMode
 {
@@ -52,7 +55,6 @@ public class OfficialDrive extends OpMode
         //For movement and rotating
         double y = gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
-        boolean slow = gamepad1.back;
 
         //For arm extension and vertical movement as well as latch
         double x2 = gamepad2.left_stick_x;
@@ -119,18 +121,18 @@ public class OfficialDrive extends OpMode
         //Rotate right
         if(rightPress != 0)
         {
-            slave.frontL.setPower(-1*rightPress);
-            slave.frontR.setPower(-1*rightPress);
-            slave.backR.setPower(-1*rightPress);
-            slave.backL.setPower(-1*rightPress);
+            slave.frontL.setPower(-rightPress);
+            slave.frontR.setPower(-rightPress);
+            slave.backR.setPower(-rightPress);
+            slave.backL.setPower(-rightPress);
         }
         //Rotate left
         else if(leftPress != 0)
         {
-            slave.frontL.setPower(-1*leftPress);
-            slave.frontR.setPower(-1*leftPress);
-            slave.backR.setPower(-1*leftPress);
-            slave.backL.setPower(-1*leftPress);
+            slave.frontL.setPower(-leftPress);
+            slave.frontR.setPower(-leftPress);
+            slave.backR.setPower(-leftPress);
+            slave.backL.setPower(-leftPress);
         }
         else if(x==0 && y==0)
         {
@@ -148,11 +150,11 @@ public class OfficialDrive extends OpMode
         }
         //ARM MOVEMENT
         if (y2 > 0)
-            slave.armFaB.setPower(-.3);
+            slave.armFaB.setPosition(1);
         else if(y2 < 0)
-            slave.armFaB.setPower(.3);
+            slave.armFaB.setPosition(-1);
         else
-            slave.armFaB.setPower(0);
+            slave.armFaB.setPosition(0);
         if (yR2 > 0)
             slave.armUaD.setPower(0.35);
         else if(yR2 <0)
@@ -170,13 +172,25 @@ public class OfficialDrive extends OpMode
 
         //LATCH
         if(rTrig2 > 0)
-            slave.latch.setPower(1.0);
+        {
+            slave.latchUp.setPower(1.0);
+            slave.latchDown.setPower(1.0);
+        }
         else
-            slave.latch.setPower(0);
-        if(lTrig2 > 0)
-            slave.latch.setPower(-1.0);
+        {
+            slave.latchUp.setPower(0);
+            slave.latchDown.setPower(0);
+        }
+        if(rTrig2 < 0)
+        {
+            slave.latchUp.setPower(-1.0);
+            slave.latchDown.setPower(-1.0);
+        }
         else
-            slave.latch.setPower(0);
+        {
+            slave.latchUp.setPower(0);
+            slave.latchDown.setPower(0);
+        }
     }
 
     /*

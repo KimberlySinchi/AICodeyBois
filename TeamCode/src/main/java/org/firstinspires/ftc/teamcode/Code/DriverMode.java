@@ -19,32 +19,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR O`THER DEALINGS IN THE S
 package org.firstinspires.ftc.teamcode.Code;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Helpers.Slave;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-/**
- * This file contains an example of an iterative (Non-Linear) "OpMode".
- * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
- * The names of OpModes appear on the menu of the FTC Driver Station.
- * When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the AutoRobot Controller and executed.
- *
- * Remove a @Disabled the on the next line or two (if present) to add this opmode to the Driver Station OpMode list,
- * or add a @Disabled annotation to prevent this OpMode from being added to the Driver Station
- */
 @TeleOp(name = "Drive", group = "TeleOp")
 
-public class DriverMode extends OpMode {
+public class DriverMode extends OpMode
+{
 
     /* Declare OpMode members. */
     private Slave slave = new Slave();
@@ -52,8 +35,10 @@ public class DriverMode extends OpMode {
     @Override
     public void init()
     {
-        slave.init(hardwareMap);
-        //getstatus
+        telemetry.addLine(slave.getStatus());
+        if(slave.getStatus().equals(""))
+            telemetry.addData("Status", "WORKING");
+        telemetry.update();
     }
 
     /*
@@ -63,7 +48,7 @@ public class DriverMode extends OpMode {
     public void init_loop()
     {
         telemetry.addData("Status ", "WORKING");
-        telemetry.addLine(slave.getStatus()); //rien
+        telemetry.addLine(slave.getStatus());
         telemetry.update();
     }
 
@@ -82,9 +67,8 @@ public class DriverMode extends OpMode {
     @Override
     public void loop()
     {
-        double bufferA = 5;
         double rightPress = gamepad1.right_trigger;
-        double leftPress = gamepad1.left_trigger * -1;
+        double leftPress = -gamepad1.left_trigger;
         double x2 = gamepad2.left_stick_x;
         double y2 = gamepad2.left_stick_y;
         boolean dPadUp = gamepad1.dpad_up;
@@ -92,6 +76,7 @@ public class DriverMode extends OpMode {
 
         double y = gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
+        double rTrig = gamepad1.right_trigger;
         double yRight = gamepad1.right_stick_y;
         double xLeft = gamepad1.right_stick_x;
 
@@ -99,7 +84,6 @@ public class DriverMode extends OpMode {
         boolean slow = gamepad1.back;
 
         //For arm extension and vertical movement as well as latch
-        double yR2 = gamepad2.right_stick_y;
         telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
         telemetry.update();
         double theta = Math.atan(y/x);
@@ -165,10 +149,10 @@ public class DriverMode extends OpMode {
             backR.setPower(-1*rightPress);
             backL.setPower(-1*rightPress);
             */
-            slave.frontL.setPower(-1*rightPress);
-            slave.frontR.setPower(-1*rightPress);
-            slave.backR.setPower(-1*rightPress);
-            slave.backL.setPower(-1*rightPress);
+            slave.frontL.setPower(-rightPress);
+            slave.frontR.setPower(-rightPress);
+            slave.backR.setPower(-rightPress);
+            slave.backL.setPower(-rightPress);
         }
         //Rotate left
         else if(leftPress != 0)
@@ -179,10 +163,10 @@ public class DriverMode extends OpMode {
             backR.setPower(-1*leftPress);
             backL.setPower(-1*leftPress);
             */
-            slave.frontL.setPower(-1*leftPress);
-            slave.frontR.setPower(-1*leftPress);
-            slave.backR.setPower(-1*leftPress);
-            slave.backL.setPower(-1*leftPress);
+            slave.frontL.setPower(-leftPress);
+            slave.frontR.setPower(-leftPress);
+            slave.backR.setPower(-leftPress);
+            slave.backL.setPower(-leftPress);
         }
         else if(x==0 && y==0)
         {
@@ -210,29 +194,9 @@ public class DriverMode extends OpMode {
             slave.backR.setPower(v2);
             slave.backL.setPower(-v1);
         }
-        //Moving the arm up
-        /**
-                if(yRight < 0)
-        {
-            armMotor1.setPower(y);
-            armMotor2.setPower(-y);
-            telemetry.addLine("Arm Up");
-        }
-        //Moving the arm down
-        else if(yRight > 0)
-        {
-            armMotor1.setPower(-y);
-            armMotor2.setPower(y);
-            telemetry.addLine("Arm Down");
-        }
-        //No vertical arm movement
-        else
-        {
-            armMotor1.setPower(0);
-            armMotor2.setPower(0);
-        }
-        telemetry.update();
-**/
+
+        //ARM MOVEMENT
+        
         //SERVOS
         if(dPadUp)
             slave.armIntake.setPosition(1);
@@ -241,47 +205,27 @@ public class DriverMode extends OpMode {
         else
             slave.armIntake.setPosition(0.5);
 
-        //upDownMotor = name of the motor that controls vertical arm movement
-        //up = the y2 might have to be changed
-        /**
-        if(y2<0)
+        //LATCH
+        if(rTrig > 0)
         {
-            upDownMotor.setPower(y2);
+            slave.latchUp.setPower(1.0);
+            slave.latchDown.setPower(1.0);
         }
         else
         {
-            upDownMotor.setPower(0);
+            slave.latchUp.setPower(0);
+            slave.latchDown.setPower(0);
         }
-        if(y2>0)
+        if(rTrig < 0)
         {
-            upDownMotor.setPower(-y2);
+            slave.latchUp.setPower(-1.0);
+            slave.latchDown.setPower(-1.0);
         }
         else
         {
-            upDownMotor.setPower(0);
+            slave.latchUp.setPower(0);
+            slave.latchDown.setPower(0);
         }
-         **/
-        if(yRight>0)
-            slave.latch.setPower(-.9);
-        else if(yRight<0)
-            slave.latch.setPower(.9);
-        else
-            slave.latch.setPower(0);
-        double armForwardAndBack = gamepad1.left_stick_y;
-        double armUpAndDown = gamepad1.right_stick_y;
-
-        if (y2 > 0)
-            slave.armFaB.setPower(-.3);
-        else if(y2 < 0)
-            slave.armFaB.setPower(.3);
-        else
-            slave.armFaB.setPower(0);
-        if (yR2 > 0)
-            slave.armUaD.setPower(0.35);
-        else if(yR2 <0)
-            slave.armUaD.setPower(-.45);
-        else
-            slave.armUaD.setPower(0);
     }
 
     /*
