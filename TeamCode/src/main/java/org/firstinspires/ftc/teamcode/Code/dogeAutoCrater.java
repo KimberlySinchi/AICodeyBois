@@ -39,8 +39,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-
-
 /**
  * This file contains an minimal example of a Linear "OpMode". An OpMode is a 'program' that runs in either
  * the autonomous or the teleop period of an FTC match. The names of OpModes appear on the menu
@@ -54,8 +52,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name = "AWESOMEAUTOREVERSE(plsWork)(CRATERAUTO)", group = "Linear Opmode")
-public class dogeAuto4 extends LinearOpMode {
+@Autonomous(name = "dogeAutoCrater", group = "Linear Opmode")
+public class dogeAutoCrater extends LinearOpMode {
 
     // Declare OpMode members.
     // Detector object
@@ -206,7 +204,7 @@ public class dogeAuto4 extends LinearOpMode {
                 goDown(forwardConv(64), .6);
                 motorsOff(.6);
 
-                goUp(forwardConv(53), .6);//perhaps lower the time here to around 42 (it used to be 48)
+                goUp(forwardConv(48), .6);//perhaps lower the time here to around 42 (it used to be 48)
                 motorsOff(.6);
                 rotateRightB(.11, timeLeft - 2.78);//2.48
                 telemetry.addLine(timeLeft + "");
