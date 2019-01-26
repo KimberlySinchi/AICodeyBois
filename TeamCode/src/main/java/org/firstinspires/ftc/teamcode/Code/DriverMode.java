@@ -35,9 +35,7 @@ public class DriverMode extends OpMode
     @Override
     public void init()
     {
-        telemetry.addLine(slave.getStatus());
-        if(slave.getStatus().equals(""))
-            telemetry.addData("Status", "WORKING");
+        telemetry.addLine("RUNNING");
         telemetry.update();
     }
 
@@ -47,8 +45,9 @@ public class DriverMode extends OpMode
     @Override
     public void init_loop()
     {
-        telemetry.addData("Status ", "WORKING");
         telemetry.addLine(slave.getStatus());
+        if(slave.getStatus().equals(""))
+            telemetry.addData("Status", "WORKING");
         telemetry.update();
     }
 
@@ -77,8 +76,13 @@ public class DriverMode extends OpMode
         double y = gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
         double rTrig = gamepad1.right_trigger;
+        boolean rBump = gamepad1.right_bumper;
+        boolean lBump = gamepad1.left_bumper;
         double yRight = gamepad1.right_stick_y;
         double xLeft = gamepad1.right_stick_x;
+
+        boolean yButton = gamepad1.y;
+        boolean aButton = gamepad1.a;
 
         //For movement and rotating
         boolean slow = gamepad1.back;
@@ -99,9 +103,7 @@ public class DriverMode extends OpMode
             }
         }
         if(isnegZ == true && x<0)
-        {
             theta = Math.PI;
-        }
         //Q2
         else if(y>0 && x<0)
         {
@@ -133,9 +135,7 @@ public class DriverMode extends OpMode
 
         double rad = Math.sqrt(x*x + y*y);
         if(rad > 1)
-        {
             rad = 1;
-        }
         double v1 = rad*(-1*Math.sin(theta + Math.PI/4));
         double v2 = rad*Math.cos(theta + Math.PI/4);
         telemetry.addData("v1 = " + v1, " v2 = " + v2);
@@ -143,12 +143,6 @@ public class DriverMode extends OpMode
         //Rotate right
         if(rightPress != 0)
         {
-            /*
-            frontL.setPower(-1*rightPress);
-            frontR.setPower(-1*rightPress);
-            backR.setPower(-1*rightPress);
-            backL.setPower(-1*rightPress);
-            */
             slave.frontL.setPower(-rightPress);
             slave.frontR.setPower(-rightPress);
             slave.backR.setPower(-rightPress);
@@ -157,12 +151,6 @@ public class DriverMode extends OpMode
         //Rotate left
         else if(leftPress != 0)
         {
-            /*
-            frontL.setPower(-1*leftPress);
-            frontR.setPower(-1*leftPress);
-            backR.setPower(-1*leftPress);
-            backL.setPower(-1*leftPress);
-            */
             slave.frontL.setPower(-leftPress);
             slave.frontR.setPower(-leftPress);
             slave.backR.setPower(-leftPress);
@@ -170,12 +158,6 @@ public class DriverMode extends OpMode
         }
         else if(x==0 && y==0)
         {
-            /*
-            frontL.setPower(0);
-            frontR.setPower(0);
-            backR.setPower(0);
-            backL.setPower(0);
-            */
             slave.frontL.setPower(0);
             slave.frontR.setPower(0);
             slave.backR.setPower(0);
@@ -183,12 +165,6 @@ public class DriverMode extends OpMode
         }
         else
         {
-            /*
-            frontL.setPower(-v2);
-            frontR.setPower(v1);
-            backR.setPower(v2);
-            backL.setPower(-v1);
-            */
             slave.frontL.setPower(-v2);
             slave.frontR.setPower(v1);
             slave.backR.setPower(v2);
@@ -196,7 +172,13 @@ public class DriverMode extends OpMode
         }
 
         //ARM MOVEMENT
-        
+        if(rTrig > 0)
+            slave.armUaD.setPower(1);
+        else if(rTrig > 0)
+            slave.armUaD.setPower(-1);
+        else
+            slave.armUaD.setPower(0);
+
         //SERVOS
         if(dPadUp)
             slave.armIntake.setPosition(1);
@@ -204,9 +186,16 @@ public class DriverMode extends OpMode
             slave.armIntake.setPosition(0);
         else
             slave.armIntake.setPosition(0.5);
+        if(yButton)
+            slave.armFaB.setPosition(1);
+        else if(aButton)
+            slave.armFaB.setPosition(0);
+        else
+            slave.armFaB.setPosition(0.5);
+
 
         //LATCH
-        if(rTrig > 0)
+        if(rBump)
         {
             slave.latchUp.setPower(1.0);
             slave.latchDown.setPower(1.0);
@@ -216,7 +205,7 @@ public class DriverMode extends OpMode
             slave.latchUp.setPower(0);
             slave.latchDown.setPower(0);
         }
-        if(rTrig < 0)
+        if(lBump)
         {
             slave.latchUp.setPower(-1.0);
             slave.latchDown.setPower(-1.0);

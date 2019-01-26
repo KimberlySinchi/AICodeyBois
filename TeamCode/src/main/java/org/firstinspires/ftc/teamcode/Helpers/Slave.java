@@ -99,7 +99,7 @@ public class Slave {
         }
         catch (Exception e)
         {
-            status += "Arm U&D failed to initialize";
+            status += "\nArm U&D failed to initialize";
         }
 
         //ARM SERVOS
@@ -121,7 +121,8 @@ public class Slave {
         }
     }
 
-    public String getStatus() {
+    public String getStatus()
+    {
         return status;
     }
 }
