@@ -35,6 +35,7 @@ public class DriverMode extends OpMode
     @Override
     public void init()
     {
+        slave.init(hardwareMap);
         telemetry.addLine("RUNNING");
         telemetry.update();
     }
