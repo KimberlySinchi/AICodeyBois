@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.Code;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -30,6 +29,15 @@ public class OfficialDrive extends OpMode
         telemetry.addLine(slave.getStatus());
         if(slave.getStatus().equals(""))
             telemetry.addData("Status", "WORKING");
+        telemetry.addData("Front L", slave.frontL);
+        telemetry.addData("Front R", slave.frontR);
+        telemetry.addData("Back L", slave.backL);
+        telemetry.addData("Back R", slave.backR);
+        telemetry.addData("Arm", slave.armUaD);
+        telemetry.addData("SERVO intake", slave.armIntake);
+        telemetry.addData("SERVO extend", slave.armFaB);
+        telemetry.addLine("I UPLOADED CODE");
+        telemetry.update();
         telemetry.update();
     }
 
@@ -65,7 +73,15 @@ public class OfficialDrive extends OpMode
         double rTrig2 = gamepad2.right_trigger;
         double lTrig2 = gamepad2.left_trigger;
 
-        telemetry.addData("Status:","x = " + x + " ,y =  " + y);
+        /*
+        TESTING FOR LATCH GEARBOX AND ARM MOVEMENT
+         */
+        boolean rBump = gamepad1.right_bumper;
+        boolean lBump = gamepad1.left_bumper;
+        boolean yButton = gamepad1.y;
+        boolean aButton = gamepad1.a;
+
+        telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
         telemetry.update();
         double theta = Math.atan(y/x);
         String compare = "-0.0";
@@ -112,7 +128,9 @@ public class OfficialDrive extends OpMode
 
         double rad = Math.sqrt(x*x + y*y);
         if(rad > 1)
+        {
             rad = 1;
+        }
         double v1 = rad*(-1*Math.sin(theta + Math.PI/4));
         double v2 = rad*Math.cos(theta + Math.PI/4);
         telemetry.addData("v1 = " + v1, " v2 = " + v2);
@@ -148,16 +166,16 @@ public class OfficialDrive extends OpMode
             slave.backL.setPower(-v1);
         }
         //ARM MOVEMENT
-        if (y2 > 0)
+        if(yButton)
             slave.armFaB.setPosition(1);
-        else if(y2 < 0)
-            slave.armFaB.setPosition(-1);
-        else
+        else if(aButton)
             slave.armFaB.setPosition(0);
+        else
+            slave.armFaB.setPosition(0.5);
         if (yR2 > 0)
-            slave.armUaD.setPower(1);
-        else if(yR2 < 0)
-            slave.armUaD.setPower(-1);
+            slave.armUaD.setPower(0.35);
+        else if(yR2 <0)
+            slave.armUaD.setPower(-.45);
         else
             slave.armUaD.setPower(0);
 
@@ -170,17 +188,12 @@ public class OfficialDrive extends OpMode
             slave.armIntake.setPosition(0.5);
 
         //LATCH
-        if(rTrig2 > 0)
+        if(rBump)
         {
             slave.latchUp.setPower(1.0);
             slave.latchDown.setPower(1.0);
         }
-        else
-        {
-            slave.latchUp.setPower(0);
-            slave.latchDown.setPower(0);
-        }
-        if(rTrig2 < 0)
+        else if(lBump)
         {
             slave.latchUp.setPower(-1.0);
             slave.latchDown.setPower(-1.0);
