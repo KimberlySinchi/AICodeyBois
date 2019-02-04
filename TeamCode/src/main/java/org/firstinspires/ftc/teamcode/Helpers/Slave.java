@@ -3,11 +3,10 @@ package org.firstinspires.ftc.teamcode.Helpers;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-public class Slave {
+public class Slave
+{
     /* Declare OpMode members. */
     public DcMotor frontL;
     public DcMotor frontR;
@@ -23,7 +22,9 @@ public class Slave {
 
     HardwareMap hwmap = null; //Need a reference to hardware map because otherwise, the code will think this is an opmode to use right now
 
-    public Slave() {
+    public Slave()
+    {
+
     }
 
     public void init(HardwareMap ahwmap)
@@ -87,7 +88,7 @@ public class Slave {
         }
         catch (Exception e)
         {
-            status += "\nHigher Gearbox motor not mapping";
+            status += "\nTop Gearbox motor not mapping";
         }
 
         //ARM MOTOR

@@ -35,6 +35,7 @@ public class DriverMode extends OpMode
     @Override
     public void init()
     {
+        slave.init(hardwareMap);
         telemetry.addLine("RUNNING");
         telemetry.update();
     }
@@ -48,6 +49,15 @@ public class DriverMode extends OpMode
         telemetry.addLine(slave.getStatus());
         if(slave.getStatus().equals(""))
             telemetry.addData("Status", "WORKING");
+        telemetry.addData("FrontL", slave.frontL);
+        telemetry.addData("FrontR", slave.frontR);
+        telemetry.addData("BackL", slave.backL);
+        telemetry.addData("BackR", slave.backR);
+        telemetry.addData("Arm Motor", slave.armUaD);
+        telemetry.addData("Latch Up", slave.latchUp);
+        telemetry.addData("Latch Down", slave.latchDown);
+        telemetry.addData("Intake Servo", slave.armIntake);
+        telemetry.addData("Extend Servo", slave.armFaB);
         telemetry.update();
     }
 
@@ -76,6 +86,7 @@ public class DriverMode extends OpMode
         double y = gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
         double rTrig = gamepad1.right_trigger;
+        double lTrig = gamepad1.left_trigger;
         boolean rBump = gamepad1.right_bumper;
         boolean lBump = gamepad1.left_bumper;
         double yRight = gamepad1.right_stick_y;
@@ -83,6 +94,8 @@ public class DriverMode extends OpMode
 
         boolean yButton = gamepad1.y;
         boolean aButton = gamepad1.a;
+        boolean bButton = gamepad1.b;
+        boolean xButton = gamepad1.x;
 
         //For movement and rotating
         boolean slow = gamepad1.back;
@@ -172,10 +185,10 @@ public class DriverMode extends OpMode
         }
 
         //ARM MOVEMENT
-        if(rTrig > 0)
-            slave.armUaD.setPower(1);
-        else if(rTrig > 0)
-            slave.armUaD.setPower(-1);
+        if(bButton)
+            slave.armUaD.setPower(0.3);
+        else if(xButton)
+            slave.armUaD.setPower(-0.2);
         else
             slave.armUaD.setPower(0);
 
@@ -200,12 +213,7 @@ public class DriverMode extends OpMode
             slave.latchUp.setPower(1.0);
             slave.latchDown.setPower(1.0);
         }
-        else
-        {
-            slave.latchUp.setPower(0);
-            slave.latchDown.setPower(0);
-        }
-        if(lBump)
+        else if(lBump)
         {
             slave.latchUp.setPower(-1.0);
             slave.latchDown.setPower(-1.0);

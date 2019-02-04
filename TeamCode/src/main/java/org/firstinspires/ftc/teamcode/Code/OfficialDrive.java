@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.Code;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -64,7 +65,7 @@ public class OfficialDrive extends OpMode
         double rTrig2 = gamepad2.right_trigger;
         double lTrig2 = gamepad2.left_trigger;
 
-        telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
+        telemetry.addData("Status:","x = " + x + " ,y =  " + y);
         telemetry.update();
         double theta = Math.atan(y/x);
         String compare = "-0.0";
@@ -111,9 +112,7 @@ public class OfficialDrive extends OpMode
 
         double rad = Math.sqrt(x*x + y*y);
         if(rad > 1)
-        {
             rad = 1;
-        }
         double v1 = rad*(-1*Math.sin(theta + Math.PI/4));
         double v2 = rad*Math.cos(theta + Math.PI/4);
         telemetry.addData("v1 = " + v1, " v2 = " + v2);
@@ -156,9 +155,9 @@ public class OfficialDrive extends OpMode
         else
             slave.armFaB.setPosition(0);
         if (yR2 > 0)
-            slave.armUaD.setPower(0.35);
-        else if(yR2 <0)
-            slave.armUaD.setPower(-.45);
+            slave.armUaD.setPower(1);
+        else if(yR2 < 0)
+            slave.armUaD.setPower(-1);
         else
             slave.armUaD.setPower(0);
 
