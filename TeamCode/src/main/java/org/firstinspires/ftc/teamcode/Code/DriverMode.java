@@ -46,8 +46,16 @@ public class DriverMode extends OpMode
     public void init_loop()
     {
         telemetry.addLine(slave.getStatus());
-        if(slave.getStatus().equals(""))
-            telemetry.addData("Status", "WORKING");
+        //if(slave.getStatus().equals(""))
+          //  telemetry.addData("Status", "WORKING");
+        telemetry.addData("Front L", slave.frontL);
+        telemetry.addData("Front R", slave.frontR);
+        telemetry.addData("Back L", slave.backL);
+        telemetry.addData("Back R", slave.backR);
+        telemetry.addData("Arm", slave.armUaD);
+        telemetry.addData("SERVO intake", slave.armIntake);
+        telemetry.addData("SERVO extend", slave.armFaB);
+        telemetry.addLine("I UPLOADED CODE");
         telemetry.update();
     }
 
@@ -76,6 +84,7 @@ public class DriverMode extends OpMode
         double y = gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
         double rTrig = gamepad1.right_trigger;
+        double lTrig = gamepad1.left_trigger;
         boolean rBump = gamepad1.right_bumper;
         boolean lBump = gamepad1.left_bumper;
         double yRight = gamepad1.right_stick_y;
@@ -174,7 +183,7 @@ public class DriverMode extends OpMode
         //ARM MOVEMENT
         if(rTrig > 0)
             slave.armUaD.setPower(1);
-        else if(rTrig > 0)
+        else if(lTrig > 0)
             slave.armUaD.setPower(-1);
         else
             slave.armUaD.setPower(0);
@@ -200,12 +209,7 @@ public class DriverMode extends OpMode
             slave.latchUp.setPower(1.0);
             slave.latchDown.setPower(1.0);
         }
-        else
-        {
-            slave.latchUp.setPower(0);
-            slave.latchDown.setPower(0);
-        }
-        if(lBump)
+        else if(lBump)
         {
             slave.latchUp.setPower(-1.0);
             slave.latchDown.setPower(-1.0);
