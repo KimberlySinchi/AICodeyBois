@@ -5,12 +5,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Helpers.Slave;
+import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
 
 @TeleOp(name = "Drive Encoders", group = "TeleOp")
 
 public class DriverModeEncoders extends OpMode
 {
-    private Slave slave = new Slave();
+    private SlaveAuto slave = new SlaveAuto();
 
     @Override
     public void init()
@@ -57,7 +58,10 @@ public class DriverModeEncoders extends OpMode
         //For arm extension and vertical movement as well as latch
         double yR2 = gamepad2.right_stick_y;
         telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
+        encoderValues();
+        encoderAvg();
         telemetry.update();
+
 
         //Rotate right
         if(rightPress != 0)
@@ -66,7 +70,7 @@ public class DriverModeEncoders extends OpMode
             slave.frontR.setPower(-rightPress);
             slave.backR.setPower(-rightPress);
             slave.backL.setPower(-rightPress);
-            encoderValues();
+
         }
         //Rotate left
         else if(leftPress != 0)
@@ -75,7 +79,7 @@ public class DriverModeEncoders extends OpMode
             slave.frontR.setPower(-leftPress);
             slave.backR.setPower(-leftPress);
             slave.backL.setPower(-leftPress);
-            encoderValues();
+            //encoderValues();
         }
         else if(y < 0)
         {
@@ -83,8 +87,8 @@ public class DriverModeEncoders extends OpMode
             slave.frontR.setPower(-y);
             slave.backR.setPower(-y);
             slave.backL.setPower(y);
-            encoderValues();
-            encoderAvg();
+            //encoderValues();
+            //encoderAvg();
         }
         else if(y > 0)
         {
@@ -92,8 +96,8 @@ public class DriverModeEncoders extends OpMode
             slave.frontR.setPower(-y);
             slave.backR.setPower(-y);
             slave.backL.setPower(y);
-            encoderValues();
-            encoderAvg();
+            //encoderValues();
+            //encoderAvg();
         }
         else if(x < 0)
         {
@@ -101,8 +105,8 @@ public class DriverModeEncoders extends OpMode
             slave.frontR.setPower(-x);
             slave.backL.setPower(x);
             slave.backR.setPower(x);
-            encoderValues();
-            encoderAvg();
+            //encoderValues();
+            //encoderAvg();
         }
         else if(x > 0)
         {
@@ -110,8 +114,8 @@ public class DriverModeEncoders extends OpMode
             slave.frontR.setPower(-x);
             slave.backL.setPower(x);
             slave.backR.setPower(x);
-            encoderValues();
-            encoderAvg();
+            //encoderValues();
+            //encoderAvg();
         }
         else
         {
@@ -119,8 +123,8 @@ public class DriverModeEncoders extends OpMode
             slave.frontR.setPower(0);
             slave.backR.setPower(0);
             slave.backL.setPower(0);
-            encoderValues();
-            encoderAvg();
+            //encoderValues();
+            //encoderAvg();
         }
 
         /*SERVOS
@@ -176,12 +180,11 @@ public class DriverModeEncoders extends OpMode
         telemetry.addLine("" + slave.frontR.getCurrentPosition());
         telemetry.addLine("" + slave.backL.getCurrentPosition());
         telemetry.addLine("" + slave.backR.getCurrentPosition());
-        telemetry.update();
     }
     public void encoderAvg()
     {
-        int average = (slave.frontL.getCurrentPosition() + slave.frontR.getCurrentPosition() + slave.backL.getCurrentPosition() + slave.backR.getCurrentPosition())/4;
-        telemetry.addData("Encoder Average:", average);
-        telemetry.update();
+        int sum = Math.abs(slave.frontL.getCurrentPosition()) + Math.abs(slave.frontR.getCurrentPosition()) + Math.abs(slave.backL.getCurrentPosition()) + Math.abs(slave.backR.getCurrentPosition());
+        int average = sum/4;
+        telemetry.addData("Encoder Average", average);
     }
 }

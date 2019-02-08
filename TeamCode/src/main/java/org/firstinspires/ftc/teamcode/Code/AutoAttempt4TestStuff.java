@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Code;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
 import java.util.List;
 
 @Autonomous(name = "test one motor encoder", group = "Slave")
+@Disabled
 
 public class AutoAttempt4TestStuff extends LinearOpMode {
     private SlaveAuto slave = new SlaveAuto();

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Code;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Autonomous(name = "iNeedThisWork", group = "Slave") //unfinished class i was tired af
 
+
 public class AutoAttempt5 extends LinearOpMode {
     private SlaveAuto slave = new SlaveAuto();
     private ElapsedTime runtime = new ElapsedTime();
@@ -26,15 +28,15 @@ public class AutoAttempt5 extends LinearOpMode {
 
     static final double SPEED = 0.6;
 
-    private static final int COUNTS_PER_MOTOR_REV = 1440;
-    private static final double DRIVE_GEAR_REDUCTION = 2.0; //This value has yet to be discovered
+    private static final int COUNTS_PER_MOTOR_REV = 1680;
+    private static final double DRIVE_GEAR_REDUCTION = 1.0; //This value has yet to be discovered
 
     private static final double WHEEL_DIAMETER_INCHES = 3.78;
     private static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
     private static final double HOLONOMIC_COMPENSATION_FACTOR = (Math.sin(45) * WHEEL_DIAMETER_INCHES * 3.1415) / (WHEEL_DIAMETER_INCHES * 3.1415);
 
-    private static final double ROBOT_DIAMETER_INCHES = 17.5;
+    private static final double ROBOT_DIAMETER_INCHES = 23;
     static final double COUNTS_PER_NINETY_DEG = (3.1415 * ROBOT_DIAMETER_INCHES / 4) * COUNTS_PER_INCH;
 
     private static final double DRIVE_SPEED = 0.6;
@@ -75,7 +77,7 @@ public class AutoAttempt5 extends LinearOpMode {
         runtime.reset();
 
         //Finding the position of the gold mineral
-        if (opModeIsActive()) {
+        if (opModeIsActive()) {/*
             while (opModeIsActive() && runtime.seconds() < 10 && detect) {
                 if (tfod != null) {
                     // getUpdatedRecognitions() will return null if no new information is available since
@@ -164,10 +166,11 @@ public class AutoAttempt5 extends LinearOpMode {
                         telemetry.update();
                     }
                 }
-            }
-            forwardE((int) COUNTS_PER_INCH * 51);
+            }*/
+            /*forwardE((int) COUNTS_PER_INCH * 51);
             backwardE((int) COUNTS_PER_INCH * 51);
-            rotateRightE(rotVal);
+            rotateRightE(rotVal);*/
+            rotateRightE((int)COUNTS_PER_NINETY_DEG);
 
         }
         if (tfod != null) {

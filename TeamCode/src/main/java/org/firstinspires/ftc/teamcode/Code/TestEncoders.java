@@ -30,6 +30,7 @@
 package org.firstinspires.ftc.teamcode.Code;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -48,6 +49,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  */
 
 @Autonomous(name="Encoder Movements", group="Linear Opmode")
+@Disabled
 public class TestEncoders extends LinearOpMode {
 
     private DcMotor frontLeft;

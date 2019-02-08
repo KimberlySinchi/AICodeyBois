@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.Helpers.Slave;
+import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class AutoAttemptEncoders extends LinearOpMode
 {
-    private Slave slave = new Slave();
+    private SlaveAuto slave = new SlaveAuto();
     private ElapsedTime runtime = new ElapsedTime();
     static final double SPEED = 0.6;
     /**
@@ -69,7 +70,7 @@ public class AutoAttemptEncoders extends LinearOpMode
                     // getUpdatedRecognitions() will return null if no new information is available since
                     // the last time that call was made.
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    rotateLeftP(0.1);
+                    rotateLeftP(0.15);
                     if (updatedRecognitions != null)
                     {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
@@ -91,7 +92,7 @@ public class AutoAttemptEncoders extends LinearOpMode
                                         goldMineralXR = (int) r.getRight();
                                         goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
                                         aligned = isAligned(goldMineralCent, 640-125, 640+125);
-                                        rotateLeftP(0.1);
+                                        rotateLeftP(0.15);
                                         telemetry.addLine("Rotating left");
                                         telemetry.addLine("Aligned: " + aligned);
                                         if(aligned)
@@ -104,14 +105,26 @@ public class AutoAttemptEncoders extends LinearOpMode
                         telemetry.addLine("Gold Center x (" + goldMineralCent + ")");
                         telemetry.addData("Position of Gold", pos);
                         telemetry.addData("Gold Mineral Aligned", aligned);
+                        telemetry.addData("Front L", slave.frontL.getCurrentPosition());
+                        telemetry.addData("Front R", slave.frontR.getCurrentPosition());
+                        telemetry.addData("Back L", slave.backL.getCurrentPosition());
+                        telemetry.addData("Back R", slave.backR.getCurrentPosition());
                         telemetry.update();
                     }
                 }
             }
             int rotateBackTicks = slave.frontL.getCurrentPosition();
-            forwardE(2880);
-            backwardE(2880);
+            forwardE(2950);
+            backwardE(2950);
             rotateRightE(rotateBackTicks);
+            rotateLeftE(2105); //Supposed to be 90 degrees
+            forwardE(2330);
+            leftE(2760);
+            rotateLeftE(4255);
+            backwardE(2500);
+            rotateRightE(905);
+            backwardE(1700);
+            forwardE(5300);
             sleep(1000);
         }
         if (tfod != null)
@@ -198,6 +211,54 @@ public class AutoAttemptEncoders extends LinearOpMode
         slave.frontR.setTargetPosition(-ticks);
         slave.backL.setTargetPosition(ticks);
         slave.backR.setTargetPosition(-ticks);
+
+        power();
+
+        while (opModeIsActive() && slave.frontL.isBusy())
+        {
+            telemetry.addLine("" + slave.frontL.getCurrentPosition());
+            telemetry.addLine("" + slave.frontR.getCurrentPosition());
+            telemetry.addLine("" + slave.backL.getCurrentPosition());
+            telemetry.addLine("" + slave.backR.getCurrentPosition());
+            telemetry.addData("Moving Backward", ticks);
+            telemetry.update();
+        }
+        nStop();
+    }
+    public void leftE(int ticks)
+    {
+        //Sets encoder values to 0 and sets the motors in RUN_TO_POSITION mode
+        encodeResetAndRun();
+
+        //Sets the target encoder value to reach
+        slave.frontL.setTargetPosition(ticks);
+        slave.frontR.setTargetPosition(ticks);
+        slave.backL.setTargetPosition(-ticks);
+        slave.backR.setTargetPosition(-ticks);
+
+        power();
+
+        while (opModeIsActive() && slave.frontL.isBusy())
+        {
+            telemetry.addLine("" + slave.frontL.getCurrentPosition());
+            telemetry.addLine("" + slave.frontR.getCurrentPosition());
+            telemetry.addLine("" + slave.backL.getCurrentPosition());
+            telemetry.addLine("" + slave.backR.getCurrentPosition());
+            telemetry.addData("Moving Backward", ticks);
+            telemetry.update();
+        }
+        nStop();
+    }
+    public void rightE(int ticks)
+    {
+        //Sets encoder values to 0 and sets the motors in RUN_TO_POSITION mode
+        encodeResetAndRun();
+
+        //Sets the target encoder value to reach
+        slave.frontL.setTargetPosition(-ticks);
+        slave.frontR.setTargetPosition(-ticks);
+        slave.backL.setTargetPosition(ticks);
+        slave.backR.setTargetPosition(ticks);
 
         power();
 
