@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.Helpers.Slave;
+import org.firstinspires.ftc.teamcode.Helpers.SlaveOfficial;
 
 /**
  * UPDATE THIS SINCE WE CHANGED THE SLAVE CLASS
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Helpers.Slave;
 @TeleOp(name = "Official Drive")
 public class OfficialDrive extends OpMode
 {
-    private Slave slave = new Slave();
+    private SlaveOfficial slave = new SlaveOfficial();
 
     @Override
     public void init()
@@ -56,14 +57,41 @@ public class OfficialDrive extends OpMode
     @Override
     public void loop()
     {
-        double rightPress = gamepad1.right_trigger;
-        double leftPress = -gamepad1.left_trigger;
-        boolean dPadUp = gamepad2.dpad_up;
-        boolean dPadDown = gamepad2.dpad_down;
-
-        //For movement and rotating
-        double y = gamepad1.left_stick_y;
+        double SPEED = 0.3;
+        /**
+         * REX'S CONTROLS
+         */
+        //For movement INITIALLY
         double x = gamepad1.left_stick_x;
+        double y = gamepad1.left_stick_y;
+
+        //For latch up and down movement
+        boolean aButton = gamepad1.a;
+        boolean bButton = gamepad1.b;
+
+        //For switching modes
+        boolean xButton = gamepad1.x;
+
+        //For movement AFTER THE SWITCH
+        boolean dPadUp = gamepad1.dpad_up;
+        boolean dPadRight = gamepad1.dpad_right;
+        boolean dPadDown = gamepad1.dpad_down;
+        boolean dPadLeft = gamepad1.dpad_left;
+
+        /**
+         * ELIZABETH'S CONTROLS
+         */
+
+        //Rotating the robot
+        double leftPress = -gamepad1.left_trigger;
+        double rightPress = gamepad1.right_trigger;
+
+        boolean dPadUp2 = gamepad2.dpad_up;
+        boolean dPadDown2 = gamepad2.dpad_down;
+
+
+
+        //
 
         //For arm extension and vertical movement as well as latch
         double x2 = gamepad2.left_stick_x;
@@ -79,7 +107,7 @@ public class OfficialDrive extends OpMode
         boolean rBump = gamepad1.right_bumper;
         boolean lBump = gamepad1.left_bumper;
         boolean yButton = gamepad1.y;
-        boolean aButton = gamepad1.a;
+
 
         telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
         telemetry.update();
@@ -135,37 +163,141 @@ public class OfficialDrive extends OpMode
         double v2 = rad*Math.cos(theta + Math.PI/4);
         telemetry.addData("v1 = " + v1, " v2 = " + v2);
 
-        //Rotate right
-        if(rightPress != 0)
+        /**
+         * REX'S CODE
+         */
+        if(gamepad1.x) //SWITCH MODES -----------
         {
-            slave.frontL.setPower(-rightPress);
-            slave.frontR.setPower(-rightPress);
-            slave.backR.setPower(-rightPress);
-            slave.backL.setPower(-rightPress);
+            //ROTATE RIGHT ----------
+            if(rightPress != 0)
+            {
+                slave.frontL.setPower(-rightPress);
+                slave.frontR.setPower(-rightPress);
+                slave.backR.setPower(-rightPress);
+                slave.backL.setPower(-rightPress);
+
+            }
+            //ROTATE LEFT --------------
+            else if(leftPress != 0)
+            {
+                slave.frontL.setPower(-leftPress);
+                slave.frontR.setPower(-leftPress);
+                slave.backR.setPower(-leftPress);
+                slave.backL.setPower(-leftPress);
+            }
+            //FORWARDS --------------
+            else if(dPadUp)
+            {
+                slave.frontL.setPower(SPEED);
+                slave.frontR.setPower(SPEED);
+                slave.backL.setPower(-SPEED);
+                slave.backR.setPower(-SPEED);
+                /*FORWARD
+                slave.frontL.setPower(-SPEED);
+                slave.frontR.setPower(SPEED);
+                slave.backR.setPower(SPEED);
+                slave.backL.setPower(-SPEED);*/
+            }
+            //BACKWARDS -----------------
+            else if(dPadDown)
+            {
+                slave.frontL.setPower(-SPEED);
+                slave.frontR.setPower(-SPEED);
+                slave.backL.setPower(SPEED);
+                slave.backR.setPower(SPEED);
+                /*BACKWARDS
+                slave.frontL.setPower(SPEED);
+                slave.frontR.setPower(-SPEED);
+                slave.backR.setPower(-SPEED);
+                slave.backL.setPower(SPEED);*/
+            }
+            //LEFT ---------------
+            else if(dPadLeft)
+            {
+                slave.frontL.setPower(SPEED);
+                slave.frontR.setPower(-SPEED);
+                slave.backR.setPower(-SPEED);
+                slave.backL.setPower(SPEED);
+                /*LEFT
+                slave.frontL.setPower(SPEED);
+                slave.frontR.setPower(SPEED);
+                slave.backL.setPower(-SPEED);
+                slave.backR.setPower(-SPEED);*/
+            }
+            //RIGHT ----------------
+            else if(dPadRight)
+            {
+                slave.frontL.setPower(-SPEED);
+                slave.frontR.setPower(SPEED);
+                slave.backR.setPower(SPEED);
+                slave.backL.setPower(-SPEED);
+                /*RIGHT
+                slave.frontL.setPower(-SPEED);
+                slave.frontR.setPower(-SPEED);
+                slave.backL.setPower(SPEED);
+                slave.backR.setPower(SPEED);*/
+            }
+            else
+            {
+                slave.frontL.setPower(0);
+                slave.frontR.setPower(0);
+                slave.backR.setPower(0);
+                slave.backL.setPower(0);
+            }
         }
-        //Rotate left
-        else if(leftPress != 0)
+        else //SWITCH MODES ----------
         {
-            slave.frontL.setPower(-leftPress);
-            slave.frontR.setPower(-leftPress);
-            slave.backR.setPower(-leftPress);
-            slave.backL.setPower(-leftPress);
+            //Rotate right
+            if(rightPress != 0)
+            {
+                slave.frontL.setPower(-rightPress);
+                slave.frontR.setPower(-rightPress);
+                slave.backR.setPower(-rightPress);
+                slave.backL.setPower(-rightPress);
+            }
+            //Rotate left
+            else if(leftPress != 0)
+            {
+                slave.frontL.setPower(-leftPress);
+                slave.frontR.setPower(-leftPress);
+                slave.backR.setPower(-leftPress);
+                slave.backL.setPower(-leftPress);
+            }
+            else if(x==0 && y==0)
+            {
+                slave.frontL.setPower(0);
+                slave.frontR.setPower(0);
+                slave.backR.setPower(0);
+                slave.backL.setPower(0);
+            }
+            else
+            {
+                slave.frontL.setPower(-v2);
+                slave.frontR.setPower(v1);
+                slave.backR.setPower(v2);
+                slave.backL.setPower(-v1);
+            }
         }
-        else if(x==0 && y==0)
+        if(aButton) //LATCH ------------
         {
-            slave.frontL.setPower(0);
-            slave.frontR.setPower(0);
-            slave.backR.setPower(0);
-            slave.backL.setPower(0);
+            slave.latchUp.setPower(1);
+            slave.latchDown.setPower(1);
+        }
+        else if(bButton)
+        {
+            slave.latchUp.setPower(-1);
+            slave.latchDown.setPower(-1);
         }
         else
         {
-            slave.frontL.setPower(-v2);
-            slave.frontR.setPower(v1);
-            slave.backR.setPower(v2);
-            slave.backL.setPower(-v1);
+            slave.latchUp.setPower(0);
+            slave.latchDown.setPower(0);
         }
-        //ARM MOVEMENT
+
+        /**
+         * ELIZABETH'S CODE
+         */
+        /*ARM MOVEMENT
         if(yButton)
             slave.armFaB.setPosition(1);
         else if(aButton)
@@ -202,7 +334,7 @@ public class OfficialDrive extends OpMode
         {
             slave.latchUp.setPower(0);
             slave.latchDown.setPower(0);
-        }
+        }*/
     }
 
     /*

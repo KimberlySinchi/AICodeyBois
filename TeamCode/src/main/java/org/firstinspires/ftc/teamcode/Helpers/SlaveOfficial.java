@@ -1,11 +1,10 @@
 package org.firstinspires.ftc.teamcode.Helpers;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-public class Slave
+public class SlaveOfficial
 {
     /* Declare OpMode members. */
     public DcMotor frontL;
@@ -22,7 +21,7 @@ public class Slave
 
     HardwareMap hwmap = null; //Need a reference to hardware map because otherwise, the code will think this is an opmode to use right now
 
-    public Slave()
+    public SlaveOfficial()
     {
 
     }
@@ -34,7 +33,7 @@ public class Slave
         //4 MOVEMENT MOTORS
         try
         {
-            frontL = hwmap.get(DcMotor.class, "DC4");
+            frontL = hwmap.get(DcMotor.class, "DC3");
             frontL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         catch (Exception e)
@@ -43,7 +42,7 @@ public class Slave
         }
         try
         {
-            frontR = hwmap.get(DcMotor.class, "DC1");
+            frontR = hwmap.get(DcMotor.class, "DC4");
             frontR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         catch (Exception e)
@@ -52,7 +51,7 @@ public class Slave
         }
         try
         {
-            backR = hwmap.get(DcMotor.class, "DC2");
+            backR = hwmap.get(DcMotor.class, "DC1");
             backR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         catch (Exception e)
@@ -61,7 +60,7 @@ public class Slave
         }
         try
         {
-            backL = hwmap.get(DcMotor.class, "DC3");
+            backL = hwmap.get(DcMotor.class, "DC2");
             backL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
         catch (Exception e)

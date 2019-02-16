@@ -83,26 +83,38 @@ public class DriverModeAuto extends OpMode {
         double x = gamepad1.left_stick_x;
         double yRight = gamepad1.right_stick_y;
         double xLeft = gamepad1.right_stick_x;
+
+        boolean rBump = gamepad1.right_bumper;
+        boolean lBump = gamepad1.left_bumper;
         telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
         telemetry.update();
 
-        if(yRight>0)
-            slave.latch.setPower(-.9);
-        else if(yRight<0)
-            slave.latch.setPower(.9);
+        if(rBump)
+        {
+            slave.latchUp.setPower(1.0);
+            slave.latchDown.setPower(1.0);
+        }
+        else if(lBump)
+        {
+            slave.latchUp.setPower(-1.0);
+            slave.latchDown.setPower(-1.0);
+        }
         else
-            slave.latch.setPower(0);
-        telemetry.addData("Latch Pos: ", slave.latch.getCurrentPosition());
+        {
+            slave.latchUp.setPower(0);
+            slave.latchDown.setPower(0);
+        }
+        telemetry.addData("Latch Pos: ", slave.latchUp.getCurrentPosition());
         telemetry.update();
 
         if(resetEncod)
-            slave.latch.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            slave.latchUp.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         else
-            slave.latch.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            slave.latchUp.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         if(resetEncod2)
-            slave.latch.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            slave.latchUp.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         else
-            slave.latch.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            slave.latchUp.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 
     }

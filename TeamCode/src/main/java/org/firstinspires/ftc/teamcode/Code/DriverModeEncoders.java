@@ -49,11 +49,15 @@ public class DriverModeEncoders extends OpMode
         double y2 = gamepad2.left_stick_y;
         boolean dPadUp = gamepad1.dpad_up;
         boolean dPadDown = gamepad1.dpad_down;
+        boolean rBump = gamepad1.right_bumper;
+        boolean lBump = gamepad1.left_bumper;
+        boolean bButton = gamepad1.b;
+        boolean xButton = gamepad1.x;
 
         double y = gamepad1.left_stick_y;
         double x = gamepad1.left_stick_x;
         double yRight = gamepad1.right_stick_y;
-        double xLeft = gamepad1.right_stick_x;
+        double xRight = gamepad1.right_stick_x;
 
         //For arm extension and vertical movement as well as latch
         double yR2 = gamepad2.right_stick_y;
@@ -63,6 +67,7 @@ public class DriverModeEncoders extends OpMode
         telemetry.update();
 
 
+        //ROTATION ---------------
         //Rotate right
         if(rightPress != 0)
         {
@@ -79,43 +84,38 @@ public class DriverModeEncoders extends OpMode
             slave.frontR.setPower(-leftPress);
             slave.backR.setPower(-leftPress);
             slave.backL.setPower(-leftPress);
-            //encoderValues();
         }
+        //FORWARDS --------------
         else if(y < 0)
         {
             slave.frontL.setPower(y);
             slave.frontR.setPower(-y);
             slave.backR.setPower(-y);
             slave.backL.setPower(y);
-            //encoderValues();
-            //encoderAvg();
         }
+        //BACKWARDS -----------------
         else if(y > 0)
         {
             slave.frontL.setPower(y);
             slave.frontR.setPower(-y);
             slave.backR.setPower(-y);
             slave.backL.setPower(y);
-            //encoderValues();
-            //encoderAvg();
         }
+        //LEFT ---------------
         else if(x < 0)
         {
             slave.frontL.setPower(-x);
             slave.frontR.setPower(-x);
             slave.backL.setPower(x);
             slave.backR.setPower(x);
-            //encoderValues();
-            //encoderAvg();
         }
-        else if(x > 0)
+        //RIGHT ----------------
+        else if(x > 0.5)
         {
             slave.frontL.setPower(-x);
             slave.frontR.setPower(-x);
             slave.backL.setPower(x);
             slave.backR.setPower(x);
-            //encoderValues();
-            //encoderAvg();
         }
         else
         {
@@ -123,8 +123,30 @@ public class DriverModeEncoders extends OpMode
             slave.frontR.setPower(0);
             slave.backR.setPower(0);
             slave.backL.setPower(0);
-            //encoderValues();
-            //encoderAvg();
+        }
+        //QUADRANT ONE NW
+        if(yRight < 0 && xRight < 0)
+        {
+            slave.backL.setPower(yRight);
+            slave.frontR.setPower(-yRight);
+        }
+        //QUADRANT TWO NE
+        else if(yRight < 0 && xRight > 0)
+        {
+            slave.frontL.setPower(-xRight);
+            slave.backR.setPower(xRight);
+        }
+        //QUADRANT THREE SE
+        else if(yRight > 0 && xRight > 0)
+        {
+            slave.backL.setPower(xRight);
+            slave.frontR.setPower(-xRight);
+        }
+        //QUADRANT FOUR SW
+        else if(yRight > 0 && xRight < 0)
+        {
+            slave.frontL.setPower(yRight);
+            slave.backR.setPower(-yRight);
         }
 
         /*SERVOS
@@ -133,15 +155,31 @@ public class DriverModeEncoders extends OpMode
         else if(dPadDown)
             slave.armIntake.setPosition(0);
         else
-            slave.armIntake.setPosition(0.5);
+            slave.armIntake.setPosition(0.5);*/
 
-        if(yRight>0)
-            slave.latch.setPower(-.9);
-        else if(yRight<0)
-            slave.latch.setPower(.9);
+        if(rBump)
+        {
+            slave.latchUp.setPower(1);
+            slave.latchDown.setPower(1);
+        }
+        else if(lBump)
+        {
+            slave.latchUp.setPower(-1.0);
+            slave.latchDown.setPower(-1.0);
+        }
         else
-            slave.latch.setPower(0);
+        {
+            slave.latchUp.setPower(0);
+            slave.latchDown.setPower(0);
+        }
 
+        if(bButton)
+            slave.armUaD.setPower(0.6);
+        else if(xButton)
+            slave.armUaD.setPower(-0.6);
+        else
+            slave.armUaD.setPower(0);
+        /*
         if (y2 > 0)
             slave.armFaB.setPower(-.3);
         else if(y2 < 0)
@@ -176,10 +214,10 @@ public class DriverModeEncoders extends OpMode
     }
     public void encoderValues()
     {
-        telemetry.addLine("" + slave.frontL.getCurrentPosition());
-        telemetry.addLine("" + slave.frontR.getCurrentPosition());
-        telemetry.addLine("" + slave.backL.getCurrentPosition());
-        telemetry.addLine("" + slave.backR.getCurrentPosition());
+        telemetry.addLine("BackL: " + slave.frontL.getCurrentPosition());
+        telemetry.addLine("FrontL: " + slave.frontR.getCurrentPosition());
+        telemetry.addLine("FrontR: " + slave.backL.getCurrentPosition());
+        telemetry.addLine("BackR: " + slave.backR.getCurrentPosition());
     }
     public void encoderAvg()
     {

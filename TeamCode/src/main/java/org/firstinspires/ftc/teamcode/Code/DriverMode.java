@@ -76,6 +76,7 @@ public class DriverMode extends OpMode
     @Override
     public void loop()
     {
+        //REX'S CONTROLS
         double rightPress = gamepad1.right_trigger;
         double leftPress = -gamepad1.left_trigger;
         double x2 = gamepad2.left_stick_x;
@@ -91,12 +92,15 @@ public class DriverMode extends OpMode
         boolean lBump = gamepad1.left_bumper;
         double yRight = gamepad1.right_stick_y;
         double xLeft = gamepad1.right_stick_x;
+        double yR2 = gamepad2.left_stick_y;
 
         boolean yButton = gamepad1.y;
         boolean aButton = gamepad1.a;
         boolean bButton = gamepad1.b;
         boolean xButton = gamepad1.x;
 
+        boolean off = gamepad2.a;
+        boolean stop = false;
         //For movement and rotating
         boolean slow = gamepad1.back;
 
@@ -186,11 +190,27 @@ public class DriverMode extends OpMode
 
         //ARM MOVEMENT
         if(bButton)
-            slave.armUaD.setPower(0.3);
+            slave.armUaD.setPower(0.6);
         else if(xButton)
-            slave.armUaD.setPower(-0.2);
+            slave.armUaD.setPower(-0.6);
         else
             slave.armUaD.setPower(0);
+        /*
+        if(yButton)
+            slave.armFaB.setPosition(1);
+        else if(aButton)
+            slave.armFaB.setPosition(0);
+        else
+            slave.armFaB.setPosition(0.5);
+        if (yR2 > 0)
+            slave.armUaD.setPower(0.35);
+        else if(yR2 <0)
+            slave.armUaD.setPower(-.45);
+        else
+            slave.armUaD.setPower(0);
+         */
+
+
 
         //SERVOS
         if(dPadUp)
@@ -210,8 +230,8 @@ public class DriverMode extends OpMode
         //LATCH
         if(rBump)
         {
-            slave.latchUp.setPower(1.0);
-            slave.latchDown.setPower(1.0);
+            slave.latchUp.setPower(1);
+            slave.latchDown.setPower(1);
         }
         else if(lBump)
         {
