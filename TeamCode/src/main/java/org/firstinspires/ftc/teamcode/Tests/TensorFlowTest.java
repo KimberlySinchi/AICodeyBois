@@ -12,18 +12,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-/**
- * This 2018-2019 OpMode illustrates the basics of using the TensorFlow Object Detection API to
- * determine the position of the gold and silver minerals.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
- *
- * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
- * is explained below.
- */
 @TeleOp(name = "TensorFlowTest")
 @Disabled
+
 public class TensorFlowTest extends LinearOpMode
 {
     //Importing the models needed to identify them through the camera phone with computer vision
@@ -45,6 +36,8 @@ public class TensorFlowTest extends LinearOpMode
      * Detection engine.
      */
     private TFObjectDetector tfod;
+    private boolean aligned = false;
+    private boolean detect = true;
 
     @Override
     public void runOpMode()
@@ -53,11 +46,6 @@ public class TensorFlowTest extends LinearOpMode
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
-
-        if (ClassFactory.getInstance().canCreateTFObjectDetector())
-            initTfod();
-        else
-            telemetry.addData("Sorry!", "This device is not compatible with TFOD");
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start tracking");
@@ -83,31 +71,60 @@ public class TensorFlowTest extends LinearOpMode
                     {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
                         int goldMineralX = -1;
-                        int goldY = -1;
-
-                        if(updatedRecognitions.size()>=1)
+                        int goldMineralXR = -1;
+                        int goldMineralCent = -1;
+                        int leftRangeX = (1280 / 2) - 50;
+                        int rightRangeX = leftRangeX + 100;
+                        if (updatedRecognitions.size() >= 3)
                         {
-                            for(Recognition r: updatedRecognitions)
+                            for (Recognition r : updatedRecognitions)
                             {
                                 if (r.getLabel().equals(LABEL_GOLD_MINERAL))
                                 {
                                     goldMineralX = (int) r.getLeft();
-                                    goldY = (int)r.getTop();
+                                    goldMineralXR = (int) r.getRight();
+                                    goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
+                                    aligned = isAligned(goldMineralCent, 640 - 125, 640 + 125);
+                                    if (aligned)
+                                    {
+                                        pos = 0;
+                                    }
+                                    if (r.getLeft() < 640 - 125)
+                                    {
+                                        pos = -1;
+                                        telemetry.addLine("LEFT");
+                                        telemetry.update();
+                                    }
+                                    else if (r.getLeft() > 640 + 125)
+                                    {
+                                        pos = 1;
+                                        telemetry.addLine("RIGHT");
+                                        telemetry.update();
+                                    }
+                                    else
+                                    {
+                                        pos = 0;
+                                        telemetry.addLine("MIDDLE");
+                                        telemetry.update();
+                                    }
                                 }
                             }
                         }
                         if (updatedRecognitions.size() == 3)
                         {
                             goldMineralX = -1;
-                            goldY = -1;
+                            goldMineralXR = -1;
+                            goldMineralCent = -1;
                             int silverMineral1X = -1;
                             int silverMineral2X = -1;
                             for (Recognition recognition : updatedRecognitions)
                             {
+                                //Getting coordinates of the mineral (leftMost pixel location of the box created around them)
                                 if (recognition.getLabel().equals(LABEL_GOLD_MINERAL))
                                 {
                                     goldMineralX = (int) recognition.getLeft();
-                                    goldY = (int)recognition.getTop();
+                                    goldMineralXR = (int) recognition.getRight();
+                                    goldMineralCent = (goldMineralX + goldMineralXR) / 2;
                                 }
                                 else if (silverMineral1X == -1)
                                     silverMineral1X = (int) recognition.getLeft();
@@ -121,23 +138,62 @@ public class TensorFlowTest extends LinearOpMode
                                     telemetry.addData("Gold Mineral Position", "Left");
                                     telemetry.addLine("Left code was updated");
                                     pos = -1;
+                                    telemetry.update();
                                 }
                                 else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X)
                                 {
                                     telemetry.addData("Gold Mineral Position", "Right");
                                     telemetry.addLine("Right code was updated");
                                     pos = 1;
+                                    telemetry.update();
                                 }
-                                else
+                                else if (goldMineralX > silverMineral1X && goldMineralX < silverMineral2X ||
+                                        goldMineralX < silverMineral1X && goldMineralX > silverMineral2X)
                                 {
                                     telemetry.addData("Gold Mineral Position", "Center");
                                     telemetry.addLine("Center code was updated");
                                     pos = 0;
+                                    telemetry.update();
                                 }
                             }
                         }
-                        telemetry.addLine("Gold cor: (" + goldMineralX + ", " + goldY + ")");
-                        telemetry.update();
+                        if (updatedRecognitions.size() == 2)
+                        {
+                            int silverMineral1X = -1;
+                            int silverMineral1XR = -1;
+                            int silverMineral2X = -1;
+                            int silverMineral2XR = -1;
+                            for (Recognition recognition : updatedRecognitions)
+                            {
+                                //Getting coordinates of the mineral (leftMost pixel location of the box created around them)
+                                if (silverMineral1X == -1)
+                                    silverMineral1X = (int) recognition.getLeft();
+                                else if(silverMineral1XR == -1)
+                                    silverMineral1XR = (int) recognition.getRight();
+                                else if(silverMineral2X == -1)
+                                    silverMineral2X = (int) recognition.getLeft();
+                                else
+                                    silverMineral2XR = (int) recognition.getRight();
+                            }
+                            telemetry.addData("Silver Mineral 1 Left Coord", silverMineral1X);
+                            telemetry.addData("Silver Mineral 1 Right Coord", silverMineral1XR);
+                            telemetry.addData("Silver Mineral 2 Left Coord", silverMineral2X);
+                            telemetry.addData("Silver Mineral 2 Right Coord", silverMineral2XR);
+                            telemetry.update();
+                            if(silverMineral1XR <= 640+125 && silverMineral2XR <= 640+125)
+                            {
+                                pos = 1;
+                            }
+                            else if(silverMineral1X >= 640-125 && silverMineral2X >= 640-125)
+                            {
+                                pos = -1;
+                            }
+                            else
+                            {
+                                pos = 0;
+                            }
+                        }
+
                     }
                 }
             }
@@ -167,6 +223,13 @@ public class TensorFlowTest extends LinearOpMode
     /**
      * Initialize the Tensor Flow Object Detection engine.
      */
+    public static boolean isAligned(int cent, int rangeLeft, int rangeRight)
+    {
+        if(cent >= rangeLeft && cent <= rangeRight)
+            return true;
+        else
+            return false;
+    }
     private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());

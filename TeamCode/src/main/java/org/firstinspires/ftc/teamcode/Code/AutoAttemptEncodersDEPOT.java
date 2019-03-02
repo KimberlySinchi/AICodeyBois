@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Code;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
 import java.util.List;
 
 @Autonomous(name = "Tensor With Encoders W/O 3 DEPOT", group = "Slave")
+@Disabled
 
 public class AutoAttemptEncodersDEPOT extends LinearOpMode
 {

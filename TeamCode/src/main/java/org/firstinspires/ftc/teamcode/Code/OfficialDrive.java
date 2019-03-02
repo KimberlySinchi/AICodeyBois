@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.Code;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveOfficial;
  * UPDATE THIS SINCE WE CHANGED THE SLAVE CLASS
  */
 @TeleOp(name = "Official Drive")
+
 public class OfficialDrive extends OpMode
 {
     private SlaveOfficial slave = new SlaveOfficial();
@@ -72,6 +74,10 @@ public class OfficialDrive extends OpMode
         //For switching modes
         boolean xButton = gamepad1.x;
 
+        //Rotating the robot
+        double leftPress = -gamepad1.left_trigger;
+        double rightPress = gamepad1.right_trigger;
+
         //For movement AFTER THE SWITCH
         boolean dPadUp = gamepad1.dpad_up;
         boolean dPadRight = gamepad1.dpad_right;
@@ -81,33 +87,25 @@ public class OfficialDrive extends OpMode
         /**
          * ELIZABETH'S CONTROLS
          */
+        //For arm intake
+        boolean rBump2 = gamepad2.right_bumper;
+        boolean lBump2 = gamepad2.left_bumper;
 
-        //Rotating the robot
-        double leftPress = -gamepad1.left_trigger;
-        double rightPress = gamepad1.right_trigger;
+        //Extension and retraction of the arm
+        boolean dPadR2 = gamepad2.dpad_right;
+        boolean dPadL2 = gamepad2.dpad_left;
 
-        boolean dPadUp2 = gamepad2.dpad_up;
-        boolean dPadDown2 = gamepad2.dpad_down;
+        //Physically moving the arm up and down (away from base and towards base)
+        boolean dPadU2 = gamepad2.dpad_up;
+        boolean dPadD2 = gamepad2.dpad_down;
 
+        //GOLD and then SILVER servos
+        boolean yButton = gamepad2.y;
+        boolean xButton2 = gamepad2.x;
 
-
-        //
-
-        //For arm extension and vertical movement as well as latch
-        double x2 = gamepad2.left_stick_x;
-        double y2 = gamepad2.left_stick_y;
-        double xR2 = gamepad2.right_stick_x;
-        double yR2 = gamepad2.right_stick_y;
-        double rTrig2 = gamepad2.right_trigger;
-        double lTrig2 = gamepad2.left_trigger;
-
-        /*
-        TESTING FOR LATCH GEARBOX AND ARM MOVEMENT
-         */
-        boolean rBump = gamepad1.right_bumper;
-        boolean lBump = gamepad1.left_bumper;
-        boolean yButton = gamepad1.y;
-
+        //Closing the GOLD and then SILVER servos
+        boolean bButton2 = gamepad2.b;
+        boolean aButton2 = gamepad2.a;
 
         telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
         telemetry.update();
@@ -297,6 +295,44 @@ public class OfficialDrive extends OpMode
         /**
          * ELIZABETH'S CODE
          */
+        //ARM INTAKE -------------------
+        if(rBump2)
+            slave.armIntake.setPosition(0);
+        else if(lBump2)
+            slave.armIntake.setPosition(1);
+        else
+            slave.armIntake.setPosition(0.5);
+
+        //ARM EXTENSION -----------------
+        if(dPadR2)
+            slave.armFaB.setPosition(0);
+        else if(dPadL2)
+            slave.armFaB.setPosition(1);
+        else
+            slave.armFaB.setPosition(0.5);
+
+        //ARM UP AND DOWN
+        if(dPadU2)
+            slave.armUaD.setPower(-0.6);
+        else if(dPadD2)
+            slave.armUaD.setPower(0.6);
+        else
+            slave.armUaD.setPower(0);
+
+        //GOLD AND SILVER MINERALS ----------------
+        if(yButton)
+            slave.goldServo.setPosition(1);
+        else if(bButton2)
+            slave.goldServo.setPosition(0);
+        else
+            slave.goldServo.setPosition(0.5);
+        if(xButton2)
+            slave.silverServo.setPosition(1);
+        else if(aButton2)
+            slave.silverServo.setPosition(0);
+        else
+            slave.silverServo.setPosition(0.5);
+
         /*ARM MOVEMENT
         if(yButton)
             slave.armFaB.setPosition(1);

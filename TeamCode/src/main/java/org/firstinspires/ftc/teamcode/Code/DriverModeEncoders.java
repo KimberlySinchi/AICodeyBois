@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Code;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -64,6 +65,8 @@ public class DriverModeEncoders extends OpMode
         telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
         encoderValues();
         encoderAvg();
+        telemetry.addData("Latch Up",slave.latchUp.getCurrentPosition());
+        telemetry.addData("Arm", slave.armUaD.getCurrentPosition());
         telemetry.update();
 
 
@@ -198,10 +201,14 @@ public class DriverModeEncoders extends OpMode
             slave.frontR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             slave.backL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             slave.backR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            slave.latchUp.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             slave.frontL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             slave.frontR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             slave.backL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             slave.backR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            slave.latchUp.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            slave.armUaD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            slave.armUaD.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 

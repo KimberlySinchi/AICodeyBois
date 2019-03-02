@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Tests;
 
 import com.disnodeteam.dogecv.CameraViewDisplay;
 import com.disnodeteam.dogecv.DogeCV;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -9,6 +10,7 @@ import org.firstinspires.ftc.teamcode.Detectors.SampleAlignDetector;
 
 
 @TeleOp(name="Doge Sample Align", group="DogeCV")
+@Disabled
 
 public class SampleAlign extends OpMode
 {

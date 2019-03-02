@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.Code;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -13,14 +12,13 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
 
 import java.util.List;
 
-@Autonomous(name = "Tensor With Encoders W/O 3 CRATER", group = "Slave")
-@Disabled
+@Autonomous(name = "DEPOT Only", group = "Slave")
 
-public class AutoAttemptEncodersCRATER extends LinearOpMode
+public class DEPOTONLY extends LinearOpMode
 {
     private SlaveAuto slave = new SlaveAuto();
     private ElapsedTime runtime = new ElapsedTime();
-    static final double SPEED = 1;
+    static double SPEED = 1;
     /**
      * TENSOR FLOW INSTANCE VARIABLES (DO NOT TOUCH)
      */
@@ -32,13 +30,9 @@ public class AutoAttemptEncodersCRATER extends LinearOpMode
     private TFObjectDetector tfod;
     private int pos = -2;
     private boolean aligned = false;
-    private boolean detect = true;
+    private boolean detect = true,testing=true;
     private double rotateBack = 0.0;
-
-    private static final double SECONDS_PER_TILE = 11.106; //WE NEED TO PUT WALID'S DATA INTO THIS
-    //2.161 inches/sec
-    private static final double SECONDS_PER_360_DEG = 0.0; //WE NEED TO PUT WALID'S DATA INTO THIS
-
+    
     @Override
     public void runOpMode()
     {
@@ -46,12 +40,8 @@ public class AutoAttemptEncodersCRATER extends LinearOpMode
 
         //For convenience, we will print on the phone that the robot is ready
         telemetry.addData("Status", "Ready to run"); //Same as System.out.println();
+        telemetry.addData("Pos", pos);
         telemetry.update(); //Makes it show up on the phone
-
-        /**
-         * SETS UP DETECTOR STUFF
-         */
-        telemetry.addData("Status", "Find gold position and align ;-;");
 
         //Setup for Tensor Flow detector
         initVuforia();
@@ -64,85 +54,161 @@ public class AutoAttemptEncodersCRATER extends LinearOpMode
         //Finding the position of the gold mineral
         if(opModeIsActive())
         {
-            while (opModeIsActive() && runtime.seconds() < 10 && detect)
+            if(!testing)
             {
-                if (tfod != null)
+                leftE(5000);
+            }
+            else
+            {
+                /*
+                latchExtendE(8400);
+                SPEED = 1;
+                rightE(400);
+                SPEED = 0.6;
+                forwardE(300);
+                leftE(400);
+                backwardE(150);
+                SPEED = 1;*/
+                while (opModeIsActive() && runtime.seconds() < 10 && detect)
                 {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    rotateLeftP(0.15);
-                    if (updatedRecognitions != null)
+                    if (tfod != null)
                     {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        int goldMineralX = -1;
-                        int goldMineralXR = -1;
-                        int goldMineralCent = -1;
-                        int leftRangeX = (1280/2)-50;
-                        int rightRangeX = leftRangeX + 100;
-                        if(updatedRecognitions.size()>=1)
+                        // getUpdatedRecognitions() will return null if no new information is available since
+                        // the last time that call was made.
+                        List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                        if (updatedRecognitions != null)
                         {
-                            //first find the center mineral to orient self
-                            //if size == 2 and the element at 0 is in the center.  reset encoders
-                            //else if size == 3 and the element at 1 is in the center. reset encoders
-
-
-
-                            for(Recognition r: updatedRecognitions)
+                            telemetry.addData("# Object Detected", updatedRecognitions.size());
+                            int goldMineralX = -1;
+                            int goldMineralXR = -1;
+                            int goldMineralCent = -1;
+                            int leftRangeX = (1280 / 2) - 50;
+                            int rightRangeX = leftRangeX + 100;
+                            if (updatedRecognitions.size() > 3 || updatedRecognitions.size() < 3)
                             {
-                                if (r.getLabel().equals(LABEL_GOLD_MINERAL))
+                                for (Recognition r : updatedRecognitions)
                                 {
-                                    if(!aligned)
+                                    if (r.getLabel().equals(LABEL_GOLD_MINERAL))
                                     {
-                                        telemetry.addLine("---TRYING TO FIND GOLD---");
                                         goldMineralX = (int) r.getLeft();
                                         goldMineralXR = (int) r.getRight();
                                         goldMineralCent = (int) ((goldMineralX + goldMineralXR) / 2);
-                                        aligned = isAligned(goldMineralCent, 640-125, 640+125);
-                                        rotateLeftP(0.15);
-                                        telemetry.addLine("Rotating left");
-                                        telemetry.addLine("Aligned: " + aligned);
-                                        if(aligned)
+                                        aligned = isAligned(goldMineralCent, 640 - 125, 640 + 125);
+                                        if (aligned)
+                                        {
                                             detect = false;
+                                            telemetry.addLine("MIDDLE");
+                                            telemetry.update();
+                                            pos = 0;
+                                        }
+                                        if (r.getRight() < 640 - 125)
+                                        {
+                                            pos = -1;
+                                            telemetry.addLine("LEFT");
+                                            telemetry.update();
+                                            detect = false;
+                                        }
+                                        else if (r.getLeft() > 640 + 125)
+                                        {
+                                            pos = 1;
+                                            telemetry.addLine("RIGHT");
+                                            telemetry.update();
+                                            detect = false;
+                                        }
+                                        else
+                                        {
+                                            pos = 0;
+                                            telemetry.addLine("MIDDLE");
+                                            telemetry.update();
+                                            detect = false;
+                                        }
                                     }
                                 }
                             }
+                            else if (updatedRecognitions.size() == 3)
+                            {
+                                goldMineralX = -1;
+                                goldMineralXR = -1;
+                                goldMineralCent = -1;
+                                int silverMineral1X = -1;
+                                int silverMineral2X = -1;
+                                for (Recognition recognition : updatedRecognitions)
+                                {
+                                    //Getting coordinates of the mineral (leftMost pixel location of the box created around them)
+                                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL))
+                                    {
+                                        goldMineralX = (int) recognition.getLeft();
+                                        goldMineralXR = (int) recognition.getRight();
+                                        goldMineralCent = (goldMineralX + goldMineralXR) / 2;
+                                    }
+                                    else if (silverMineral1X == -1)
+                                        silverMineral1X = (int) recognition.getLeft();
+                                    else
+                                        silverMineral2X = (int) recognition.getLeft();
+                                }
+                                if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1)
+                                {
+                                    if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X)
+                                    {
+                                        telemetry.addData("Gold Mineral Position", "Left");
+                                        telemetry.addLine("Left code was updated");
+                                        pos = -1;
+                                        telemetry.update();
+                                        detect = false;
+                                    }
+                                    else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X)
+                                    {
+                                        telemetry.addData("Gold Mineral Position", "Right");
+                                        telemetry.addLine("Right code was updated");
+                                        pos = 1;
+                                        telemetry.update();
+                                        detect = false;
+                                    }
+                                    else if (goldMineralX > silverMineral1X && goldMineralX < silverMineral2X ||
+                                            goldMineralX < silverMineral1X && goldMineralX > silverMineral2X)
+                                    {
+                                        telemetry.addData("Gold Mineral Position", "Center");
+                                        telemetry.addLine("Center code was updated");
+                                        pos = 0;
+                                        telemetry.update();
+                                        detect = false;
+                                    }
+                                }
+                            }
+                            telemetry.addLine("Gold cords: (" + goldMineralX + " to " + goldMineralXR + ")");
+                            telemetry.addLine("Gold Center x (" + goldMineralCent + ")");
+                            telemetry.addData("Position of Gold", pos);
+                            telemetry.addData("Gold Mineral Aligned", aligned);
+                            telemetry.update();
                         }
-                        telemetry.addLine("Gold cords: (" + goldMineralX + " to " + goldMineralXR + ")");
-                        telemetry.addLine("Gold Center x (" + goldMineralCent + ")");
-                        telemetry.addData("Position of Gold", pos);
-                        telemetry.addData("Gold Mineral Aligned", aligned);
-                        telemetry.addData("Front L", slave.frontL.getCurrentPosition());
-                        telemetry.addData("Front R", slave.frontR.getCurrentPosition());
-                        telemetry.addData("Back L", slave.backL.getCurrentPosition());
-                        telemetry.addData("Back R", slave.backR.getCurrentPosition());
-                        telemetry.update();
                     }
+
+                }
+                int rotateBackTicks = slave.frontL.getCurrentPosition();
+                if (pos == 0 || pos == -2)
+                    forwardE(6000);
+                else
+                    forwardE(1500);
+                if (pos == -1)
+                {
+                    leftE(1720);
+                    forwardE(3300);
+                    rightE(1720);
+                    forwardE(1200);
+                }
+                else if (pos == 1)
+                {
+                    rightE(1720);
+                    forwardE(3300);
+                    leftE(1720);
+                    forwardE(1200);
                 }
             }
-            int rotateBackTicks = slave.frontL.getCurrentPosition();
-            forwardE(3000); //Hit mineral
-            backwardE(3000); //Go back
-            rotateRightE(rotateBackTicks); //Rotate to starting position
-            rotateLeftE(2110); //Rotate to 90 degrees, facing minerals
-            forwardE(2330); //Go & stop right before minerals
-            leftE(4200); //Move left
-            rotateLeftE(4260); //Rotate so that the back of the robot is facing the depot
-            backwardE(5200); //Head towards depot
-            forwardE(6000); //Head into crater
-            sleep(1000);
         }
         if (tfod != null)
         {
             tfod.shutdown();
         }
-        /*
-        //Stop the autonomous program
-        stop();
-        telemetry.addData("Path", "Complete");
-        telemetry.update();
-        sleep(1000);
-        */
     }
 
     public void nStop()
@@ -201,6 +267,7 @@ public class AutoAttemptEncodersCRATER extends LinearOpMode
             telemetry.addLine("" + slave.frontR.getCurrentPosition());
             telemetry.addLine("" + slave.backL.getCurrentPosition());
             telemetry.addLine("" + slave.backR.getCurrentPosition());
+            telemetry.addLine("Latch: " + slave.latchUp.getCurrentPosition());
             telemetry.addData("Moving Forward", ticks);
             telemetry.update();
         }
@@ -225,6 +292,7 @@ public class AutoAttemptEncodersCRATER extends LinearOpMode
             telemetry.addLine("" + slave.frontR.getCurrentPosition());
             telemetry.addLine("" + slave.backL.getCurrentPosition());
             telemetry.addLine("" + slave.backR.getCurrentPosition());
+            telemetry.addLine("Latch: " + slave.latchUp.getCurrentPosition());
             telemetry.addData("Moving Backward", ticks);
             telemetry.update();
         }
@@ -249,6 +317,7 @@ public class AutoAttemptEncodersCRATER extends LinearOpMode
             telemetry.addLine("" + slave.frontR.getCurrentPosition());
             telemetry.addLine("" + slave.backL.getCurrentPosition());
             telemetry.addLine("" + slave.backR.getCurrentPosition());
+            telemetry.addLine("Latch: " + slave.latchUp.getCurrentPosition());
             telemetry.addData("Moving Backward", ticks);
             telemetry.update();
         }
@@ -273,6 +342,7 @@ public class AutoAttemptEncodersCRATER extends LinearOpMode
             telemetry.addLine("" + slave.frontR.getCurrentPosition());
             telemetry.addLine("" + slave.backL.getCurrentPosition());
             telemetry.addLine("" + slave.backR.getCurrentPosition());
+            telemetry.addLine("Latch: " + slave.latchUp.getCurrentPosition());
             telemetry.addData("Moving Backward", ticks);
             telemetry.update();
         }
@@ -302,6 +372,7 @@ public class AutoAttemptEncodersCRATER extends LinearOpMode
         }
         nStop();
     }
+
     public void rotateLeftE(int ticks)
     {
         //Sets encoder values to 0 and sets the motors in RUN_TO_POSITION mode
@@ -325,6 +396,55 @@ public class AutoAttemptEncodersCRATER extends LinearOpMode
             telemetry.update();
         }
         nStop();
+    }
+    public void latchExtendE(int ticks)
+    {
+        //Sets encoder values to 0 and sets the motors in RUN_TO_POSITION mode
+        slave.latchUp.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.latchDown.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.latchUp.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.latchDown.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        //Sets the target encoder value to reach
+        slave.latchUp.setTargetPosition(ticks);
+        slave.latchDown.setTargetPosition(ticks);
+
+        slave.latchUp.setPower(1);
+        slave.latchDown.setPower(1);
+
+        while (opModeIsActive() && slave.latchUp.isBusy() && slave.latchUp.getCurrentPosition() < ticks)
+        {
+            telemetry.addLine("" + slave.latchUp.getCurrentPosition());
+            telemetry.addData("Latch Extending", ticks);
+            telemetry.addLine("latchUP status " + slave.latchUp.isBusy());
+            telemetry.update();
+        }
+        slave.latchUp.setPower(0);
+        slave.latchDown.setPower(0);
+    }
+    public void latchRetractE(int ticks)
+    {
+        //Sets encoder values to 0 and sets the motors in RUN_TO_POSITION mode
+        slave.latchUp.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.latchDown.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.latchUp.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slave.latchDown.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        //Sets the target encoder value to reach
+        slave.latchUp.setTargetPosition(-ticks);
+        slave.latchDown.setTargetPosition(-ticks);
+
+        slave.latchUp.setPower(SPEED);
+        slave.latchDown.setPower(SPEED);
+
+        while (opModeIsActive() && slave.latchUp.isBusy())
+        {
+            telemetry.addLine("" + slave.latchUp.getCurrentPosition());
+            telemetry.addData("Latch Retracting", ticks);
+            telemetry.update();
+        }
+        slave.latchUp.setPower(0);
+        slave.latchDown.setPower(0);
     }
     public void strafeNW(int ticks)
     {
@@ -413,6 +533,38 @@ public class AutoAttemptEncodersCRATER extends LinearOpMode
             telemetry.update();
         }
         nStop();
+    }
+    public void armAwayBase(int ticks)
+    {
+        slave.armUaD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.armUaD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        slave.armUaD.setTargetPosition(ticks);
+
+        slave.armUaD.setPower(0.6);
+
+        while(opModeIsActive() && slave.armUaD.isBusy())
+        {
+            telemetry.addLine("" + slave.armUaD.getCurrentPosition());
+            telemetry.addData("Moving arm away from base", ticks);
+            telemetry.update();
+        }
+    }
+    public void armTowardsBase(int ticks)
+    {
+        slave.armUaD.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slave.armUaD.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        slave.armUaD.setTargetPosition(-ticks);
+
+        slave.armUaD.setPower(0.6);
+
+        while(opModeIsActive() && slave.armUaD.isBusy())
+        {
+            telemetry.addLine("" + slave.armUaD.getCurrentPosition());
+            telemetry.addData("Moving arm towards from base", ticks);
+            telemetry.update();
+        }
     }
 
     /**
@@ -532,11 +684,5 @@ public class AutoAttemptEncodersCRATER extends LinearOpMode
             return true;
         else
             return false;
-    }
-    public int encoderAvg()
-    {
-        int sum = Math.abs(slave.frontL.getCurrentPosition()) + Math.abs(slave.frontR.getCurrentPosition()) + Math.abs(slave.backL.getCurrentPosition()) + Math.abs(slave.backR.getCurrentPosition());
-        int average = sum/4;
-        return average;
     }
 }

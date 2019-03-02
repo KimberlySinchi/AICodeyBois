@@ -210,8 +210,6 @@ public class DriverMode extends OpMode
             slave.armUaD.setPower(0);
          */
 
-
-
         //SERVOS
         if(dPadUp)
             slave.armIntake.setPosition(1);

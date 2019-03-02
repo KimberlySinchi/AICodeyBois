@@ -19,6 +19,8 @@ public class Slave
 
     public Servo armIntake;
     public Servo armFaB;
+    public Servo goldServo;
+    public Servo silverServo;
 
     HardwareMap hwmap = null; //Need a reference to hardware map because otherwise, the code will think this is an opmode to use right now
 
@@ -119,6 +121,24 @@ public class Slave
         catch (Exception e)
         {
             status += "\nArm Extension servo not mapping";
+        }
+
+        //DIVIDER SERVOS
+        try
+        {
+            goldServo = hwmap.get(Servo.class, "S3");
+        }
+        catch(Exception e)
+        {
+            status += "\nGold Divider not mapping";
+        }
+        try
+        {
+            silverServo = hwmap.get(Servo.class, "S4");
+        }
+        catch(Exception e)
+        {
+            status += "\nSilver Divider not mapping";
         }
     }
 

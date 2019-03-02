@@ -55,7 +55,7 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name = "Crater AutoAttemptEncoders", group = "Linear Opmode")
+@Autonomous(name = "Crater AutoAttemptEncodersDEPOT", group = "Linear Opmode")
 @Disabled
 public class dogeAuto5 extends LinearOpMode {
 

@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Helpers.SlaveAuto;
 import java.util.List;
 
 @Autonomous(name = "iNeedThisWork", group = "Slave") //unfinished class i was tired af
-
+@Disabled
 
 public class AutoAttempt5 extends LinearOpMode {
     private SlaveAuto slave = new SlaveAuto();

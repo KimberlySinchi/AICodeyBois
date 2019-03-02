@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 
 @TeleOp(name="Doge Sampling Order", group="DogeCV")
+@Disabled
 
 public class SamplingOrderExample extends OpMode {
     // Detector object
