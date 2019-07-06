@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Code;
+package org.firstinspires.ftc.teamcode.OfficialCode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -60,15 +60,14 @@ public class DEPOTONLY extends LinearOpMode
             }
             else
             {
-                /*
-                latchExtendE(8400);
+                latchExtendE(10600);
                 SPEED = 1;
                 rightE(400);
                 SPEED = 0.6;
                 forwardE(300);
                 leftE(400);
                 backwardE(150);
-                SPEED = 1;*/
+                SPEED = 1;
                 while (opModeIsActive() && runtime.seconds() < 10 && detect)
                 {
                     if (tfod != null)
@@ -191,18 +190,19 @@ public class DEPOTONLY extends LinearOpMode
                     forwardE(1500);
                 if (pos == -1)
                 {
-                    leftE(1720);
+                    leftE(1820);
                     forwardE(3300);
-                    rightE(1720);
+                    rightE(1820);
                     forwardE(1200);
                 }
                 else if (pos == 1)
                 {
-                    rightE(1720);
+                    rightE(1820);
                     forwardE(3300);
-                    leftE(1720);
+                    leftE(1820);
                     forwardE(1200);
                 }
+                moveMarker(2);
             }
         }
         if (tfod != null)
@@ -228,6 +228,15 @@ public class DEPOTONLY extends LinearOpMode
             slave.frontR.setPower(0);
             slave.backR.setPower(0);
         }
+    }
+    public void moveMarker(double seconds)
+    {
+        ElapsedTime timer = new ElapsedTime();
+        while(timer.seconds() <=  seconds)
+        {
+            slave.markerServo.setPosition(1);
+        }
+        slave.markerServo.setPosition(0.5);
     }
     public void encodeResetAndRun()
     {

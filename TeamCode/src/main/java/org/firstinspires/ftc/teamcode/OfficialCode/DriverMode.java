@@ -16,7 +16,7 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FO
 DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR O`THER DEALINGS IN THE SOFTWARE.
 */
-package org.firstinspires.ftc.teamcode.Code;
+package org.firstinspires.ftc.teamcode.OfficialCode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -28,7 +28,6 @@ import org.firstinspires.ftc.teamcode.Helpers.Slave;
 
 public class DriverMode extends OpMode
 {
-
     /* Declare OpMode members. */
     private Slave slave = new Slave();
 
@@ -99,10 +98,10 @@ public class DriverMode extends OpMode
         boolean bButton = gamepad1.b;
         boolean xButton = gamepad1.x;
 
-        boolean off = gamepad2.a;
-        boolean stop = false;
-        //For movement and rotating
-        boolean slow = gamepad1.back;
+        boolean dpadLeft2 = gamepad2.dpad_left;
+        boolean dpadRight2 = gamepad2.dpad_right;
+        boolean dpadUp2 = gamepad2.dpad_up;
+        boolean dpadDown2 = gamepad2.dpad_down;
 
         //For arm extension and vertical movement as well as latch
         telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
@@ -153,8 +152,8 @@ public class DriverMode extends OpMode
         double rad = Math.sqrt(x*x + y*y);
         if(rad > 1)
             rad = 1;
-        double v1 = rad*(-1*Math.sin(theta + Math.PI/4));
-        double v2 = rad*Math.cos(theta + Math.PI/4);
+        double v1 = rad*(-1*Math.sin(theta));
+        double v2 = rad*Math.cos(theta);
         telemetry.addData("v1 = " + v1, " v2 = " + v2);
 
         //Rotate right
@@ -195,34 +194,28 @@ public class DriverMode extends OpMode
             slave.armUaD.setPower(-0.6);
         else
             slave.armUaD.setPower(0);
-        /*
-        if(yButton)
-            slave.armFaB.setPosition(1);
+
+        /*if(yButton)
+            slave.armFaB.setPower(1);
         else if(aButton)
-            slave.armFaB.setPosition(0);
+            slave.armFaB.setPower(-1);
         else
-            slave.armFaB.setPosition(0.5);
-        if (yR2 > 0)
-            slave.armUaD.setPower(0.35);
-        else if(yR2 <0)
-            slave.armUaD.setPower(-.45);
+            slave.armFaB.setPower(0);*/
+       if (yR2 > 0)
+            slave.armFaB.setPower(1);//0.35
+        else if(yR2 < 0)
+            slave.armFaB.setPower(-1); //-0.45
         else
-            slave.armUaD.setPower(0);
-         */
+            slave.armFaB.setPower(0);
+
 
         //SERVOS
         if(dPadUp)
-            slave.armIntake.setPosition(1);
-        else if(dPadDown)
             slave.armIntake.setPosition(0);
+        else if(dPadDown)
+            slave.armIntake.setPosition(1);
         else
             slave.armIntake.setPosition(0.5);
-        if(yButton)
-            slave.armFaB.setPosition(1);
-        else if(aButton)
-            slave.armFaB.setPosition(0);
-        else
-            slave.armFaB.setPosition(0.5);
 
 
         //LATCH
@@ -241,6 +234,20 @@ public class DriverMode extends OpMode
             slave.latchUp.setPower(0);
             slave.latchDown.setPower(0);
         }
+
+        if(dpadLeft2)
+            slave.mineralServo.setPosition(1);
+        else if(dpadRight2)
+            slave.mineralServo.setPosition(0);
+        else
+            slave.mineralServo.setPosition(0.5);
+
+        if(dpadDown2)
+            slave.markerServo.setPosition(1);
+        else
+            slave.markerServo.setPosition(0.5);
+
+
     }
 
     /*

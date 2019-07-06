@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Code;
+package org.firstinspires.ftc.teamcode.OfficialCode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -29,9 +29,10 @@ public class CRATERONLY extends LinearOpMode
     private static final String VUFORIA_KEY = "ATMeJeb/////AAAAGaZ47DzTRUyOhcXnfJD+z89ATBWAF+fi+oOutLvXaf0YT/RPuf2mu6VJsJowCDiWiOzGMHUjXKsLBqA4Ziar76oZY/juheUactiQaY6Z3qPHnGmchAMlYuqgKErvggTuqmFca8VvTjtB6YOheJmAbllTDTaCudODpnIDkuFNTa36WCTr4L8HcCnIsB7bjF8pZoivYEBwPkfCVtfAiEpqxbyDAZgNXnuCyp6v/oi3FYZbp7JkFVorcM182+q0PVN5gIr14SKEMlDcDFDiv/sQwNeQOs5iNBd1OSkCoTe9CYbdmtE0gUXxKN2w9NqwATYC6YRJP9uoopxqmr9zkepI10peh2/RnU6pHOmR0KKRAVh8";
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
+
     private int pos = -2;
     private boolean aligned = false;
-    private boolean detect = true,testing=true;
+    private boolean detect = true, testing=true;
     private double rotateBack = 0.0;
 
     @Override
@@ -61,13 +62,13 @@ public class CRATERONLY extends LinearOpMode
             }
             else
             {
-                /*latchExtendE(8400);
+                latchExtendE(10600);
                 rightE(400);
                 SPEED = 0.6;
                 forwardE(300);
                 leftE(400);
                 backwardE(150);
-                SPEED = 1;*/
+                SPEED = 1;
                 while (opModeIsActive() && runtime.seconds() < 10 && detect)
                 {
                     if (tfod != null)
@@ -167,14 +168,15 @@ public class CRATERONLY extends LinearOpMode
                     forwardE(1500);
                 if (pos == -1)
                 {
-                    leftE(1720);
+                    leftE(1820);
                     forwardE(3300);
                 }
                 else if (pos == 1)
                 {
-                    rightE(1720);
+                    rightE(1820);
                     forwardE(3300);
                 }
+                moveMarker(2);
             }
         }
         if (tfod != null)
@@ -200,6 +202,15 @@ public class CRATERONLY extends LinearOpMode
             slave.frontR.setPower(0);
             slave.backR.setPower(0);
         }
+    }
+    public void moveMarker(double seconds)
+    {
+        ElapsedTime timer = new ElapsedTime();
+        while(timer.seconds() <=  seconds)
+        {
+            slave.markerServo.setPosition(1);
+        }
+        slave.markerServo.setPosition(0.5);
     }
     public void encodeResetAndRun()
     {

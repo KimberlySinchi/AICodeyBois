@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Code;
+package org.firstinspires.ftc.teamcode.OfficialCode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -34,9 +34,9 @@ public class DEPOTBOXenemycrater extends LinearOpMode
     private boolean detect = true,testing=true;
     private double rotateBack = 0.0;
 
-    private static final double SECONDS_PER_TILE = 11.106; //WE NEED TO PUT WALID'S DATA INTO THIS
+    private static final double SECONDS_PER_TILE = 11.106;
     //2.161 inches/sec
-    private static final double SECONDS_PER_360_DEG = 0.0; //WE NEED TO PUT WALID'S DATA INTO THIS
+    private static final double SECONDS_PER_360_DEG = 0.0;
 
     @Override
     public void runOpMode()
@@ -65,13 +65,13 @@ public class DEPOTBOXenemycrater extends LinearOpMode
             }
             else
             {
-                /*latchExtendE(8400);
+                latchExtendE(10600);
                 rightE(400);
                 SPEED = 0.6;
                 forwardE(300);
                 leftE(400);
                 backwardE(150);
-                SPEED = 1;*/
+                SPEED = 1;
                 while (opModeIsActive() && runtime.seconds() < 10 && detect)
                 {
                     if (tfod != null)
@@ -171,18 +171,19 @@ public class DEPOTBOXenemycrater extends LinearOpMode
                     forwardE(1500);
                 if (pos == -1)
                 {
-                    leftE(1720);
+                    leftE(1820);
                     forwardE(3300);
-                    rightE(1720);
+                    rightE(1820);
                     forwardE(1300);
                 }
                 else if (pos == 1)
                 {
-                    rightE(1720);
+                    rightE(1820);
                     forwardE(3300);
-                    leftE(1720);
+                    leftE(1820);
                     forwardE(1300);
                 }
+                moveMarker(2);
                 rotateLeftE(1050);
                 forwardE(900);
                 leftE(8100);
@@ -211,6 +212,15 @@ public class DEPOTBOXenemycrater extends LinearOpMode
             slave.frontR.setPower(0);
             slave.backR.setPower(0);
         }
+    }
+    public void moveMarker(double seconds)
+    {
+        ElapsedTime timer = new ElapsedTime();
+        while(timer.seconds() <=  seconds)
+        {
+            slave.markerServo.setPosition(1);
+        }
+        slave.markerServo.setPosition(0.5);
     }
     public void encodeResetAndRun()
     {

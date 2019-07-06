@@ -15,12 +15,12 @@ public class Slave
     public DcMotor latchDown;
     public DcMotor latchUp;
     public DcMotor armUaD;
+    public DcMotor armFaB;
     public String status = "";
 
     public Servo armIntake;
-    public Servo armFaB;
-    public Servo goldServo;
-    public Servo silverServo;
+    public Servo mineralServo;
+    public Servo markerServo;
 
     HardwareMap hwmap = null; //Need a reference to hardware map because otherwise, the code will think this is an opmode to use right now
 
@@ -104,6 +104,16 @@ public class Slave
         {
             status += "\nArm U&D failed to initialize";
         }
+        try
+        {
+            armFaB = hwmap.get(DcMotor.class, "DC8");
+            armFaB.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            armFaB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+        catch (Exception e)
+        {
+            status += "\nArm F&B failed to initialize";
+        }
 
         //ARM SERVOS
         try
@@ -114,31 +124,31 @@ public class Slave
         {
             status += "\nArm Intake servo not mapping";
         }
+
+        //SERVOS
         try
         {
-            armFaB = hwmap.get(Servo.class, "S2");
+            armIntake = hwmap.get(Servo.class, "S1");
         }
         catch (Exception e)
         {
-            status += "\nArm Extension servo not mapping";
-        }
-
-        //DIVIDER SERVOS
-        try
-        {
-            goldServo = hwmap.get(Servo.class, "S3");
-        }
-        catch(Exception e)
-        {
-            status += "\nGold Divider not mapping";
+            status += "\nArm Intake servo not mapping";
         }
         try
         {
-            silverServo = hwmap.get(Servo.class, "S4");
+            mineralServo = hwmap.get(Servo.class, "S3");
         }
-        catch(Exception e)
+        catch (Exception e)
         {
-            status += "\nSilver Divider not mapping";
+            status += "\nMineral servo not mapping";
+        }
+        try
+        {
+            markerServo = hwmap.get(Servo.class, "S4");
+        }
+        catch (Exception e)
+        {
+            status += "\nMarker servo not mapping";
         }
     }
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Code;
+package org.firstinspires.ftc.teamcode.OfficialCode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -99,13 +99,8 @@ public class OfficialDrive extends OpMode
         boolean dPadU2 = gamepad2.dpad_up;
         boolean dPadD2 = gamepad2.dpad_down;
 
-        //GOLD and then SILVER servos
+        //Mineral servos
         boolean yButton = gamepad2.y;
-        boolean xButton2 = gamepad2.x;
-
-        //Closing the GOLD and then SILVER servos
-        boolean bButton2 = gamepad2.b;
-        boolean aButton2 = gamepad2.a;
 
         telemetry.addData("Status:","x = " + x + " ,y =  " +y  );
         telemetry.update();
@@ -304,80 +299,32 @@ public class OfficialDrive extends OpMode
             slave.armIntake.setPosition(0.5);
 
         //ARM EXTENSION -----------------
-        if(dPadR2)
-            slave.armFaB.setPosition(0);
-        else if(dPadL2)
-            slave.armFaB.setPosition(1);
+        if(dPadL2)
+            slave.armFaB.setPower(-1);
+        else if(dPadR2)
+            slave.armFaB.setPower(1);
         else
-            slave.armFaB.setPosition(0.5);
+            slave.armFaB.setPower(0);
 
-        //ARM UP AND DOWN
+        //ARM UP AND DOWN -------------------
         if(dPadU2)
-            slave.armUaD.setPower(-0.6);
-        else if(dPadD2)
             slave.armUaD.setPower(0.6);
+        else if(dPadD2)
+            slave.armUaD.setPower(-0.6);
         else
             slave.armUaD.setPower(0);
 
-        //GOLD AND SILVER MINERALS ----------------
+        //MINERAL DEPOSIT ----------------
         if(yButton)
-            slave.goldServo.setPosition(1);
-        else if(bButton2)
-            slave.goldServo.setPosition(0);
+            slave.mineralServo.setPosition(0);
         else
-            slave.goldServo.setPosition(0.5);
-        if(xButton2)
-            slave.silverServo.setPosition(1);
-        else if(aButton2)
-            slave.silverServo.setPosition(0);
-        else
-            slave.silverServo.setPosition(0.5);
-
-        /*ARM MOVEMENT
-        if(yButton)
-            slave.armFaB.setPosition(1);
-        else if(aButton)
-            slave.armFaB.setPosition(0);
-        else
-            slave.armFaB.setPosition(0.5);
-        if (yR2 > 0)
-            slave.armUaD.setPower(0.35);
-        else if(yR2 <0)
-            slave.armUaD.setPower(-.45);
-        else
-            slave.armUaD.setPower(0);
-
-        //SERVOS
-        if(dPadUp)
-            slave.armIntake.setPosition(1);
-        else if(dPadDown)
-            slave.armIntake.setPosition(0);
-        else
-            slave.armIntake.setPosition(0.5);
-
-        //LATCH
-        if(rBump)
-        {
-            slave.latchUp.setPower(1.0);
-            slave.latchDown.setPower(1.0);
-        }
-        else if(lBump)
-        {
-            slave.latchUp.setPower(-1.0);
-            slave.latchDown.setPower(-1.0);
-        }
-        else
-        {
-            slave.latchUp.setPower(0);
-            slave.latchDown.setPower(0);
-        }*/
+            slave.mineralServo.setPosition(0.5);
     }
 
     /*
      * Code to run ONCE after the driver hits STOP
      */
     @Override
-    public void stop() {
-
-    }
+    public void stop()
+    { }
 }
