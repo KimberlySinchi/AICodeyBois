@@ -18,6 +18,7 @@ public class HokeyPokey extends LinearOpMode {
     private Dancer dancer = new Dancer();
     static double SPEED = 1;
 
+    @Override
     public void runOpMode(){
         dancer.init(hardwareMap);
 
@@ -25,16 +26,16 @@ public class HokeyPokey extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-
+        int rotateFull = (int)(Math.PI * 3.77 * 1440 * 2);
         if(opModeIsActive()){
-            leftE(3760);
-            rightE(3760);
-            leftE(3760);
-            rotateLeft(3270);
-            rightE(7520);
-            leftE(3270);
-            rightE(3270);
-            rotateRight(3270);
+            leftE(470);
+            rightE(470);
+            leftE(470);
+            rotateLeft(3720);
+            rightE(470);
+            leftE(470);
+            rightE(470);
+            rotateRight(3720);
         }
     }
 
@@ -60,8 +61,8 @@ public class HokeyPokey extends LinearOpMode {
     public void backwardE(int ticks){
         encodeResetAndRun();
 
-        dancer.right.setPower(ticks);
-        dancer.left.setPower(-ticks);
+        dancer.right.setTargetPosition(ticks);
+        dancer.left.setTargetPosition(-ticks);
 
         power();
 
@@ -79,8 +80,8 @@ public class HokeyPokey extends LinearOpMode {
     public void rightE(int ticks){
         encodeResetAndRun();
 
-        dancer.front.setPower(ticks);
-        dancer.back.setPower(-ticks);
+        dancer.front.setTargetPosition(ticks);
+        dancer.back.setTargetPosition(-ticks);
 
         power();
 
@@ -97,8 +98,8 @@ public class HokeyPokey extends LinearOpMode {
     public void leftE(int ticks){
         encodeResetAndRun();
 
-        dancer.front.setPower(-ticks);
-        dancer.back.setPower(ticks);
+        dancer.front.setTargetPosition(-ticks);
+        dancer.back.setTargetPosition(ticks);
 
         power();
 
@@ -115,14 +116,14 @@ public class HokeyPokey extends LinearOpMode {
     public void rotateRight(int ticks){
         encodeResetAndRun();
 
-        dancer.front.setPower(ticks);
-        dancer.back.setPower(ticks);
-        dancer.left.setPower(ticks);
-        dancer.right.setPower(ticks);
+        dancer.front.setTargetPosition(ticks);
+        dancer.back.setTargetPosition(ticks);
+        dancer.left.setTargetPosition(ticks);
+        dancer.right.setTargetPosition(ticks);
 
         power();
 
-        while(opModeIsActive() && dancer.front.isBusy());
+        while(opModeIsActive() && dancer.front.isBusy())
         {
             telemetry.addLine("" + dancer.front.getCurrentPosition());
             telemetry.addLine("" + dancer.back.getCurrentPosition());
@@ -133,29 +134,33 @@ public class HokeyPokey extends LinearOpMode {
         }
 
         nStop();
+
+        System.out.printf("rotated right");
     }
 
     public void rotateLeft(int ticks){
         encodeResetAndRun();
 
-        dancer.front.setPower(-ticks);
-        dancer.back.setPower(-ticks);
-        dancer.left.setPower(-ticks);
-        dancer.right.setPower(-ticks);
+        dancer.front.setTargetPosition(-ticks);
+        dancer.back.setTargetPosition(-ticks);
+        dancer.left.setTargetPosition(-ticks);
+        dancer.right.setTargetPosition(-ticks);
 
         power();
 
-        while(opModeIsActive() && dancer.front.isBusy());
+        while(opModeIsActive() && dancer.front.isBusy())
         {
             telemetry.addLine("" + dancer.front.getCurrentPosition());
             telemetry.addLine("" + dancer.back.getCurrentPosition());
             telemetry.addLine("" + dancer.right.getCurrentPosition());
             telemetry.addLine("" + dancer.left.getCurrentPosition());
-            telemetry.addData("Rotating Right", ticks);
+            telemetry.addData("Rotating Left", ticks);
             telemetry.update();
         }
 
         nStop();
+
+        System.out.printf("rotated left");
     }
 
     public void encodeResetAndRun(){
