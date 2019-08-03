@@ -26,7 +26,6 @@ public class HokeyPokey extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-        int rotateFull = (int)(Math.PI * 3.77 * 1440 * 2);
         if(opModeIsActive()){
             leftE(470);
             rightE(470);

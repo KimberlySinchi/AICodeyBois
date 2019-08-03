@@ -15,6 +15,7 @@ public class Dancer
     public DcMotor latchUp;
     public DcMotor armUaD;
     public DcMotor armFaB;
+    public DcMotor arm;
     public String status = "";
 
     public Servo armIntake;
@@ -138,6 +139,14 @@ public class Dancer
         catch (Exception e)
         {
             status += "\nMarker servo not mapping";
+        }
+
+        try{
+            arm = hwmap.get(DcMotor.class, "DC5");
+            arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }catch(Exception e){
+            status += "\nArm not mapping";
         }
     }
 
